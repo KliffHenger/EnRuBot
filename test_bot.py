@@ -13,22 +13,24 @@ async def on_startup(_):
     print('The bot is online!')
 
 
+@dp.message_handler(Command('menu'))
+async def menu(message: types.Message):
+    await message.answer('Добро пожаловать в меню!')
+
+
 @dp.message_handler(Command('start'))
 async def start_bot(message: types.Message):
-    await message.answer('Привет!')
-    user_id_tg = ''
-    try:
-        for index in range(len(find_table)):
-            if find_table[index]['fields']['UserIDTG'] == message.from_user.id:
-                user_id_tg = find_table[index]['fields']['UserIDTG']
-                await message.answer(
-                    f"Здравствуйте, {find_table[index]['fields']['UserName']} {table[index]['fields']['UserSurname']}")
-            else:
-                continue
-    except:
-        pass
-    # if not user_id_tg:
-    #     await message.answer('Здравствуйте! Пройдем регистрацию в боте!', reply_markup=ikb_register)
+    is_found = False
+    user_name, user_surname = '', ''
+    for index in range(len(find_table)):
+        if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+            user_name = find_table[index]['fields']['UserName']
+            user_surname = find_table[index]['fields']['UserSurname']
+            is_found = True
+    if is_found:
+        await message.answer(f"Здравствуйте, {user_name} {user_surname}!\n Для прохождения в меню нажмите /menu")
+    else:
+        await message.answer(f"Для прохождения регистрации нажмите /register")
 
 
 @dp.message_handler(Command('register'))
@@ -62,7 +64,8 @@ async def get_user_name(message: types.Message, state: FSMContext):
         resize_keyboard=True,
         one_time_keyboard=True
     )
-    await message.answer(f"<b>{message.text}</b>, теперь введите Вашу фамилию: ", reply_markup=user_surname, parse_mode='HTML')
+    await message.answer(f"<b>{message.text}</b>, теперь введите Вашу фамилию: ", reply_markup=user_surname,
+                         parse_mode='HTML')
     await Reg.user_surname.set()
 
 
@@ -71,9 +74,6 @@ async def get_email(message: types.Message, state: FSMContext):
     await state.update_data(user_surname=message.text)
     user_email = ReplyKeyboardMarkup(
         keyboard=[
-            [
-                KeyboardButton(text=f"{message.text}")
-            ],
             [
                 KeyboardButton(text=f"Отмена регистрации")
             ]
@@ -95,20 +95,9 @@ async def set_user_email(message: types.Message, state=FSMContext):
         user_name = data.get('user_name')
         user_surname = data.get('user_surname')
         user_email = data.get('user_email')
-        table.create(fields={'UserName': user_name, 'UserSurname': user_surname, 'UserEmail': user_email, 'UserIDTG': str(message.from_user.id)})
-        await message.answer("Регистрация успешно завершена!")
-    # else:
-    #     markup = ReplyKeyboardMarkup(
-    #         keyboard=[
-    #             [
-    #                 KeyboardButton(text='Отмена регистрации')
-    #             ]
-    #         ],
-    #         resize_keyboard=True
-    #     )
-    #     await message.answer("Введите корректный адрес электронной почты.", reply_markup=markup)
-
-
+        table.create(fields={'UserName': user_name, 'UserSurname': user_surname, 'UserEmail': user_email,
+                             'UserIDTG': str(message.from_user.id)})
+        await message.answer("Регистрация успешно завершена!\n Для прохождения в меню нажмите /menu.")
 
 
 if __name__ == '__main__':
