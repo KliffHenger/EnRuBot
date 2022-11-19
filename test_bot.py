@@ -78,6 +78,8 @@ async def set_user_email(message: types.Message, state=FSMContext):
     table.create(fields={'UserName': user_name, 'UserSurname': user_surname, 'UserEmail': user_email,
                          'UserIDTG': str(message.from_user.id)})
     await message.answer("Регистрация успешно завершена!\n Для прохождения в меню нажмите /menu.")
+    await state.finish()
+    await menu(message)
 
 
 @dp.message_handler(commands=['statistics'])
@@ -94,7 +96,6 @@ async def statistics(message: types.Message):
 
 @dp.message_handler(commands=['eng_level'])
 async def english_level(message: types.Message):
-    await message.answer('Выберите ваш уровень английского: ')
     user_english_level = ReplyKeyboardMarkup(
         keyboard=[
             [
@@ -133,8 +134,18 @@ async def set_eng_level(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
     table.update(record_id=element_id, fields={'UserEngLevel': message.text})
-    await message.answer(f"Ваш уровень англйиского - {answer}\n"
-                         f"Для прохождения в меню нажмите /menu")
+    menu_button = ReplyKeyboardMarkup(
+        keyboard=[
+            [
+                KeyboardButton(text="/menu")
+            ]
+        ],
+        resize_keyboard=True,
+        one_time_keyboard=True
+    )
+    await message.answer(f"Ваш уровень англйиского - {answer}\n", reply_markup=menu_button)
+    await state.finish()
+    await menu(message)
 
 
 if __name__ == '__main__':
