@@ -77,7 +77,14 @@ async def set_user_email(message: types.Message, state=FSMContext):
     user_email = data.get('user_email')
     table.create(fields={'UserName': user_name, 'UserSurname': user_surname, 'UserEmail': user_email,
                          'UserIDTG': str(message.from_user.id)})
-    await message.answer("Регистрация успешно завершена!\n Для прохождения в меню нажмите /menu.")
+    # keyboard_button = ReplyKeyboardMarkup(
+    #     keyboard=[
+    #         [
+    #             KeyboardButton(text='/menu',)
+    #         ],
+    #     ],
+    # )
+    await message.answer("Регистрация успешно завершена!\n")
     await state.finish()
     await menu(message)
 
@@ -133,7 +140,7 @@ async def set_eng_level(message: types.Message, state: FSMContext):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-    table.update(record_id=element_id, fields={'UserEngLevel': message.text})
+    table.update(record_id=element_id, fields={'UserEngLevel': str(message.text)})
     menu_button = ReplyKeyboardMarkup(
         keyboard=[
             [
@@ -143,9 +150,14 @@ async def set_eng_level(message: types.Message, state: FSMContext):
         resize_keyboard=True,
         one_time_keyboard=True
     )
-    await message.answer(f"Ваш уровень англйиского - {answer}\n", reply_markup=menu_button)
+    await message.answer(f"Ваш уровень английского - {answer}\n", reply_markup=menu_button)
     await state.finish()
     await menu(message)
+
+
+@dp.message_handler(commands='timeslot')
+async def define_timeslot(message: types.Message):
+    await message.answer(text='Здесь Вы сможете задать желаемое для Вас время')
 
 
 if __name__ == '__main__':
