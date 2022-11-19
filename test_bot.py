@@ -116,7 +116,7 @@ async def english_level(message: types.Message):
                 KeyboardButton(text="C2")
             ],
 
-    ],
+        ],
         resize_keyboard=True,
         one_time_keyboard=True
     )
@@ -128,7 +128,11 @@ async def english_level(message: types.Message):
 async def set_eng_level(message: types.Message, state: FSMContext):
     answer = message.text
     await state.update_data(user_eng_level=answer)
-    table.update(record_id='recFbb7IbB8nW9rX6', fields={"UserIDTG": str(message.from_user.id), "UserEngLevel": str(answer)})
+    element_id = ''
+    for index in range(len(find_table)):
+        if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+            element_id = find_table[index]['id']
+    table.update(record_id=element_id, fields={'UserEngLevel': message.text})
     await message.answer(f"Ваш уровень англйиского - {answer}\n"
                          f"Для прохождения в меню нажмите /menu")
 
