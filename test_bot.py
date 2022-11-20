@@ -2,6 +2,15 @@ from config import dp
 from aiogram import executor
 from utils import registration, menu
 
+# TODO:
+#   1. Setting English level
+#   2. Setting users' timeslots
+
+
+
+
+
+
 
 async def on_startup(_):
     print('The bot is online!')
