@@ -140,7 +140,7 @@ async def set_eng_level(message: types.Message, state: FSMContext):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-    table.update(record_id=element_id, fields={'UserEngLevel': str(message.text)})
+    table.update(str(element_id), {'UserEngLevel': str(message.text)})
     menu_button = ReplyKeyboardMarkup(
         keyboard=[
             [
@@ -157,7 +157,8 @@ async def set_eng_level(message: types.Message, state: FSMContext):
 
 @dp.message_handler(commands='timeslot')
 async def define_timeslot(message: types.Message):
-    await message.answer(text='Здесь Вы сможете задать желаемое для Вас время')
+    await message.answer(
+        text='Задайте, пожалуйста, тайм-слот на следующей неделе с 21 по 27 ноября 2022 в формате MO1718, где MO - Monday, 17 (17:00) время начала тайм-слота, 18 (18:00) - время окончания тайм-слота"')
 
 
 if __name__ == '__main__':
