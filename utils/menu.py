@@ -2,11 +2,14 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Command
 from user_states import Reg
 from aiogram.dispatcher import FSMContext
-from airtable_config import table
+from airtable_config import table, at
 from airtable_config import find_table
 from keyboards.english_level import user_english_level
 from keyboards.menu import menu_button
-from asyncio import sleep
+
+# TODO: It is necessary to fix setting english level
+#       (set_eng_level function)
+#       I don't know what to do exactly. I have 422 user error during trying to update record
 
 
 async def start_bot(message: types.Message):
@@ -56,9 +59,12 @@ async def set_eng_level(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
     await message.answer(f"Ваш уровень английского - {answer}\n", reply_markup=menu_button)
+    # 422 user error. After the restarting of the project
+    # I don't have any troubles with setting english level
+    table.update(record_id=str(element_id), fields={'UserEngLevel': str(message.text)})
+    # at.update('test_table', element_id, {'UserEngLevel': message.text})
     await state.finish()
     await menu(message)
-    # await sleep(0.2, table.update(record_id=str(element_id), fields={'UserEngLevel': str(message.text)}))
 
 
 async def define_timeslot(message: types.Message):
