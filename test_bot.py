@@ -7,11 +7,6 @@ from utils import registration, menu
 #   2. Setting users' timeslots
 
 
-
-
-
-
-
 async def on_startup(_):
     print('The bot is online!')
 

@@ -6,6 +6,7 @@ from airtable_config import table
 from airtable_config import find_table
 from keyboards.english_level import user_english_level
 from keyboards.menu import menu_button
+from asyncio import sleep
 
 
 async def start_bot(message: types.Message):
@@ -54,10 +55,10 @@ async def set_eng_level(message: types.Message, state: FSMContext):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-    table.update(str(element_id), {'UserEngLevel': str(message.text)})
     await message.answer(f"Ваш уровень английского - {answer}\n", reply_markup=menu_button)
     await state.finish()
     await menu(message)
+    # await sleep(0.2, table.update(record_id=str(element_id), fields={'UserEngLevel': str(message.text)}))
 
 
 async def define_timeslot(message: types.Message):

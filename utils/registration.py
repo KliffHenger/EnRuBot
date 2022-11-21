@@ -5,6 +5,7 @@ from aiogram.dispatcher import FSMContext
 from test_bot import menu
 from airtable_config import table
 from utils.menu import menu
+import re
 
 
 async def bot_register(message: types.Message):
@@ -26,16 +27,20 @@ async def get_email(message: types.Message, state: FSMContext):
 
 
 async def set_user_email(message: types.Message, state=FSMContext):
-    await state.update_data(user_email=message.text)
-    data = await state.get_data()
-    user_name = data.get('user_name')
-    user_surname = data.get('user_surname')
-    user_email = data.get('user_email')
-    table.create(fields={'UserName': user_name, 'UserSurname': user_surname, 'UserEmail': user_email,
-                         'UserIDTG': str(message.from_user.id)})
-    await message.answer("Регистрация успешно завершена!\n")
-    await state.finish()
-    await menu(message)
+    pattern = r'^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$'
+    if re.fullmatch(pattern, message.text):
+        await state.update_data(user_email=message.text)
+        data = await state.get_data()
+        user_name = data.get('user_name')
+        user_surname = data.get('user_surname')
+        user_email = data.get('user_email')
+        table.create(fields={'UserName': user_name, 'UserSurname': user_surname, 'UserEmail': user_email,
+                             'UserIDTG': str(message.from_user.id)})
+        await message.answer("Регистрация успешно завершена!\n")
+        await state.finish()
+        await menu(message)
+    else:
+        await message.answer(text='Введите корректное значение электронной почты.')
 
 
 def register_handlers_registration(dp: Dispatcher):
