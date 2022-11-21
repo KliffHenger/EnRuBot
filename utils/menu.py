@@ -9,7 +9,7 @@ from keyboards.menu import menu_button
 
 # TODO: It is necessary to fix setting english level
 #       (set_eng_level function)
-#       I don't know what to do exactly. I have 422 user error during trying to update record
+#       I don't know what to do exactly. I have 422 error during trying to update a record
 
 
 async def start_bot(message: types.Message):
@@ -59,10 +59,9 @@ async def set_eng_level(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
     await message.answer(f"Ваш уровень английского - {answer}\n", reply_markup=menu_button)
-    # 422 user error. After the restarting of the project
+    # 422 user error. After restarting of the project
     # I don't have any troubles with setting english level
     table.update(record_id=str(element_id), fields={'UserEngLevel': str(message.text)})
-    # at.update('test_table', element_id, {'UserEngLevel': message.text})
     await state.finish()
     await menu(message)
 
