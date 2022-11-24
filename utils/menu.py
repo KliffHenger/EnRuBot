@@ -1,6 +1,6 @@
 from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Command
-from user_states import Reg
+from user_states import Reg 
 from aiogram.dispatcher import FSMContext
 from airtable_config import table, at
 from airtable_config import find_table
@@ -66,9 +66,9 @@ async def set_eng_level(message: types.Message, state: FSMContext):
     await menu(message)
 
 
-async def define_timeslot(message: types.Message):
-    await message.answer(
-        text='Задайте, пожалуйста, тайм-слот на следующей неделе с 21 по 27 ноября 2022 в формате MO1718, где MO - Monday, 17 (17:00) время начала тайм-слота, 18 (18:00) - время окончания тайм-слота"')
+# async def define_timeslot(message: types.Message):
+#     await message.answer(
+#         text='Задайте, пожалуйста, тайм-слот на следующей неделе с 21 по 27 ноября 2022 в формате MO1718, где MO - Monday, 17 (17:00) время начала тайм-слота, 18 (18:00) - время окончания тайм-слота"')
 
 
 def register_handlers_menu(dp: Dispatcher):
@@ -77,4 +77,4 @@ def register_handlers_menu(dp: Dispatcher):
     dp.register_message_handler(statistics, commands='statistics')
     dp.register_message_handler(english_level, commands='eng_level')
     dp.register_message_handler(set_eng_level, state=Reg.user_eng_level)
-    dp.register_message_handler(define_timeslot, commands='timeslot')
+    # dp.register_message_handler(define_timeslot, commands='timeslot')
