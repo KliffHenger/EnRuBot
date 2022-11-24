@@ -1,6 +1,7 @@
 from config import dp
 from aiogram import executor
 from utils import registration, menu, time_slot
+from airtable_config import api_key
 
 # TODO:
 #   1. Setting English level

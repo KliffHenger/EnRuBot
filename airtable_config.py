@@ -1,9 +1,13 @@
 from pyairtable import Table
 from airtable import airtable
+import requests
+import os
 
 
-api_key = "keypdxX6KYuSbLmWB"
-table = Table(api_key, 'appq6pQqHPLUZGcPb', 'test_table')
+api_key = os.getenv('AIRTABLE_API_KEY')
+base_id = 'appq6pQqHPLUZGcPb'
+table_name = 'test_table' 
+table = Table(api_key, base_id, table_name, timeout=(5,5))
 find_table = table.all()
 
 

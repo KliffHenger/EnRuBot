@@ -59,9 +59,12 @@ async def set_eng_level(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
     await message.answer(f"Ваш уровень английского - {answer}\n", reply_markup=menu_button)
+    user_level = str(answer)
     # 422 user error. After restarting of the project
     # I don't have any troubles with setting english level
-    table.update(record_id=str(element_id), fields={'UserEngLevel': str(message.text)})
+    print(user_level)
+    table.update(record_id=str(element_id), fields={'UserEngLevel': user_level})
+    
     await state.finish()
     await menu(message)
 

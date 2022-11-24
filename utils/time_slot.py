@@ -3,11 +3,14 @@ from aiogram.dispatcher.filters import Command
 from user_states import TimeSlot
 from aiogram.dispatcher import FSMContext
 from keyboards.time_slot import WEEK
-from airtable_config import find_table
+from airtable_config import find_table, api_key
 # from test_bot import menu
 from airtable_config import table
 # from utils.menu import menu
 import re
+import requests
+import json
+
 
 
 async def time_slot_input(message: types.Message):
@@ -40,8 +43,12 @@ async def get_end_time(message: types.Message, state: FSMContext):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+
+            
     await message.answer(f"Ваш тайм-слот - {user_time_slot}")
-    table.update(record_id=str(element_id), fields={'UserTimeSlot': user_time_slot})
+    print(f'element_id = {element_id}')
+    table.update(str(element_id), {'UserTimeSlot': user_time_slot})
+    
     await state.finish()
 
 

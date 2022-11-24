@@ -8,6 +8,7 @@ from utils.menu import menu
 import re
 
 
+
 async def bot_register(message: types.Message):
     await message.answer(f"Для начала регистрации введите Ваше имя: ")
     await Reg.user_name.set()
@@ -34,7 +35,16 @@ async def set_user_email(message: types.Message, state=FSMContext):
         user_name = data.get('user_name')
         user_surname = data.get('user_surname')
         user_email = data.get('user_email')
-        table.create(fields={'UserName': user_name, 'UserSurname': user_surname, 'UserEmail': user_email,
+        
+        # url = 'https://api.airtable.com/v0/appq6pQqHPLUZGcPb/test_table/'
+        # h = {'Authorization' : 'Bearer ' +api_key, 
+        #     'Content-Type' : 'application/json'
+        #     } 
+        # data_list = {'records': [{'fields': {'UserName': user_name, 'UserSurname': user_surname, 'UserEmail': user_email,
+        #                      'UserIDTG': str(message.from_user.id)}}]}
+        # requests.post(url,data=json.dumps(data_list),headers=h).text
+
+        table.create({'UserName': user_name, 'UserSurname': user_surname, 'UserEmail': user_email,
                              'UserIDTG': str(message.from_user.id)})
         await message.answer("Регистрация успешно завершена!\n")
         await state.finish()
