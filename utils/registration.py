@@ -2,11 +2,9 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Command
 from user_states import Reg
 from aiogram.dispatcher import FSMContext
-from test_bot import menu
 from airtable_config import table
 from utils.menu import menu
 import re
-
 
 
 async def bot_register(message: types.Message):
@@ -35,15 +33,6 @@ async def set_user_email(message: types.Message, state=FSMContext):
         user_name = data.get('user_name')
         user_surname = data.get('user_surname')
         user_email = data.get('user_email')
-        
-        # url = 'https://api.airtable.com/v0/appq6pQqHPLUZGcPb/test_table/'
-        # h = {'Authorization' : 'Bearer ' +api_key, 
-        #     'Content-Type' : 'application/json'
-        #     } 
-        # data_list = {'records': [{'fields': {'UserName': user_name, 'UserSurname': user_surname, 'UserEmail': user_email,
-        #                      'UserIDTG': str(message.from_user.id)}}]}
-        # requests.post(url,data=json.dumps(data_list),headers=h).text
-
         table.create({'UserName': user_name, 'UserSurname': user_surname, 'UserEmail': user_email,
                              'UserIDTG': str(message.from_user.id)})
         await message.answer("Регистрация успешно завершена!\n")
@@ -54,7 +43,7 @@ async def set_user_email(message: types.Message, state=FSMContext):
 
 
 def register_handlers_registration(dp: Dispatcher):
-    dp.register_message_handler(bot_register, Command('register'))
+    dp.register_message_handler(bot_register, commands=['register'])
     dp.register_message_handler(get_user_name, state=Reg.user_name)
     dp.register_message_handler(get_email, state=Reg.user_surname)
     dp.register_message_handler(set_user_email, state=Reg.user_email)

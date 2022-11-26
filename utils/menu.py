@@ -3,7 +3,7 @@ from aiogram.dispatcher.filters import Command
 from user_states import Reg 
 from aiogram.dispatcher import FSMContext
 from airtable_config import table, at
-from airtable_config import find_table
+# from airtable_config import find_table
 from keyboards.english_level import user_english_level
 from keyboards.menu import menu_button
 
@@ -13,6 +13,7 @@ from keyboards.menu import menu_button
 
 
 async def start_bot(message: types.Message):
+    find_table = table.all()
     is_found = False
     user_name, user_surname = '', ''
     for index in range(len(find_table)):
@@ -54,24 +55,17 @@ async def english_level(message: types.Message):
 async def set_eng_level(message: types.Message, state: FSMContext):
     answer = message.text
     await state.update_data(user_eng_level=answer)
+    find_table = table.all()
     element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
     await message.answer(f"Ваш уровень английского - {answer}\n", reply_markup=menu_button)
     user_level = str(answer)
-    # 422 user error. After restarting of the project
-    # I don't have any troubles with setting english level
     print(user_level)
     table.update(record_id=str(element_id), fields={'UserEngLevel': user_level})
-    
     await state.finish()
     await menu(message)
-
-
-# async def define_timeslot(message: types.Message):
-#     await message.answer(
-#         text='Задайте, пожалуйста, тайм-слот на следующей неделе с 21 по 27 ноября 2022 в формате MO1718, где MO - Monday, 17 (17:00) время начала тайм-слота, 18 (18:00) - время окончания тайм-слота"')
 
 
 def register_handlers_menu(dp: Dispatcher):
@@ -80,4 +74,4 @@ def register_handlers_menu(dp: Dispatcher):
     dp.register_message_handler(statistics, commands='statistics')
     dp.register_message_handler(english_level, commands='eng_level')
     dp.register_message_handler(set_eng_level, state=Reg.user_eng_level)
-    # dp.register_message_handler(define_timeslot, commands='timeslot')
+
