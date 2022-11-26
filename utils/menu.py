@@ -32,6 +32,7 @@ async def menu(message: types.Message):
     1. Задать уровень английского /eng_level\n
     2. Задать таймслот /timeslot\n
     3. Показать статистику /statistics\n
+    4. Найти собеседника /find_interlocutor\n
     """)
 
 

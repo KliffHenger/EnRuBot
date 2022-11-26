@@ -34,7 +34,7 @@ async def set_user_email(message: types.Message, state=FSMContext):
         user_surname = data.get('user_surname')
         user_email = data.get('user_email')
         table.create({'UserName': user_name, 'UserSurname': user_surname, 'UserEmail': user_email,
-                             'UserIDTG': str(message.from_user.id)})
+                             'UserIDTG': str(message.from_user.id), 'UserEngLevel': "Undefined", 'UserTimeSlot': 'Undefined', 'IsPared': 'False', 'UserHourGoal': '10'})
         await message.answer("Регистрация успешно завершена!\n")
         await state.finish()
         await menu(message)
