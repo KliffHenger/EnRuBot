@@ -37,11 +37,9 @@ async def get_end_time(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
     await message.answer(f"Ваш тайм-слот - {user_time_slot}")
-    print(f'record_id = {element_id}')
     table.update(str(element_id), {'UserTimeSlot': user_time_slot})
     await state.finish()
     await menu(message)
-    
     
 
 def register_handlers_time_slot(dp: Dispatcher):

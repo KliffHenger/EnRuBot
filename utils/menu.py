@@ -2,8 +2,7 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Command
 from user_states import Reg 
 from aiogram.dispatcher import FSMContext
-from airtable_config import table, at
-# from airtable_config import find_table
+from airtable_config import table
 from keyboards.english_level import user_english_level
 from keyboards.menu import menu_button
 
@@ -62,7 +61,6 @@ async def set_eng_level(message: types.Message, state: FSMContext):
             element_id = find_table[index]['id']
     await message.answer(f"Ваш уровень английского - {answer}\n", reply_markup=menu_button)
     user_level = str(answer)
-    print(user_level)
     table.update(record_id=str(element_id), fields={'UserEngLevel': user_level})
     await state.finish()
     await menu(message)
