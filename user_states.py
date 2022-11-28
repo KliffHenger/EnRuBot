@@ -10,6 +10,6 @@ class Reg(StatesGroup):
 class TimeSlot(StatesGroup):
     week_day = State()
     start_time = State()
-    end_time = State()
+    # end_time = State() - раскомментить если понадобится
 
 
