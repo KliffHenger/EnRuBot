@@ -1,34 +1,31 @@
 from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Command
-from user_states import Reg 
+from user_states import Reg
 from aiogram.dispatcher import FSMContext
 from airtable_config import table
 from keyboards.english_level import user_english_level
 from keyboards.menu import menu_button
-
-# TODO: It is necessary to fix setting english level
-#       (set_eng_level function)
-#       I don't know what to do exactly. I have 422 error during trying to update a record
 
 
 async def start_bot(message: types.Message):
     find_table = table.all()
     is_found = False
     user_name, user_surname = '', ''
-    for index in range(len(find_table)):
-        if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
-            user_name = find_table[index]['fields']['UserName']
-            user_surname = find_table[index]['fields']['UserSurname']
-            is_found = True
-    if is_found:
-        await message.answer(f"Здравствуйте, {user_name} {user_surname}!\n Для прохождения в меню нажмите /menu")
-    else:
-        await message.answer(f"Для прохождения регистрации нажмите /register")
+    try:
+        for index in range(len(find_table)):
+            if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                user_name = find_table[index]['fields']['UserName']
+                user_surname = find_table[index]['fields']['UserSurname']
+                is_found = True
+        if is_found:
+            await message.answer(f"Здравствуйте, {user_name} {user_surname}!\n Для прохождения в меню нажмите /menu")
+    except:
+        await message.answer(f"Для прохождения идентификации с базой учеников нажмите /register")
 
 
 async def menu(message: types.Message):
     await message.answer("""
-    Добро пожаловать в меню!\n
+    Главное меню\n
     1. Задать уровень английского /eng_level\n
     2. Задать таймслот /timeslot\n
     3. Показать статистику /statistics\n
@@ -73,4 +70,3 @@ def register_handlers_menu(dp: Dispatcher):
     dp.register_message_handler(statistics, commands='statistics')
     dp.register_message_handler(english_level, commands='eng_level')
     dp.register_message_handler(set_eng_level, state=Reg.user_eng_level)
-
