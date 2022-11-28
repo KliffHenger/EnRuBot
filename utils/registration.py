@@ -19,6 +19,7 @@ async def get_user_name(message: types.Message, state: FSMContext):
     await Reg.user_surname.set()
 
 
+
 async def get_email(message: types.Message, state: FSMContext):
     await state.update_data(user_surname=message.text)
     await message.answer(f"Теперь введите Вашу электронную почту: ", parse_mode='HTML')
