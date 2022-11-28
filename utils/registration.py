@@ -7,7 +7,7 @@ import re
 
 
 async def bot_register(message: types.Message):
-    await message.answer(f"Пожалуйста, введите Вашу электронную почту: : ")
+    await message.answer(f"Пожалуйста, введите Вашу электронную почту:")
     await Reg.user_email.set()
 
 
