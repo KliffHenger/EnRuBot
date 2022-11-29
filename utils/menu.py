@@ -5,7 +5,6 @@ from aiogram.dispatcher import FSMContext
 from airtable_config import table
 from keyboards.english_level import user_english_level
 from keyboards.menu import menu_button
-import asyncio
 
 
 async def start_bot(message: types.Message):
@@ -19,7 +18,7 @@ async def start_bot(message: types.Message):
                 user_surname = find_table[index]['fields']['UserSurname']
                 is_found = True
         if is_found:
-            await message.answer(f"Здравствуйте, {user_name} {user_surname}!\n Для прохождения в меню нажмите /menu")
+            await message.answer(f"Здравствуйте, {user_name} {user_surname}!\n Для просмотра опций Главного Меню нажмите /menu")
     except:
         await message.answer(f"Для прохождения идентификации с базой учеников нажмите /register")
 
