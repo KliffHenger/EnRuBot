@@ -24,6 +24,10 @@ def generateToken():
 
 
 def createMeeting():
+    """В данном документе находятся все основные параметры встречи.
+        Я проверял start time, вроде там что-то не так.
+        Но как мы и решили ранее, ссылка формируется именно в нужное время
+    """
     meetingdetails = {"topic": "The title of your zoom meeting",
                       "type": 2,
                       "start_time": "2022-11-26T10: 14:00",

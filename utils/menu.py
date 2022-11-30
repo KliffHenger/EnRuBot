@@ -8,6 +8,11 @@ from keyboards.menu import menu_button
 
 
 async def start_bot(message: types.Message):
+    """
+    если ник пользователя лежит в базе, то бот поприветствует юзера.
+    если же нет, то попросит почту. Если почта есть в БД - пустит дальше.
+    Если нет - по факту будет "тупик"
+    """
     find_table = table.all()
     is_found = False
     user_name, user_surname = '', ''
@@ -18,7 +23,8 @@ async def start_bot(message: types.Message):
                 user_surname = find_table[index]['fields']['UserSurname']
                 is_found = True
         if is_found:
-            await message.answer(f"Здравствуйте, {user_name} {user_surname}!\n Для просмотра опций Главного Меню нажмите /menu")
+            await message.answer(
+                f"Здравствуйте, {user_name} {user_surname}!\n Для просмотра опций Главного Меню нажмите /menu")
         else:
             await message.answer(f"Для прохождения идентификации с базой учеников нажмите /register")
     except:
@@ -52,6 +58,10 @@ async def english_level(message: types.Message):
 
 
 async def set_eng_level(message: types.Message, state: FSMContext):
+    """
+    Дла начала нам нужно найти record_id нашего пользователя. Далее
+    мы обновляем его параметр уровня владения языка в базе
+    """
     answer = message.text
     await state.update_data(user_eng_level=answer)
     find_table = table.all()
