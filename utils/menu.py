@@ -19,6 +19,8 @@ async def start_bot(message: types.Message):
                 is_found = True
         if is_found:
             await message.answer(f"Здравствуйте, {user_name} {user_surname}!\n Для просмотра опций Главного Меню нажмите /menu")
+        else:
+            await message.answer(f"Для прохождения идентификации с базой учеников нажмите /register")
     except:
         await message.answer(f"Для прохождения идентификации с базой учеников нажмите /register")
 

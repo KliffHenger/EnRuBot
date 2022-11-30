@@ -29,6 +29,7 @@ async def set_user_email(message: types.Message, state=FSMContext):
         if not is_found:
             await message.answer(
                 "Вас нет в базе учеников! Свяжитесь с администрацией школы для выяснения подробностей.")
+            await state.finish()
     else:
         await message.answer(text='Введите корректное значение электронной почты.')
 
