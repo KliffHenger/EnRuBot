@@ -9,17 +9,20 @@ import re
 
 
 
-
 '''(1)Начало ввода ТаймСлота(старт "машины состояний")'''
+
 async def time_slot_input(message: types.Message):
     await message.answer(f"Выберите подходящий день недели.", reply_markup=WEEK)
     await TimeSlot.week_day.set()
 
+
 '''(2)Ввод дня недели'''
+
 async def get_week_day(message: types.Message,  state: FSMContext):
     await state.update_data(week_day=message.text)
     await message.answer(f"Вы выбрали {message.text}\nТеперь введите в какое время вам удобно начать: \nНапример: 17")
     await TimeSlot.start_time.set()
+
 
 # '''(3)Ввод времени начала'''
 # async def get_start_time(message: types.Message, state: FSMContext):
@@ -30,6 +33,7 @@ async def get_week_day(message: types.Message,  state: FSMContext):
 #         await TimeSlot.end_time.set()
 #     else:
 #         await message.answer(text='Вы ввели что-то не то. \nКорректный формат от 00 до 23')
+
 
 # '''(4)Ввод времени конца (завершение "машины состояний")'''
 # async def get_end_time(message: types.Message, state: FSMContext):
@@ -61,7 +65,7 @@ async def get_start_time(message: types.Message, state: FSMContext):
         data = await state.get_data()
         week_day = data.get('week_day')
         start_time = data.get('start_time')
-        user_time_slot = week_day+start_time
+        user_time_slot = week_day + start_time
         find_table = table.all()
         element_id = ''
         for index in range(len(find_table)):
@@ -73,7 +77,7 @@ async def get_start_time(message: types.Message, state: FSMContext):
         await menu(message)
     else:
         await message.answer(text='Вы ввели что-то не то. \nКорректный формат от 00 до 23')
-    
+
 
 
 def register_handlers_time_slot(dp: Dispatcher):

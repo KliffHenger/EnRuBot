@@ -3,13 +3,10 @@ from aiogram.utils import executor
 from utils import registration, menu, time_slot, find_interlocutor
 
 
-# TODO:
-#   1. Setting English level
-#   2. Setting users' timeslots
-
 async def on_startup(_):
     print('The bot is online!')
 
+"""Регистрация все хэндлеров"""
 registration.register_handlers_registration(dp)
 time_slot.register_handlers_time_slot(dp)
 menu.register_handlers_menu(dp)

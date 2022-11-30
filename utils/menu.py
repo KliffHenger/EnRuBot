@@ -9,10 +9,16 @@ from keyboards.inline_menu import KB_MENU
 from config import bot
 
 
+
 isCall = False
 
 
 async def start_bot(message: types.Message):
+    """
+    если ник пользователя лежит в базе, то бот поприветствует юзера.
+    если же нет, то попросит почту. Если почта есть в БД - пустит дальше.
+    Если нет - по факту будет "тупик"
+    """
     find_table = table.all()
     is_found = False
     user_name, user_surname = '', ''
@@ -23,7 +29,10 @@ async def start_bot(message: types.Message):
                 user_surname = find_table[index]['fields']['UserSurname']
                 is_found = True
         if is_found:
-            await message.answer(f"Здравствуйте, {user_name} {user_surname}!\n Для прохождения в меню нажмите /menu")
+            await message.answer(
+                f"Здравствуйте, {user_name} {user_surname}!\n Для просмотра опций Главного Меню нажмите /menu")
+        else:
+            await message.answer(f"Для прохождения идентификации с базой учеников нажмите /register")
     except:
         await message.answer(f"Для прохождения идентификации с базой учеников нажмите /register")
 
@@ -66,6 +75,10 @@ async def english_level(message: types.Message):
 
 
 async def set_eng_level(message: types.Message, state: FSMContext):
+    """
+    Дла начала нам нужно найти record_id нашего пользователя. Далее
+    мы обновляем его параметр уровня владения языка в базе
+    """
     answer = message.text
     await state.update_data(user_eng_level=answer)
     find_table = table.all()
@@ -87,3 +100,4 @@ def register_handlers_menu(dp: Dispatcher):
     dp.register_message_handler(statistics, commands='statistics')
     dp.register_message_handler(english_level, commands='eng_level')
     dp.register_message_handler(set_eng_level, state=Reg.user_eng_level)
+
