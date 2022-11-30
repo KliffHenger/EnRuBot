@@ -5,6 +5,11 @@ from aiogram.dispatcher import FSMContext
 from airtable_config import table
 from keyboards.english_level import user_english_level
 from keyboards.menu import menu_button
+from keyboards.inline_menu import KB_MENU
+from config import bot
+
+
+isCall = False
 
 
 async def start_bot(message: types.Message):
@@ -24,13 +29,24 @@ async def start_bot(message: types.Message):
 
 
 async def menu(message: types.Message):
-    await message.answer("""
+    answer_message = """
     Главное меню\n
     1. Задать уровень английского /eng_level\n
     2. Задать таймслот /timeslot\n
     3. Показать статистику /statistics\n
     4. Найти собеседника /find_interlocutor\n
-    """)
+    """
+    await bot.send_message(message.chat.id, text=answer_message, reply_markup=KB_MENU)
+
+async def callback_menu(callback_query):
+    answer_message = """
+    Главное меню\n
+    1. Задать уровень английского /eng_level\n
+    2. Задать таймслот /timeslot\n
+    3. Показать статистику /statistics\n
+    4. Найти собеседника /find_interlocutor\n
+    """
+    await bot.send_message(callback_query, text=answer_message, reply_markup=KB_MENU)
 
 
 async def statistics(message: types.Message):
@@ -67,6 +83,7 @@ async def set_eng_level(message: types.Message, state: FSMContext):
 def register_handlers_menu(dp: Dispatcher):
     dp.register_message_handler(start_bot, Command('start'))
     dp.register_message_handler(menu, commands='menu')
+    dp.callback_query_handler(callback_menu, text='menu')
     dp.register_message_handler(statistics, commands='statistics')
     dp.register_message_handler(english_level, commands='eng_level')
     dp.register_message_handler(set_eng_level, state=Reg.user_eng_level)
