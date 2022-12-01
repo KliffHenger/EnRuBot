@@ -5,11 +5,17 @@ from aiogram.dispatcher import FSMContext
 from keyboards.time_slot import WEEK
 from airtable_config import table
 from utils.menu import menu
+from config import dp, bot
+
 import re
 
 
 
 '''(1)Начало ввода ТаймСлота(старт "машины состояний")'''
+@dp.callback_query_handler(text='timeslot')
+async def callback_timeslot_input(message: types.Message):
+    await bot.send_message(message.from_user.id, "Выберите подходящий день недели.", reply_markup=WEEK)
+    await TimeSlot.week_day.set()
 
 async def time_slot_input(message: types.Message):
     await message.answer(f"Выберите подходящий день недели.", reply_markup=WEEK)
@@ -57,6 +63,8 @@ async def get_week_day(message: types.Message,  state: FSMContext):
     (3v2-4v2)Ввод времени начала (завершение "машины состояний")
     Закомментить/раскомментить что необходимо
     '''
+
+
 async def get_start_time(message: types.Message, state: FSMContext):
     pattern = r'^0[0-9]|1[0-9]|2[0-3]$'
     if re.fullmatch(pattern, message.text):

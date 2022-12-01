@@ -5,8 +5,8 @@ from aiogram.dispatcher import FSMContext
 from airtable_config import table
 from keyboards.english_level import user_english_level
 from keyboards.menu import menu_button
-from keyboards.inline_menu import KB_MENU
-from config import bot
+from keyboards.inline_menu import KB_MENU, G_MENU
+from config import bot, dp
 
 
 
@@ -30,7 +30,7 @@ async def start_bot(message: types.Message):
                 is_found = True
         if is_found:
             await message.answer(
-                f"Здравствуйте, {user_name} {user_surname}!\n Для просмотра опций Главного Меню нажмите /menu")
+                f"Здравствуйте, {user_name} {user_surname}!", reply_markup=G_MENU) # инлайн-кнопка приводящая в Главное Меню
         else:
             await message.answer(f"Для прохождения идентификации с базой учеников нажмите /register")
     except:
@@ -39,23 +39,24 @@ async def start_bot(message: types.Message):
 
 async def menu(message: types.Message):
     answer_message = """
-    Главное меню\n
-    1. Задать уровень английского /eng_level\n
-    2. Задать таймслот /timeslot\n
-    3. Показать статистику /statistics\n
-    4. Найти собеседника /find_interlocutor\n
+    ГЛАВНОЕ МЕНЮ:\n
+    1. Вы можете задать уровень знания английского.\n
+    2. Задать таймслот.\n
+    3. Посмотреть статистику.\n
+    4. Найти собеседника.\n
     """
-    await bot.send_message(message.chat.id, text=answer_message, reply_markup=KB_MENU)
+    await bot.send_message(message.chat.id, text=answer_message, reply_markup=KB_MENU) # инлайн-кнопка выводящая пункты Главного Меню
 
-async def callback_menu(callback_query):
+@dp.callback_query_handler(text='menu')
+async def callback_menu(message: types.Message):
     answer_message = """
-    Главное меню\n
-    1. Задать уровень английского /eng_level\n
-    2. Задать таймслот /timeslot\n
-    3. Показать статистику /statistics\n
-    4. Найти собеседника /find_interlocutor\n
+    ГЛАВНОЕ МЕНЮ:\n
+    1. Вы можете задать уровень знания английского.\n
+    2. Задать таймслот.\n
+    3. Посмотреть статистику.\n
+    4. Найти собеседника.\n
     """
-    await bot.send_message(callback_query, text=answer_message, reply_markup=KB_MENU)
+    await bot.send_message(message.from_user.id, text=answer_message, reply_markup=KB_MENU) # инлайн-кнопка выводящая пункты Главного Меню
 
 
 async def statistics(message: types.Message):
@@ -71,6 +72,11 @@ async def statistics(message: types.Message):
 
 async def english_level(message: types.Message):
     await message.answer(text='Укажите Ваш уровень английского', reply_markup=user_english_level)
+    await Reg.user_eng_level.set()
+
+@dp.callback_query_handler(text='eng_level')
+async def eng_level(message: types.Message):
+    await bot.send_message(message.from_user.id, 'Укажите Ваш уровень английского', reply_markup=user_english_level)
     await Reg.user_eng_level.set()
 
 
@@ -96,7 +102,6 @@ async def set_eng_level(message: types.Message, state: FSMContext):
 def register_handlers_menu(dp: Dispatcher):
     dp.register_message_handler(start_bot, Command('start'))
     dp.register_message_handler(menu, commands='menu')
-    dp.callback_query_handler(callback_menu, text='menu')
     dp.register_message_handler(statistics, commands='statistics')
     dp.register_message_handler(english_level, commands='eng_level')
     dp.register_message_handler(set_eng_level, state=Reg.user_eng_level)
