@@ -1,5 +1,4 @@
 from aiogram import types, Dispatcher
-from aiogram.dispatcher.filters import Command
 from user_states import TimeSlot
 from aiogram.dispatcher import FSMContext
 from keyboards.time_slot import WEEK

@@ -39,24 +39,24 @@ async def start_bot(message: types.Message):
 
 async def menu(message: types.Message):
     answer_message = """
-    ГЛАВНОЕ МЕНЮ:\n
+    <b>ГЛАВНОЕ МЕНЮ:</b>\n
     1. Вы можете задать уровень знания английского.\n
     2. Задать таймслот.\n
     3. Посмотреть статистику.\n
     4. Найти собеседника.\n
     """
-    await bot.send_message(message.chat.id, text=answer_message, reply_markup=KB_MENU) # инлайн-кнопка выводящая пункты Главного Меню
+    await bot.send_message(message.chat.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU) # инлайн-кнопка выводящая пункты Главного Меню
 
 @dp.callback_query_handler(text='menu')
 async def callback_menu(message: types.Message):
     answer_message = """
-    ГЛАВНОЕ МЕНЮ:\n
+    <b>ГЛАВНОЕ МЕНЮ:</b>\n
     1. Вы можете задать уровень знания английского.\n
     2. Задать таймслот.\n
     3. Посмотреть статистику.\n
     4. Найти собеседника.\n
     """
-    await bot.send_message(message.from_user.id, text=answer_message, reply_markup=KB_MENU) # инлайн-кнопка выводящая пункты Главного Меню
+    await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU) # инлайн-кнопка выводящая пункты Главного Меню
 
 
 async def statistics(message: types.Message):

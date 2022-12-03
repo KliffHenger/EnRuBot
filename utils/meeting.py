@@ -25,7 +25,7 @@ def generateToken():
 
 def createMeeting():
     """В данном документе находятся все основные параметры встречи.
-        Я проверял start time, вроде там что-то не так.
+        Я проверял start time, вроде                             там что-то не так.
         Но как мы и решили ранее, ссылка формируется именно в нужное время
     """
     meetingdetails = {"topic": "The title of your zoom meeting",
@@ -53,9 +53,23 @@ def createMeeting():
         f'https://api.zoom.us/v2/users/me/meetings',
         headers=headers, data=json.dumps(meetingdetails))
 
-    # print(r.text)
+    print(r.text)
     # converting the output into json and extracting the details
     y = json.loads(r.text)
     join_URL = y["join_url"]
     meetingPassword = y["password"]
     return join_URL, meetingPassword
+
+
+'''
+Работать будет только с коммерческим аккаунтом в Zoom
+'''
+# def getMeetingDetails():
+#     meetingId = '82665194632'
+#     headers = {'authorization': 'Bearer ' + generateToken(),
+#                'content-type': 'application/json'}
+#     r = requests.get(f'https://api.zoom.us/v2/metrics/meetings/{meetingId}/', headers=headers)
+#     print(r.text)
+#     y = json.loads(r.text)
+#     duration = y['total_minutes']
+#     return duration
