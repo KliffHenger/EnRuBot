@@ -53,7 +53,7 @@ async def get_week_day(message: types.Message,  state: FSMContext):
 #     for index in range(len(find_table)):
 #         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
 #             element_id = find_table[index]['id']
-#     await message.answer(f"Ваш тайм-слот - {user_time_slot}")
+#     await message.answer(f"Ваш тайм-слот - {user_time_slot}-00 - {start_time}-40.")
 #     table.update(str(element_id), {'UserTimeSlot': user_time_slot})
 #     await state.finish()
 #     await menu(message)
@@ -78,7 +78,7 @@ async def get_start_time(message: types.Message, state: FSMContext):
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 element_id = find_table[index]['id']
-        await message.answer(f"Ваш тайм-слот - {user_time_slot}")
+        await message.answer(f"Ваш тайм-слот - {user_time_slot}-00 - {start_time}-40.")
         table.update(str(element_id), {'UserTimeSlot': user_time_slot})
         await state.finish()
         await menu(message)

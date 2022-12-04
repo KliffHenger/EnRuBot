@@ -4,7 +4,9 @@ from .meeting import createMeeting
 from config import bot, dp
 from .menu import menu
 from keyboards.inline_menu import G_MENU
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import asyncio
+
 
 
 @dp.callback_query_handler(text='find_interlocutor')
@@ -29,6 +31,7 @@ async def callback_find_companion(message: types.Message):
         meeting_link, join_password = createMeeting()
         table.update(record_id=str(first_user_record_id), fields={'IsPared': "True"})
         table.update(record_id=str(second_user_record_id), fields={'IsPared': "True"})
+
         await bot.send_message(message.from_user.id, text=f"Join new meeting: {meeting_link}")
         await bot.send_message(chat_id=int(second_user_tg_id), text=f"Hi! You can join new meeting: {meeting_link}")
         await asyncio.sleep(60)
