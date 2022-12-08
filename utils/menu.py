@@ -40,7 +40,7 @@ async def start_bot(message: types.Message):
 async def menu(message: types.Message):
     answer_message = """
     <b>ГЛАВНОЕ МЕНЮ:</b>\n
-    1. Вы можете задать уровень знания английского.\n
+    1. Задать уровень знания английского.\n
     2. Задать таймслот.\n
     3. Посмотреть статистику.\n
     4. Найти собеседника.\n
@@ -51,7 +51,7 @@ async def menu(message: types.Message):
 async def callback_menu(message: types.Message):
     answer_message = """
     <b>ГЛАВНОЕ МЕНЮ:</b>\n
-    1. Вы можете задать уровень знания английского.\n
+    1. Задать уровень знания английского.\n
     2. Задать таймслот.\n
     3. Посмотреть статистику.\n
     4. Найти собеседника.\n
