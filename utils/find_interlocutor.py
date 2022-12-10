@@ -50,14 +50,14 @@ async def callback_find_companion(message: types.Message):
             time_now = datetime.now()
             date_now = datetime.date(time_now)
             day_now = time_now.weekday()
-            # different_days = search_day - day_now if day_now < search_day else 7 - day_now + search_day        # для нормальной работы раскомментить
-            different_days = 0                                                                                   # закомментить/удалить после тестов
+            different_days = search_day - day_now if day_now < search_day else 7 - day_now + search_day        # для нормальной работы раскомментить
+            # different_days = 0                                                                                   # закомментить/удалить после тестов
             date_meet = date_now + timedelta(days=different_days)
             datetime_meet = str(date_meet)+","+str(start_time)+",00,00"
             dt_meet = datetime.strptime(datetime_meet, "%Y-%m-%d,%H,%M,%S")
             delta = dt_meet - time_now
-            # seconds_to_meet = round(delta.total_seconds())                                                     # для нормальной работы раскомментить
-            seconds_to_meet = 30                                                                                 # закомментить/удалить после тестов
+            seconds_to_meet = round(delta.total_seconds())                                                     # для нормальной работы раскомментить
+            # seconds_to_meet = 30                                                                                 # закомментить/удалить после тестов
             print(seconds_to_meet)                                                                               # удалить после тестов
         await asyncio.sleep(seconds_to_meet-18)                                                                  # к отнимаемому числе добавить 00 после тестов
         await bot.send_message(message.from_user.id, text='Встреча начнется через 30 минут')

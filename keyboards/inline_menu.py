@@ -6,8 +6,11 @@ BTN_STATISTICS = InlineKeyboardButton('Статистика', callback_data='sta
 BTN_FIND_INTERLOCUTOR = InlineKeyboardButton('Найти Собеседника',  callback_data='find_interlocutor')
 BTN_HOUR_GOAL = InlineKeyboardButton('Цель', callback_data='hour_goal')
 BTN_GEN_MENU = InlineKeyboardButton('Главное Меню', callback_data='menu')
+BTN_DA = InlineKeyboardButton('Да', callback_data='register')
+BTN_NET = InlineKeyboardButton('Нет', callback_data='start')
 
 # START = ReplyKeyboardMarkup().add(BTN_START)
 G_MENU = InlineKeyboardMarkup().add(BTN_GEN_MENU)
 KB_MENU = InlineKeyboardMarkup().add(BTN_ENG_LEVEL, BTN_TIME_SLOT, BTN_STATISTICS, BTN_FIND_INTERLOCUTOR, BTN_HOUR_GOAL)
+START_MENU = InlineKeyboardMarkup().add(BTN_DA, BTN_NET)
 

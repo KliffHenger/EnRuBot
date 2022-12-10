@@ -3,23 +3,28 @@ from user_states import Reg
 from aiogram.dispatcher import FSMContext
 from airtable_config import table
 from utils.menu import menu
+from config import bot, dp
 import re
+
+
 
 
 async def bot_register(message: types.Message):
     await message.answer(f"Пожалуйста, введите Вашу электронную почту:")
     await Reg.user_email.set()
 
+@dp.callback_query_handler(text='register')
+async def bot_register(message: types.Message):
+    # await bot.delete_message(message.from_user.id, message_id=message.message_id)
+    await bot.send_message(message.from_user.id, f"Пожалуйста, введите Вашу электронную почту:")
+    await Reg.user_email.set()
 
 async def set_user_email(message: types.Message, state=FSMContext):
     """
-    Изначально была валидация почты. В процессе я её убрал.
-    Дело в том, что регулярка не обрабатывает тот случай,
-    когда в самой почте может быть несколько точек.
-    код не убирал, коль что - добавишь. Если tg_id пользователя
+    Валидация почты работает. Если tg_id пользователя
     есть в базе - пропустит дальше. Если нет - попросит почту.
     Если почта есть в базе, то значение tg_id будет обновлено, а бот
-    пустит пользователя дальше. Если нет - "тупик"
+    пустит пользователя дальше.
     """
     pattern = r'^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,3}$'
     is_found = False

@@ -5,12 +5,44 @@ from aiogram.dispatcher import FSMContext
 from airtable_config import table
 from keyboards.english_level import user_english_level
 from keyboards.menu import menu_button
-from keyboards.inline_menu import KB_MENU, G_MENU
+from keyboards.inline_menu import KB_MENU, G_MENU, START_MENU
 from config import bot, dp
 
 
 
-isCall = False
+last_msg = 0
+
+
+@dp.callback_query_handler(text='start')
+async def start_bot(message: types.Message):
+    """
+    если ник пользователя лежит в базе, то бот поприветствует юзера.
+    если же нет, то попросит почту. Если почта есть в БД - пустит дальше.
+    Если нет - по факту будет "тупик"
+    """
+    find_table = table.all()
+    is_found = False
+    user_name, user_surname = '', ''
+    try:
+        for index in range(len(find_table)):
+            if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                user_name = find_table[index]['fields']['UserName']
+                user_surname = find_table[index]['fields']['UserSurname']
+                is_found = True
+        if is_found:
+            await bot.send_message(message.from_user.id, 
+                f"Здравствуйте, {user_name} {user_surname}!", reply_markup=G_MENU) # инлайн-кнопка приводящая в Главное Меню
+        else:
+            last_msg = (await bot.send_message(message.from_user.id, 
+                f"Вы не авторизованы в сервисе поиска собеседников. Хотите авторизоваться?", reply_markup=START_MENU)).message_id
+            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+            print(last_msg)
+            
+    except:
+        last_msg = (await bot.send_message(message.from_user.id, 
+            f"Вы не авторизованы в сервисе поиска собеседников. Хотите авторизоваться?", reply_markup=START_MENU)).message_id
+        await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+        print(last_msg)
 
 
 async def start_bot(message: types.Message):
@@ -32,9 +64,16 @@ async def start_bot(message: types.Message):
             await message.answer(
                 f"Здравствуйте, {user_name} {user_surname}!", reply_markup=G_MENU) # инлайн-кнопка приводящая в Главное Меню
         else:
-            await message.answer(f"Для прохождения идентификации с базой учеников нажмите /register")
+            last_msg = (await bot.send_message(message.from_user.id, 
+                f"Вы не авторизованы в сервисе поиска собеседников. Хотите авторизоваться?", reply_markup=START_MENU)).message_id
+            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+            print(last_msg)
+            
     except:
-        await message.answer(f"Для прохождения идентификации с базой учеников нажмите /register")
+        last_msg = (await bot.send_message(message.from_user.id, 
+            f"Вы не авторизованы в сервисе поиска собеседников. Хотите авторизоваться?", reply_markup=START_MENU)).message_id
+        await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+        print(last_msg)
 
 
 async def menu(message: types.Message):
