@@ -5,7 +5,7 @@ from aiogram.dispatcher import FSMContext
 from airtable_config import table
 from keyboards.english_level import user_english_level
 from keyboards.menu import menu_button
-from keyboards.inline_menu import KB_MENU, G_MENU, START_MENU
+from keyboards.inline_menu import KB_MENU, G_MENU, START_MENU, NO_EN_LVL, NO_T_SLOT
 from config import bot, dp
 
 
@@ -77,25 +77,63 @@ async def start_bot(message: types.Message):
 
 
 async def menu(message: types.Message):
-    answer_message = """
-    <b>ГЛАВНОЕ МЕНЮ:</b>\n
-    1. Задать уровень знания английского.\n
-    2. Задать таймслот.\n
-    3. Посмотреть статистику.\n
-    4. Найти собеседника.\n
-    """
-    await bot.send_message(message.chat.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU) # инлайн-кнопка выводящая пункты Главного Меню
+    find_table = table.all()
+    # is_found = False
+    for index in range(len(find_table)):
+        if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
+            and find_table[index]['fields']['UserEngLevel'] == str('None'):
+            answer_message = """
+                <b>ГЛАВНОЕ МЕНЮ:1</b>
+                """
+            last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)).message_id
+            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+        elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
+            and find_table[index]['fields']['UserTimeSlot'] == str('None') \
+                and find_table[index]['fields']['UserEngLevel'] != str('None'):
+            answer_message = """
+                <b>ГЛАВНОЕ МЕНЮ:2</b>
+                """
+            last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
+            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+        elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
+            and find_table[index]['fields']['UserTimeSlot'] != str('None') \
+                and find_table[index]['fields']['UserEngLevel'] != str('None'):
+            answer_message = """
+                <b>ГЛАВНОЕ МЕНЮ:3</b>
+                """
+            last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
+            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+
+
 
 @dp.callback_query_handler(text='menu')
 async def callback_menu(message: types.Message):
-    answer_message = """
-    <b>ГЛАВНОЕ МЕНЮ:</b>\n
-    1. Задать уровень знания английского.\n
-    2. Задать таймслот.\n
-    3. Посмотреть статистику.\n
-    4. Найти собеседника.\n
-    """
-    await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU) # инлайн-кнопка выводящая пункты Главного Меню
+    find_table = table.all()
+    # is_found = False
+    for index in range(len(find_table)):
+        if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
+            and find_table[index]['fields']['UserEngLevel'] == str('None'):
+            answer_message = """
+                <b>ГЛАВНОЕ МЕНЮ:1</b>
+                """
+            last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)).message_id
+            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+        elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
+            and find_table[index]['fields']['UserTimeSlot'] == str('None') \
+                and find_table[index]['fields']['UserEngLevel'] != str('None'):
+            answer_message = """
+                <b>ГЛАВНОЕ МЕНЮ:2</b>
+                """
+            last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
+            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+        elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
+            and find_table[index]['fields']['UserTimeSlot'] != str('None') \
+                and find_table[index]['fields']['UserEngLevel'] != str('None'):
+            answer_message = """
+                <b>ГЛАВНОЕ МЕНЮ:3</b>
+                """
+            last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
+            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
 
 
 async def statistics(message: types.Message):
@@ -110,12 +148,14 @@ async def statistics(message: types.Message):
 
 
 async def english_level(message: types.Message):
-    await message.answer(text='Укажите Ваш уровень английского', reply_markup=user_english_level)
+    last_msg = (await message.answer(text='Укажите Ваш уровень английского', reply_markup=user_english_level)).message_id
+    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
     await Reg.user_eng_level.set()
 
 @dp.callback_query_handler(text='eng_level')
 async def eng_level(message: types.Message):
-    await bot.send_message(message.from_user.id, 'Укажите Ваш уровень английского', reply_markup=user_english_level)
+    last_msg = (await bot.send_message(message.from_user.id, 'Укажите Ваш уровень английского', reply_markup=user_english_level)).message_id
+    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
     await Reg.user_eng_level.set()
 
 
@@ -131,7 +171,9 @@ async def set_eng_level(message: types.Message, state: FSMContext):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-    await message.answer(f"Ваш уровень английского - {answer}\n", reply_markup=menu_button)
+    last_msg = (await message.answer(f"Ваш уровень английского - {answer}\n", reply_markup=menu_button)).message_id
+    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+    await bot.delete_message(message.from_user.id, message_id=last_msg-2)
     user_level = str(answer)
     table.update(record_id=str(element_id), fields={'UserEngLevel': user_level})
     await state.finish()

@@ -8,15 +8,22 @@ import re
 
 
 
+last_msg = 0
+
 
 async def bot_register(message: types.Message):
-    await message.answer(f"Пожалуйста, введите Вашу электронную почту:")
+    last_msg = (await bot.send_message(message.from_user.id,
+        f"Пожалуйста, введите Вашу электронную почту:")).message_id
+    # await bot.delete_message(message.from_user.id, message_id=last_msg-2)
+    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
     await Reg.user_email.set()
 
 @dp.callback_query_handler(text='register')
 async def bot_register(message: types.Message):
-    # await bot.delete_message(message.from_user.id, message_id=message.message_id)
-    await bot.send_message(message.from_user.id, f"Пожалуйста, введите Вашу электронную почту:")
+    last_msg = (await bot.send_message(message.from_user.id,
+        f"Пожалуйста, введите Вашу электронную почту:")).message_id
+    # await bot.delete_message(message.from_user.id, message_id=last_msg-2)
+    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
     await Reg.user_email.set()
 
 async def set_user_email(message: types.Message, state=FSMContext):
@@ -35,18 +42,30 @@ async def set_user_email(message: types.Message, state=FSMContext):
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserEmail'] == message.text:
                 is_found = True
+                wrong_date = None
+                wrong_status = False
                 element_id = find_table[index]['id']
-                await message.answer(
-                    f"Добро пожаловать, {find_table[index]['fields']['UserName']} {find_table[index]['fields']['UserSurname']}")
+                last_msg = (await bot.send_message(message.from_user.id,
+                    f"Добро пожаловать, {find_table[index]['fields']['UserName']} {find_table[index]['fields']['UserSurname']}")).message_id
+                await bot.delete_message(message.from_user.id, message_id=last_msg-1)
                 await state.finish()
                 table.update(record_id=str(element_id), fields={"UserIDTG": str(message.from_user.id)})
+                table.update(record_id=str(element_id), fields={"UserEngLevel": str(wrong_date)})
+                table.update(record_id=str(element_id), fields={"UserTimeSlot": str(wrong_date)})
+                table.update(record_id=str(element_id), fields={"IsPared": str(wrong_status)})
                 await menu(message)
         if not is_found:
-            await message.answer(
-                "Вас нет в базе учеников! Свяжитесь с администрацией школы для выяснения подробностей.")
+            last_msg = (await bot.send_message(message.from_user.id,
+                "Вас нет в базе учеников! Свяжитесь с администрацией школы для выяснения подробностей.")).message_id
+            await bot.delete_message(message.from_user.id, message_id=last_msg-2)
+            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
             await state.finish()
     else:
-        await message.answer(text='Введите корректное значение электронной почты.')
+        last_msg = (await bot.send_message(message.from_user.id,
+            text='Введите корректное значение электронной почты.')).message_id
+        await bot.delete_message(message.from_user.id, message_id=last_msg-2)
+        await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+
 
 
 def register_handlers_registration(dp: Dispatcher):
