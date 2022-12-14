@@ -2,6 +2,7 @@ from aiogram import types, Dispatcher
 from user_states import TimeSlot
 from aiogram.dispatcher import FSMContext
 from keyboards.time_slot import WEEK
+from keyboards.inline_menu import G_MENU
 from airtable_config import table
 from utils.menu import menu
 from config import dp, bot
@@ -9,15 +10,18 @@ from config import dp, bot
 import re
 
 
+last_msg = 0
 
 '''(1)Начало ввода ТаймСлота(старт "машины состояний")'''
 @dp.callback_query_handler(text='timeslot')
 async def callback_timeslot_input(message: types.Message):
-    await bot.send_message(message.from_user.id, "Выберите подходящий день недели.", reply_markup=WEEK)
+    last_msg = (await bot.send_message(message.from_user.id, "Выберите подходящий день недели.", reply_markup=WEEK)).message_id
+    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
     await TimeSlot.week_day.set()
 
 async def time_slot_input(message: types.Message):
-    await message.answer(f"Выберите подходящий день недели.", reply_markup=WEEK)
+    last_msg = (await bot.send_message(message.from_user.id, "Выберите подходящий день недели.", reply_markup=WEEK)).message_id
+    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
     await TimeSlot.week_day.set()
 
 
@@ -25,7 +29,10 @@ async def time_slot_input(message: types.Message):
 
 async def get_week_day(message: types.Message,  state: FSMContext):
     await state.update_data(week_day=message.text)
-    await message.answer(f"Вы выбрали {message.text}\nТеперь введите в какое время вам удобно начать: \nНапример: 17")
+    last_msg = (await bot.send_message(message.from_user.id, 
+        f"Вы выбрали {message.text}\nТеперь введите в какое время вам удобно начать: \nНапример: 17")).message_id
+    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+    await bot.delete_message(message.from_user.id, message_id=last_msg-2)
     await TimeSlot.start_time.set()
 
 
@@ -68,7 +75,8 @@ async def get_start_time(message: types.Message, state: FSMContext):
     pattern = r'^0[0-9]|1[0-9]|2[0-3]$'
     if re.fullmatch(pattern, message.text):
         await state.update_data(start_time=message.text)
-        await message.answer(f"Вы выбрали {message.text}.")
+        last_msg = (await bot.send_message(message.from_user.id, f"Вы выбрали {message.text}.")).message_id
+        await bot.delete_message(message.from_user.id, message_id=last_msg-1)
         data = await state.get_data()
         week_day = data.get('week_day')
         start_time = data.get('start_time')
@@ -78,12 +86,16 @@ async def get_start_time(message: types.Message, state: FSMContext):
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 element_id = find_table[index]['id']
-        await message.answer(f"Ваш тайм-слот - {user_time_slot}-00 - {start_time}-40.")
+        last_msg = (await bot.send_message(message.from_user.id, 
+            f"Ваш тайм-слот - {user_time_slot}-00 - {start_time}-40.", reply_markup=G_MENU)).message_id
+        await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+        await bot.delete_message(message.from_user.id, message_id=last_msg-3)
         table.update(str(element_id), {'UserTimeSlot': user_time_slot})
         await state.finish()
-        await menu(message)
     else:
-        await message.answer(text='Вы ввели что-то не то. \nКорректный формат от 00 до 23')
+        last_msg = (await bot.send_message(message.from_user.id, 
+            text='Вы ввели что-то не то. \nКорректный формат от 00 до 23')).message_id
+        await bot.delete_message(message.from_user.id, message_id=last_msg-1)
 
 
 

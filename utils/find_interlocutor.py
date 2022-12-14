@@ -59,13 +59,13 @@ async def callback_find_companion(message: types.Message):
             seconds_to_meet = round(delta.total_seconds())                                                     # для нормальной работы раскомментить
             # seconds_to_meet = 30                                                                                 # закомментить/удалить после тестов
             print(seconds_to_meet)                                                                               # удалить после тестов
-        await asyncio.sleep(seconds_to_meet-18)                                                                  # к отнимаемому числе добавить 00 после тестов
+        await asyncio.sleep(seconds_to_meet-1800)                                                                  # к отнимаемому числе добавить 00 после тестов
         await bot.send_message(message.from_user.id, text='Встреча начнется через 30 минут')
         await bot.send_message(chat_id=int(second_user_tg_id), text='Встреча начнется через 30 минут')
-        await asyncio.sleep(seconds_to_meet-9)                                                                   # к отнимаемому числе добавить 00 после тестов
+        await asyncio.sleep(seconds_to_meet-900)                                                                   # к отнимаемому числе добавить 00 после тестов
         await bot.send_message(message.from_user.id, text='Встреча начнется через 15 минут')
         await bot.send_message(chat_id=int(second_user_tg_id), text='Встреча начнется через 15 минут')
-        await asyncio.sleep(seconds_to_meet-3)                                                                   # к отнимаемому числе добавить 00 после тестов
+        await asyncio.sleep(seconds_to_meet-300)                                                                   # к отнимаемому числе добавить 00 после тестов
         await bot.send_message(message.from_user.id, text='Встреча начнется через 5 минут')
         await bot.send_message(chat_id=int(second_user_tg_id), text='Встреча начнется через 5 минут')
         await asyncio.sleep(seconds_to_meet)

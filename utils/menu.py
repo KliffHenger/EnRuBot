@@ -83,7 +83,7 @@ async def menu(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserEngLevel'] == str('None'):
             answer_message = """
-                <b>ГЛАВНОЕ МЕНЮ:1</b>
+                <b>ГЛАВНОЕ МЕНЮ:</b>
                 """
             last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)).message_id
             await bot.delete_message(message.from_user.id, message_id=last_msg-1)
@@ -91,7 +91,7 @@ async def menu(message: types.Message):
             and find_table[index]['fields']['UserTimeSlot'] == str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
             answer_message = """
-                <b>ГЛАВНОЕ МЕНЮ:2</b>
+                <b>ГЛАВНОЕ МЕНЮ:</b>
                 """
             last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
             await bot.delete_message(message.from_user.id, message_id=last_msg-1)
@@ -99,7 +99,7 @@ async def menu(message: types.Message):
             and find_table[index]['fields']['UserTimeSlot'] != str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
             answer_message = """
-                <b>ГЛАВНОЕ МЕНЮ:3</b>
+                <b>ГЛАВНОЕ МЕНЮ:</b>
                 """
             last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
             await bot.delete_message(message.from_user.id, message_id=last_msg-1)
@@ -114,7 +114,7 @@ async def callback_menu(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserEngLevel'] == str('None'):
             answer_message = """
-                <b>ГЛАВНОЕ МЕНЮ:1</b>
+                <b>ГЛАВНОЕ МЕНЮ:</b>
                 """
             last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)).message_id
             await bot.delete_message(message.from_user.id, message_id=last_msg-1)
@@ -122,7 +122,7 @@ async def callback_menu(message: types.Message):
             and find_table[index]['fields']['UserTimeSlot'] == str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
             answer_message = """
-                <b>ГЛАВНОЕ МЕНЮ:2</b>
+                <b>ГЛАВНОЕ МЕНЮ:</b>
                 """
             last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
             await bot.delete_message(message.from_user.id, message_id=last_msg-1)
@@ -130,7 +130,7 @@ async def callback_menu(message: types.Message):
             and find_table[index]['fields']['UserTimeSlot'] != str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
             answer_message = """
-                <b>ГЛАВНОЕ МЕНЮ:3</b>
+                <b>ГЛАВНОЕ МЕНЮ:</b>
                 """
             last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
             await bot.delete_message(message.from_user.id, message_id=last_msg-1)
