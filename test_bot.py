@@ -1,10 +1,15 @@
-from config import dp
+from config import dp, scheduler
 from aiogram.utils import executor
 from utils import registration, menu, time_slot, find_interlocutor, hour_goal
 
 
+
+
+
 async def on_startup(_):
     print('The bot is online!')
+    scheduler.start()
+
 
 """Регистрация все хэндлеров"""
 registration.register_handlers_registration(dp)
