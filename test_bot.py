@@ -8,7 +8,7 @@ from utils import registration, menu, time_slot, find_interlocutor, hour_goal
 
 async def on_startup(_):
     print('The bot is online!')
-    scheduler.start()
+    scheduler.start()                   # эта штука хранит задачи
 
 
 """Регистрация все хэндлеров"""

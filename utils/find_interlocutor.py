@@ -50,8 +50,8 @@ async def callback_find_companion(message: types.Message):
             is_found = True
     if is_found:
         is_pared_id = first_user_tg_id+second_user_tg_id
-        table.update(record_id=str(first_user_record_id), fields={'IsPared': "True"})
-        table.update(record_id=str(second_user_record_id), fields={'IsPared': "True"})
+        # table.update(record_id=str(first_user_record_id), fields={'IsPared': "True"})
+        # table.update(record_id=str(second_user_record_id), fields={'IsPared': "True"})
         table.update(record_id=str(first_user_record_id), fields={'IsParedID': is_pared_id})
         table.update(record_id=str(second_user_record_id), fields={'IsParedID': is_pared_id})
         await bot.send_message(message.from_user.id, text=f'Для Вас есть собеседник на время {week_for_message}, {start_time}-00.')
@@ -63,23 +63,27 @@ async def callback_find_companion(message: types.Message):
             time_now = datetime.now()
             date_now = datetime.date(time_now)
             day_now = time_now.weekday()
-            different_days = search_day - day_now if day_now < search_day else 7 - day_now + search_day
+            different_days = search_day - day_now if day_now <= search_day else 7 - day_now + search_day
             date_meet = date_now + timedelta(days=different_days)
             datetime_meet = str(date_meet)+","+str(start_time)+",00,00"
             dt_meet = datetime.strptime(datetime_meet, "%Y-%m-%d,%H,%M,%S")
+            start_alert = int(start_time) - 1
+            
+            
         
         # scheduler.add_job(send_message_cron, trigger='cron', hour=datetime.now().hour, 
             # minute=datetime.now().minute + 1, start_date=datetime.now(), kwargs={'message': message})
-        scheduler.add_job(send_message_cron30, trigger='cron', hour=dt_meet.hour - 1, 
-            minute=30, start_date=dt_meet, kwargs={'message': message})
-        scheduler.add_job(send_message_cron15, trigger='cron', hour=dt_meet.hour - 1, 
-            minute=45, start_date=dt_meet, kwargs={'message': message})
-        scheduler.add_job(send_message_cron5, trigger='cron', hour=dt_meet.hour - 1, 
-            minute=55, start_date=dt_meet, kwargs={'message': message})
-        scheduler.add_job(send_message_cron, trigger='cron', hour=dt_meet.hour, 
-            minute=00, start_date=dt_meet, kwargs={'message': message})
-        scheduler.add_job(update_cron, trigger='cron', hour=dt_meet.hour, 
-            minute=40, start_date=dt_meet, kwargs={'message': message})
+        scheduler.add_job(send_message_cron30, trigger='cron', day_of_week=search_day, hour=int(start_alert), 
+            minute=30, kwargs={'message': message})
+        scheduler.add_job(send_message_cron15, trigger='cron', day_of_week=search_day, hour=int(start_alert), 
+            minute=45, kwargs={'message': message})
+        scheduler.add_job(send_message_cron5, trigger='cron', day_of_week=search_day, hour=int(start_alert), 
+            minute=55, kwargs={'message': message})
+        scheduler.add_job(send_message_cron, trigger='cron', day_of_week=search_day, hour=int(start_time),
+            minute=0, kwargs={'message': message})
+        scheduler.add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(start_time),
+            minute=40, kwargs={'message': message})
+        scheduler.print_jobs()
     else:
         await bot.send_message(message.from_user.id, text='Извините, мы никого не смогли найти....', reply_markup=G_MENU)
     
@@ -116,7 +120,7 @@ async def find_companion(message: types.Message):
     пользователей совпадают, то они образуют пару. Если нет - бот выводит: 'Извините, мы никого не смогли найти....'.
     Ровно в этот момент их значения поля 'IsPared' в базе становится True.
     По истечению 40 минут (в данной функции пока что одна минута) их значение 'IsPared'
-    снова снанет False.
+    снова снанет False. 298933932
     """
     find_table = table.all()
     first_user_record_id, first_user_eng_level, first_user_time_slot, second_user_record_id, second_user_tg_id = '', '', '', '', ''

@@ -133,7 +133,6 @@ async def callback_menu(message: types.Message):
                 <b>ГЛАВНОЕ МЕНЮ:</b>
                 """
             last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
-            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
 
 
 async def statistics(message: types.Message):
