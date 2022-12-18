@@ -16,7 +16,7 @@ last_msg = 0
 @dp.callback_query_handler(text='timeslot')
 async def callback_timeslot_input(message: types.Message):
     last_msg = (await bot.send_message(message.from_user.id, "Выберите подходящий день недели.", reply_markup=WEEK)).message_id
-    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+    # await bot.delete_message(message.from_user.id, message_id=last_msg-1)
     await TimeSlot.week_day.set()
 
 async def time_slot_input(message: types.Message):
