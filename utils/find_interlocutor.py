@@ -16,10 +16,6 @@ first_user_tg_id = ''
 second_user_tg_id = ''
 
 
-
-
-
-
 @dp.callback_query_handler(text='find_interlocutor')
 async def callback_find_companion(message: types.Message):
     find_table = table.all()
@@ -67,21 +63,22 @@ async def callback_find_companion(message: types.Message):
             date_meet = date_now + timedelta(days=different_days)
             datetime_meet = str(date_meet)+","+str(start_time)+",00,00"
             dt_meet = datetime.strptime(datetime_meet, "%Y-%m-%d,%H,%M,%S")
-            start_alert = int(start_time) - 1
+            start_alert = dt_meet - timedelta(minutes=30)
+            print(start_alert)
             
             
         
         # scheduler.add_job(send_message_cron, trigger='cron', hour=datetime.now().hour, 
             # minute=datetime.now().minute + 1, start_date=datetime.now(), kwargs={'message': message})
-        scheduler.add_job(send_message_cron30, trigger='cron', day_of_week=search_day, hour=int(start_alert), 
+        scheduler.add_job(send_message_cron30, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
             minute=30, kwargs={'message': message})
-        scheduler.add_job(send_message_cron15, trigger='cron', day_of_week=search_day, hour=int(start_alert), 
+        scheduler.add_job(send_message_cron15, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
             minute=45, kwargs={'message': message})
-        scheduler.add_job(send_message_cron5, trigger='cron', day_of_week=search_day, hour=int(start_alert), 
+        scheduler.add_job(send_message_cron5, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
             minute=55, kwargs={'message': message})
-        scheduler.add_job(send_message_cron, trigger='cron', day_of_week=search_day, hour=int(start_time),
+        scheduler.add_job(send_message_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
             minute=0, kwargs={'message': message})
-        scheduler.add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(start_time),
+        scheduler.add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
             minute=40, kwargs={'message': message})
         scheduler.print_jobs()
     else:
