@@ -23,8 +23,10 @@ async def callback_find_companion(message: types.Message):
     global second_user_record_id
     global second_user_tg_id
     first_user_record_id, first_user_eng_level, first_user_time_slot, second_user_record_id, second_user_tg_id = '', '', '', '', ''
+    
     global first_user_tg_id
     first_user_tg_id = str(message.from_user.id)
+    more_found = False
     is_found = False
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
@@ -44,6 +46,14 @@ async def callback_find_companion(message: types.Message):
             second_user_fname = find_table[index]['fields']['UserName']
             second_user_record_id = find_table[index]['id']
             is_found = True
+            more_found = False
+    for index in range(len(find_table)):
+        if find_table[index]['fields']['UserIDTG'] != str(message.from_user.id) \
+                and find_table[index]['fields']['UserEngLevel'] == first_user_eng_level \
+                and find_table[index]['fields']['IsPared'] == 'False':
+            more_time_slot = find_table[index]['fields']['UserTimeSlot']
+            is_found = False
+            more_found = True
     if is_found:
         is_pared_id = first_user_tg_id+second_user_tg_id
         # table.update(record_id=str(first_user_record_id), fields={'IsPared': "True"})
@@ -76,8 +86,12 @@ async def callback_find_companion(message: types.Message):
         scheduler.add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
             minute=40, kwargs={'message': message})
         scheduler.print_jobs()
+    elif more_found:
+        await bot.send_message(message.from_user.id, 
+            text=f'На ваш ТаймСлот нет совпадений, но есть в {more_time_slot}', reply_markup=G_MENU)
     else:
-        await bot.send_message(message.from_user.id, text='Извините, мы никого не смогли найти....', reply_markup=G_MENU)
+        await bot.send_message(message.from_user.id, 
+            text='Извините, но с вашим уровнем знания языка никого нет. Попробуйте изменить его.', reply_markup=G_MENU)
     
 
 async def send_message_cron30(message: types.Message):
