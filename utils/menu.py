@@ -22,16 +22,18 @@ async def start_bot(message: types.Message):
     """
     find_table = table.all()
     is_found = False
-    user_name, user_surname = '', ''
+    user_name, user_surname, eng_level, time_slot = '', '', '', ''
     try:
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 user_name = find_table[index]['fields']['UserName']
                 user_surname = find_table[index]['fields']['UserSurname']
+                eng_level = find_table[index]['fields']['UserEngLevel']
+                time_slot = find_table[index]['fields']['UserTimeSlot']
                 is_found = True
         if is_found:
             await bot.send_message(message.from_user.id, 
-                f"Hello, {user_name} {user_surname}!", reply_markup=G_MENU) # инлайн-кнопка приводящая в Главное Меню
+                f"Hello, {user_name} {user_surname}!\nYour level of English - {eng_level}.\nYour Time-Slot - {time_slot}", reply_markup=G_MENU) # инлайн-кнопка приводящая в Главное Меню
         else:
             last_msg = (await bot.send_message(message.from_user.id, 
                 f"You are not authorized in the service of searching for interlocutors. Want to log in?", reply_markup=START_MENU)).message_id
@@ -53,16 +55,18 @@ async def start_bot(message: types.Message):
     """
     find_table = table.all()
     is_found = False
-    user_name, user_surname = '', ''
+    user_name, user_surname, eng_level, time_slot = '', '', '', ''
     try:
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 user_name = find_table[index]['fields']['UserName']
                 user_surname = find_table[index]['fields']['UserSurname']
+                eng_level = find_table[index]['fields']['UserEngLevel']
+                time_slot = find_table[index]['fields']['UserTimeSlot']
                 is_found = True
         if is_found:
             await message.answer(
-                f"Hello, {user_name} {user_surname}!", reply_markup=G_MENU) # инлайн-кнопка приводящая в Главное Меню
+                f"Hello, {user_name} {user_surname}!\nYour level of English - {eng_level}.\nYour Time-Slot - {time_slot}", reply_markup=G_MENU) # инлайн-кнопка приводящая в Главное Меню
         else:
             last_msg = (await bot.send_message(message.from_user.id, 
                 f"You are not authorized in the service of searching for interlocutors. Want to log in?", reply_markup=START_MENU)).message_id
