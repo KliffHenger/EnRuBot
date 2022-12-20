@@ -61,10 +61,10 @@ async def callback_find_companion(message: types.Message):
         table.update(record_id=str(second_user_record_id), fields={'IsPared': "True"})
         table.update(record_id=str(first_user_record_id), fields={'IsParedID': is_pared_id})
         table.update(record_id=str(second_user_record_id), fields={'IsParedID': is_pared_id})
-        await bot.send_message(message.from_user.id, text=f'Для Вас есть собеседник на время {week_for_message}, {start_time}-00.')
-        await bot.send_message(message.from_user.id, text=f'Ваш собеседник - {second_user_fname}.', reply_markup=G_MENU)
-        await bot.send_message(chat_id=int(second_user_tg_id), text=f'Для Вас есть собеседник на время {week_for_message}, {start_time}-00.')
-        await bot.send_message(chat_id=int(second_user_tg_id), text=f'Ваш собеседник - {first_user_fname}.', reply_markup=G_MENU)
+        await bot.send_message(message.from_user.id, text=f'There is an interlocutor for you for the time of {week_for_message}, {start_time}-00.')
+        await bot.send_message(message.from_user.id, text=f'Your interlocutor is - {second_user_fname}.', reply_markup=G_MENU)
+        await bot.send_message(chat_id=int(second_user_tg_id), text=f'There is an interlocutor for you for the time of {week_for_message}, {start_time}-00.')
+        await bot.send_message(chat_id=int(second_user_tg_id), text=f'Your interlocutor is - {first_user_fname}.', reply_markup=G_MENU)
         if week_for_message:    # этот кусок кода отвечет за отсрочку выдачи всех последующих сообщений
             search_day = WEEKDAYS.index(week_for_message.lower())  
             time_now = datetime.now()
@@ -89,23 +89,23 @@ async def callback_find_companion(message: types.Message):
         scheduler.print_jobs()
     elif more_found == True and is_found == False:
         await bot.send_message(message.from_user.id, 
-            text=f'На ваш ТаймСлот нет совпадений, но есть в {more_time_slot}', reply_markup=G_MENU)
+            text=f'There are no coincidences for your time slopes, but there is at {more_time_slot}', reply_markup=G_MENU)
     else:
         await bot.send_message(message.from_user.id, 
-            text='Извините, но с вашим уровнем знания языка никого нет. Попробуйте изменить его.', reply_markup=G_MENU)
+            text='Sorry, but there is no one with your level of knowledge of the language. Try to change it.', reply_markup=G_MENU)
     
 
 async def send_message_cron30(message: types.Message):
-    await bot.send_message(chat_id=int(first_user_tg_id), text='Встреча начнется через 30 минут')
-    await bot.send_message(chat_id=int(second_user_tg_id), text='Встреча начнется через 30 минут')
+    await bot.send_message(chat_id=int(first_user_tg_id), text='The meeting will begin after 30 minutes.')
+    await bot.send_message(chat_id=int(second_user_tg_id), text='The meeting will begin after 30 minutes.')
 
 async def send_message_cron15(message: types.Message):                                                                  
-    await bot.send_message(chat_id=int(first_user_tg_id), text='Встреча начнется через 15 минут')
-    await bot.send_message(chat_id=int(second_user_tg_id), text='Встреча начнется через 15 минут')
+    await bot.send_message(chat_id=int(first_user_tg_id), text='The meeting will begin after 15 minutes.')
+    await bot.send_message(chat_id=int(second_user_tg_id), text='The meeting will begin after 15 minutes.')
 
 async def send_message_cron5(message: types.Message):
-    await bot.send_message(chat_id=int(first_user_tg_id), text='Встреча начнется через 5 минут')
-    await bot.send_message(chat_id=int(second_user_tg_id), text='Встреча начнется через 5 минут')
+    await bot.send_message(chat_id=int(first_user_tg_id), text='The meeting will begin after 5 minutes.')
+    await bot.send_message(chat_id=int(second_user_tg_id), text='The meeting will begin after 5 minutes.')
 
 async def send_message_cron(message: types.Message):
     meeting_link, join_password = createMeeting()
@@ -126,8 +126,7 @@ async def find_companion(message: types.Message):
     После данной операции нам необзодимо провести операцию сравнения. Если параметры языка и времени у
     пользователей совпадают, то они образуют пару. Если нет - бот выводит: 'Извините, мы никого не смогли найти....'.
     Ровно в этот момент их значения поля 'IsPared' в базе становится True.
-    По истечению 40 минут (в данной функции пока что одна минута) их значение 'IsPared'
-    снова снанет False. 298933932
+    По истечению 40 минут их значение 'IsPared' снова снанет False.
     """
     find_table = table.all()
     first_user_record_id, first_user_eng_level, first_user_time_slot, second_user_record_id, second_user_tg_id = '', '', '', '', ''

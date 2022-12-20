@@ -13,7 +13,7 @@ last_msg = 0
 
 async def bot_register(message: types.Message):
     last_msg = (await bot.send_message(message.from_user.id,
-        f"Пожалуйста, введите Вашу электронную почту:")).message_id
+        f"Please enter your e-mail:")).message_id
     # await bot.delete_message(message.from_user.id, message_id=last_msg-2)
     await bot.delete_message(message.from_user.id, message_id=last_msg-1)
     await Reg.user_email.set()
@@ -21,7 +21,7 @@ async def bot_register(message: types.Message):
 @dp.callback_query_handler(text='register')
 async def bot_register(message: types.Message):
     last_msg = (await bot.send_message(message.from_user.id,
-        f"Пожалуйста, введите Вашу электронную почту:")).message_id
+        f"Please enter your e-mail:")).message_id
     # await bot.delete_message(message.from_user.id, message_id=last_msg-2)
     await bot.delete_message(message.from_user.id, message_id=last_msg-1)
     await Reg.user_email.set()
@@ -46,7 +46,7 @@ async def set_user_email(message: types.Message, state=FSMContext):
                 wrong_status = False
                 element_id = find_table[index]['id']
                 last_msg = (await bot.send_message(message.from_user.id,
-                    f"Добро пожаловать, {find_table[index]['fields']['UserName']} {find_table[index]['fields']['UserSurname']}")).message_id
+                    f"Welcome, {find_table[index]['fields']['UserName']} {find_table[index]['fields']['UserSurname']}")).message_id
                 await bot.delete_message(message.from_user.id, message_id=last_msg-1)
                 await state.finish()
                 table.update(record_id=str(element_id), fields={"UserIDTG": str(message.from_user.id)})
@@ -56,13 +56,13 @@ async def set_user_email(message: types.Message, state=FSMContext):
                 await menu(message)
         if not is_found:
             last_msg = (await bot.send_message(message.from_user.id,
-                "Вас нет в базе учеников! Свяжитесь с администрацией школы для выяснения подробностей.")).message_id
+                "You are not in the database of students! Contact the school administration to find out the details.")).message_id
             await bot.delete_message(message.from_user.id, message_id=last_msg-2)
             await bot.delete_message(message.from_user.id, message_id=last_msg-1)
             await state.finish()
     else:
         last_msg = (await bot.send_message(message.from_user.id,
-            text='Введите корректное значение электронной почты.')).message_id
+            text='Enter the correct e-mail.')).message_id
         await bot.delete_message(message.from_user.id, message_id=last_msg-2)
         await bot.delete_message(message.from_user.id, message_id=last_msg-1)
 
