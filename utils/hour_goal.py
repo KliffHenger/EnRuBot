@@ -11,7 +11,8 @@ async def get_hour_goal(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             user_hour_goal = find_table[index]['fields']['UserHourGoal']
-    await bot.send_message(message.from_user.id, f"You have {user_hour_goal} meetings left to the goal.", reply_markup=G_MENU)
+    msg_id = (await bot.send_message(message.from_user.id, f"You have {user_hour_goal} meetings left to the goal.", reply_markup=G_MENU)).message_id
+    print(msg_id)
     
 
 async def get_hour_goal(message: types.Message):
@@ -20,7 +21,8 @@ async def get_hour_goal(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             user_hour_goal = find_table[index]['fields']['UserHourGoal']
-    await message.answer(f"You have {user_hour_goal} meetings left to the goal.", reply_markup=G_MENU)
+    msg_id = (await message.answer(f"You have {user_hour_goal} meetings left to the goal.", reply_markup=G_MENU)).message_id
+    print(msg_id)
     
 
 def register_handlers_hour_goal(dp: Dispatcher):

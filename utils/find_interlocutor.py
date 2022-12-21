@@ -88,11 +88,13 @@ async def callback_find_companion(message: types.Message):
             minute=40, kwargs={'message': message})
         scheduler.print_jobs()
     elif more_found == True and is_found == False:
-        await bot.send_message(message.from_user.id, 
-            text=f'There are no coincidences for your time slopes, but there is at {more_time_slot}', reply_markup=G_MENU)
+        msg_id = (await bot.send_message(message.from_user.id, 
+            text=f'There are no coincidences for your time slopes, but there is at {more_time_slot}', reply_markup=G_MENU)).message_id
+        print(msg_id)
     else:
-        await bot.send_message(message.from_user.id, 
-            text='Sorry, but there is no one with your level of knowledge of the language. Try to change it.', reply_markup=G_MENU)
+        msg_id = (await bot.send_message(message.from_user.id, 
+            text='Sorry, but there is no one with your level of knowledge of the language. Try to change it.', reply_markup=G_MENU)).message_id
+        print(msg_id)
     
 
 async def send_message_cron30(message: types.Message):
