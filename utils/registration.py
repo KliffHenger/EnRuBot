@@ -8,22 +8,16 @@ import re
 
 
 
-last_msg = 0
-
 
 async def bot_register(message: types.Message):
-    last_msg = (await bot.send_message(message.from_user.id,
-        f"Please enter your e-mail:")).message_id
-    # await bot.delete_message(message.from_user.id, message_id=last_msg-2)
-    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+    await bot.send_message(message.from_user.id,
+        f"Please enter your e-mail:")
     await Reg.user_email.set()
 
 @dp.callback_query_handler(text='register')
 async def bot_register(message: types.Message):
-    last_msg = (await bot.send_message(message.from_user.id,
-        f"Please enter your e-mail:")).message_id
-    # await bot.delete_message(message.from_user.id, message_id=last_msg-2)
-    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+    await bot.send_message(message.from_user.id,
+        f"Please enter your e-mail:")
     await Reg.user_email.set()
 
 async def set_user_email(message: types.Message, state=FSMContext):
@@ -45,9 +39,8 @@ async def set_user_email(message: types.Message, state=FSMContext):
                 wrong_date = None
                 wrong_status = False
                 element_id = find_table[index]['id']
-                last_msg = (await bot.send_message(message.from_user.id,
-                    f"Welcome, {find_table[index]['fields']['UserName']} {find_table[index]['fields']['UserSurname']}")).message_id
-                await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+                await bot.send_message(message.from_user.id,
+                    f"Welcome, {find_table[index]['fields']['UserName']} {find_table[index]['fields']['UserSurname']}")
                 await state.finish()
                 table.update(record_id=str(element_id), fields={"UserIDTG": str(message.from_user.id)})
                 table.update(record_id=str(element_id), fields={"UserEngLevel": str(wrong_date)})
@@ -55,16 +48,12 @@ async def set_user_email(message: types.Message, state=FSMContext):
                 table.update(record_id=str(element_id), fields={"IsPared": str(wrong_status)})
                 await menu(message)
         if not is_found:
-            last_msg = (await bot.send_message(message.from_user.id,
-                "You are not in the database of students! Contact the school administration to find out the details.")).message_id
-            await bot.delete_message(message.from_user.id, message_id=last_msg-2)
-            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+            await bot.send_message(message.from_user.id,
+                "You are not in the database of students! Contact the school administration to find out the details.")
             await state.finish()
     else:
-        last_msg = (await bot.send_message(message.from_user.id,
-            text='Enter the correct e-mail.')).message_id
-        await bot.delete_message(message.from_user.id, message_id=last_msg-2)
-        await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+        await bot.send_message(message.from_user.id,
+            text='Enter the correct e-mail.')
 
 
 

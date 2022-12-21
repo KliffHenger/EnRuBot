@@ -10,9 +10,6 @@ from config import bot, dp
 
 
 
-last_msg = 0
-
-
 @dp.callback_query_handler(text='start')
 async def start_bot(message: types.Message):
     """
@@ -35,16 +32,11 @@ async def start_bot(message: types.Message):
             await bot.send_message(message.from_user.id, 
                 f"Hello, {user_name} {user_surname}!\nYour level of English - {eng_level}.\nYour Time-Slot - {time_slot}", reply_markup=G_MENU) # инлайн-кнопка приводящая в Главное Меню
         else:
-            last_msg = (await bot.send_message(message.from_user.id, 
-                f"You are not authorized in the service of searching for interlocutors. Want to log in?", reply_markup=START_MENU)).message_id
-            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
-            print(last_msg)
-            
+            await bot.send_message(message.from_user.id, 
+                f"You are not authorized in the service of searching for interlocutors. Want to log in?", reply_markup=START_MENU)
     except:
-        last_msg = (await bot.send_message(message.from_user.id, 
-            f"You are not authorized in the service of searching for interlocutors. Want to log in?", reply_markup=START_MENU)).message_id
-        await bot.delete_message(message.from_user.id, message_id=last_msg-1)
-        print(last_msg)
+        await bot.send_message(message.from_user.id, 
+            f"You are not authorized in the service of searching for interlocutors. Want to log in?", reply_markup=START_MENU)
 
 
 async def start_bot(message: types.Message):
@@ -68,17 +60,11 @@ async def start_bot(message: types.Message):
             await message.answer(
                 f"Hello, {user_name} {user_surname}!\nYour level of English - {eng_level}.\nYour Time-Slot - {time_slot}", reply_markup=G_MENU) # инлайн-кнопка приводящая в Главное Меню
         else:
-            last_msg = (await bot.send_message(message.from_user.id, 
-                f"You are not authorized in the service of searching for interlocutors. Want to log in?", reply_markup=START_MENU)).message_id
-            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
-            print(last_msg)
-            
+            await bot.send_message(message.from_user.id, 
+                f"You are not authorized in the service of searching for interlocutors. Want to log in?", reply_markup=START_MENU)
     except:
-        last_msg = (await bot.send_message(message.from_user.id, 
-            f"You are not authorized in the service of searching for interlocutors. Want to log in?", reply_markup=START_MENU)).message_id
-        await bot.delete_message(message.from_user.id, message_id=last_msg-1)
-        print(last_msg)
-
+        await bot.send_message(message.from_user.id, 
+            f"You are not authorized in the service of searching for interlocutors. Want to log in?", reply_markup=START_MENU)
 
 async def menu(message: types.Message):
     find_table = table.all()
@@ -89,24 +75,21 @@ async def menu(message: types.Message):
             answer_message = """
                 <b>MAIN MENU:</b>
                 """
-            last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)).message_id
-            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+            await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] == str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
             answer_message = """
                 <b>MAIN MENU:</b>
                 """
-            last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
-            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+            await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] != str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
             answer_message = """
                 <b>MAIN MENU:</b>
                 """
-            last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
-            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+            await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)
 
 
 
@@ -120,23 +103,21 @@ async def callback_menu(message: types.Message):
             answer_message = """
                 <b>MAIN MENU:</b>
                 """
-            last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)).message_id
-            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+            await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] == str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
             answer_message = """
                 <b>MAIN MENU:</b>
                 """
-            last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
-            await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+            await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] != str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
             answer_message = """
                 <b>MAIN MENU:</b>
                 """
-            last_msg = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
+            await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)
 
 
 async def statistics(message: types.Message):
@@ -151,14 +132,12 @@ async def statistics(message: types.Message):
 
 
 async def english_level(message: types.Message):
-    last_msg = (await message.answer(text='Indicate your level of English', reply_markup=user_english_level)).message_id
-    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+    await message.answer(text='Indicate your level of English', reply_markup=user_english_level)
     await Reg.user_eng_level.set()
 
 @dp.callback_query_handler(text='eng_level')
 async def eng_level(message: types.Message):
-    last_msg = (await bot.send_message(message.from_user.id, 'Indicate your level of English', reply_markup=user_english_level)).message_id
-    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
+    await bot.send_message(message.from_user.id, 'Indicate your level of English', reply_markup=user_english_level)
     await Reg.user_eng_level.set()
 
 
@@ -174,9 +153,7 @@ async def set_eng_level(message: types.Message, state: FSMContext):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-    last_msg = (await message.answer(f"Your level of English - {answer}\n", reply_markup=menu_button)).message_id
-    await bot.delete_message(message.from_user.id, message_id=last_msg-1)
-    await bot.delete_message(message.from_user.id, message_id=last_msg-2)
+    await message.answer(f"Your level of English - {answer}\n", reply_markup=menu_button)
     user_level = str(answer)
     table.update(record_id=str(element_id), fields={'UserEngLevel': user_level})
     await state.finish()
