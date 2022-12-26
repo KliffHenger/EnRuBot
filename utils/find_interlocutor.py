@@ -47,14 +47,6 @@ async def callback_find_companion(message: types.Message):
             second_user_record_id = find_table[index]['id']
             is_found = True
             more_found = False
-    for index in range(len(find_table)):
-        if find_table[index]['fields']['UserIDTG'] != str(message.from_user.id) \
-                and find_table[index]['fields']['UserEngLevel'] == first_user_eng_level \
-                and find_table[index]['fields']['UserTimeSlot'] != first_user_time_slot \
-                and find_table[index]['fields']['IsPared'] == 'False':
-            more_time_slot = find_table[index]['fields']['UserTimeSlot']
-            is_found = False
-            more_found = True
     if is_found == True and more_found == False:
         is_pared_id = first_user_tg_id+second_user_tg_id
         table.update(record_id=str(first_user_record_id), fields={'IsPared': "True"})
@@ -87,15 +79,24 @@ async def callback_find_companion(message: types.Message):
         scheduler.add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
             minute=40, kwargs={'message': message})
         scheduler.print_jobs()
-    elif more_found == True and is_found == False:
-        msg_id = (await bot.send_message(message.from_user.id, 
-            text=f'There are no coincidences for your time slopes, but there is at {more_time_slot}', reply_markup=G_MENU)).message_id
-        print(msg_id)
     else:
-        msg_id = (await bot.send_message(message.from_user.id, 
-            text='Sorry, but there is no one with your level of knowledge of the language. Try to change it.', reply_markup=G_MENU)).message_id
-        print(msg_id)
-    
+        for index in range(len(find_table)):
+            if find_table[index]['fields']['UserIDTG'] != str(message.from_user.id) \
+                    and find_table[index]['fields']['UserEngLevel'] == first_user_eng_level \
+                    and find_table[index]['fields']['UserTimeSlot'] != first_user_time_slot \
+                    and find_table[index]['fields']['IsPared'] == 'False':
+                more_time_slot = find_table[index]['fields']['UserTimeSlot']
+                is_found = False
+                more_found = True
+        if is_found == False and more_found == True:
+            msg_id = (await bot.send_message(message.from_user.id, 
+                text=f'There are no coincidences for your time slopes, but there is at {more_time_slot}', reply_markup=G_MENU)).message_id
+            print(msg_id)
+        else:
+            msg_id = (await bot.send_message(message.from_user.id, 
+                text='Sorry, but there is no one with your level of knowledge of the language. Try to change it.', reply_markup=G_MENU)).message_id
+            print(msg_id)
+        
 
 async def send_message_cron30(message: types.Message):
     await bot.send_message(chat_id=int(first_user_tg_id), text='The meeting will begin after 30 minutes.')
@@ -168,5 +169,3 @@ def register_handlers_find_interlocutor(dp: Dispatcher):
     dp.register_message_handler(send_message_cron5)
     dp.register_message_handler(send_message_cron)
     dp.register_message_handler(update_cron)
-
-    

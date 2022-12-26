@@ -16,6 +16,7 @@ import re
 async def callback_timeslot_input(message: types.Message):
     msg_id = (await bot.send_message(message.from_user.id, "Choose the right day of the week.", reply_markup=WEEK)).message_id
     print(msg_id)
+    # await bot.delete_message(message.from_user.id, msg_id-1)
     await TimeSlot.week_day.set()
 
 async def time_slot_input(message: types.Message):
@@ -31,6 +32,8 @@ async def get_week_day(message: types.Message,  state: FSMContext):
     msg_id = (await bot.send_message(message.from_user.id, 
         f"You choosed {message.text}\nNow enter what time it is convenient for you to start: \nFor example: 17")).message_id
     print(msg_id)
+    # await bot.delete_message(message.from_user.id, msg_id-2)
+    # await message.delete()
     await TimeSlot.start_time.set()
 
 
@@ -75,6 +78,8 @@ async def get_start_time(message: types.Message, state: FSMContext):
         await state.update_data(start_time=message.text)
         msg_id = (await bot.send_message(message.from_user.id, f"You choosed {message.text}.")).message_id
         print(msg_id)
+        # await bot.delete_message(message.from_user.id, msg_id-2)
+        # await message.delete()
         data = await state.get_data()
         week_day = data.get('week_day')
         start_time = data.get('start_time')
@@ -87,12 +92,15 @@ async def get_start_time(message: types.Message, state: FSMContext):
         msg_id = (await bot.send_message(message.from_user.id, 
             f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.", reply_markup=G_MENU)).message_id
         print(msg_id)
+        # await bot.delete_message(message.from_user.id, msg_id-1)
         table.update(str(element_id), {'UserTimeSlot': user_time_slot})
         await state.finish()
     else:
         msg_id = (await bot.send_message(message.from_user.id, 
             text='You introduced something wrong. \nCorrect format from 00 to 23')).message_id
         print(msg_id)
+        # await bot.delete_message(message.from_user.id, msg_id-2)
+        # await message.delete()
 
 
 def register_handlers_time_slot(dp: Dispatcher):

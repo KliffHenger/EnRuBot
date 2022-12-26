@@ -13,6 +13,7 @@ async def get_hour_goal(message: types.Message):
             user_hour_goal = find_table[index]['fields']['UserHourGoal']
     msg_id = (await bot.send_message(message.from_user.id, f"You have {user_hour_goal} meetings left to the goal.", reply_markup=G_MENU)).message_id
     print(msg_id)
+    # await bot.delete_message(message.from_user.id, msg_id-1)
     
 
 async def get_hour_goal(message: types.Message):

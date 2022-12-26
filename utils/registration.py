@@ -3,6 +3,7 @@ from user_states import Reg
 from aiogram.dispatcher import FSMContext
 from airtable_config import table
 from utils.menu import menu
+from keyboards.inline_menu import START
 from config import bot, dp
 import re
 
@@ -20,6 +21,7 @@ async def bot_register(message: types.Message):
     msg_id = (await bot.send_message(message.from_user.id,
         f"Please enter your e-mail:")).message_id
     print(msg_id)
+    # await bot.delete_message(message.from_user.id, msg_id-1)
     await Reg.user_email.set()
 
 async def set_user_email(message: types.Message, state=FSMContext):
@@ -49,17 +51,22 @@ async def set_user_email(message: types.Message, state=FSMContext):
                 table.update(record_id=str(element_id), fields={"UserEngLevel": str(wrong_date)})
                 table.update(record_id=str(element_id), fields={"UserTimeSlot": str(wrong_date)})
                 table.update(record_id=str(element_id), fields={"IsPared": str(wrong_status)})
-                msg_id = (await menu(message)).message_id
-                print(msg_id)
+                await menu(message)
+                
         if not is_found:
             msg_id = (await bot.send_message(message.from_user.id,
-                "You are not in the database of students! Contact the school administration to find out the details.")).message_id
+                "You are not in the database of students! Contact the school administration to find out the details.", reply_markup=START)).message_id
             print(msg_id)
+            # await message.delete()
+            # await bot.delete_message(message.from_user.id, msg_id-2)
             await state.finish()
     else:
         msg_id = (await bot.send_message(message.from_user.id,
             text='Enter the correct e-mail.')).message_id
         print(msg_id)
+        # await message.delete()
+        # await bot.delete_message(message.from_user.id, msg_id-2)
+        
 
 
 
