@@ -1,34 +1,30 @@
 from aiogram import types, Dispatcher
 from airtable_config import table
 from .meeting import createMeeting
-from config import bot, dp, week_dict, WEEKDAYS, scheduler
+from config import bot, dp, week_dict, WEEKDAYS
 from .menu import menu
 from keyboards.inline_menu import G_MENU
-
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime, timedelta
 import asyncio
 
 
 
-first_user_record_id = ''
-second_user_record_id = ''
-first_user_tg_id = ''
-second_user_tg_id = ''
 
 
 @dp.callback_query_handler(text='find_interlocutor')
 async def callback_find_companion(message: types.Message):
+    meeting_link, join_password = createMeeting()
     find_table = table.all()
     global first_user_record_id
     global second_user_record_id
     global second_user_tg_id
-    first_user_record_id, first_user_eng_level, first_user_time_slot, second_user_record_id, second_user_tg_id = '', '', '', '', ''
-    
     global first_user_tg_id
+    first_user_record_id, first_user_eng_level, first_user_time_slot, second_user_record_id, second_user_tg_id = '', '', '', '', ''
     first_user_tg_id = str(message.from_user.id)
     more_found = False
     is_found = False
-    for index in range(len(find_table)):
+    for index in range(len(find_table)): # начало цикла подбора, вытягивание инициатора из БД
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             first_user_eng_level = find_table[index]['fields']['UserEngLevel']
             first_user_time_slot = find_table[index]['fields']['UserTimeSlot']
@@ -37,7 +33,7 @@ async def callback_find_companion(message: types.Message):
             start_time = first_user_time_slot[2]+first_user_time_slot[3]
             week_for_message = week_dict.get(week)
             first_user_record_id = find_table[index]['id']
-    for index in range(len(find_table)):
+    for index in range(len(find_table)):  # вытягивание собеседника из БД
         if find_table[index]['fields']['UserIDTG'] != str(message.from_user.id) \
                 and find_table[index]['fields']['UserEngLevel'] == first_user_eng_level \
                 and find_table[index]['fields']['UserTimeSlot'] == first_user_time_slot \
@@ -48,16 +44,32 @@ async def callback_find_companion(message: types.Message):
             is_found = True
             more_found = False
     if is_found == True and more_found == False:
-        is_pared_id = first_user_tg_id+second_user_tg_id
+        '''начинаем обновлять данные в БД и тут же получаем кое что обратно'''
         table.update(record_id=str(first_user_record_id), fields={'IsPared': "True"})
         table.update(record_id=str(second_user_record_id), fields={'IsPared': "True"})
-        table.update(record_id=str(first_user_record_id), fields={'IsParedID': is_pared_id})
-        table.update(record_id=str(second_user_record_id), fields={'IsParedID': is_pared_id})
-        await bot.send_message(message.from_user.id, text=f'There is an interlocutor for you for the time of {week_for_message}, {start_time}-00.')
-        await bot.send_message(message.from_user.id, text=f'Your interlocutor is - {second_user_fname}.', reply_markup=G_MENU)
-        await bot.send_message(chat_id=int(second_user_tg_id), text=f'There is an interlocutor for you for the time of {week_for_message}, {start_time}-00.')
-        await bot.send_message(chat_id=int(second_user_tg_id), text=f'Your interlocutor is - {first_user_fname}.', reply_markup=G_MENU)
-        if week_for_message:    # этот кусок кода отвечет за отсрочку выдачи всех последующих сообщений
+        table.update(record_id=str(first_user_record_id), fields={'IsParedID': second_user_tg_id})
+        table.update(record_id=str(second_user_record_id), fields={'IsParedID': first_user_tg_id})
+        
+        f_dict = table.get(first_user_record_id)
+        
+        first_tg_id = f_dict['fields']['UserIDTG']
+        second_tg_id = f_dict['fields']['IsParedID']
+
+        first_record_id = first_user_record_id 
+        second_record_id = second_user_record_id
+        
+        '''тут мы пытаемся каждому пользователю выдать по планировщику'''
+        name_sched = 'sched'+first_tg_id
+        # print(name_sched1)
+        globals()[name_sched] = AsyncIOScheduler(timezone="Europe/Minsk")
+        globals()[name_sched].start()
+        
+        '''тут у нас выдача сообщений про успешный метчинг'''
+        await bot.send_message(message.from_user.id, text=f'There is an companion for you for the time of {week_for_message}, {start_time}-00.')
+        await bot.send_message(message.from_user.id, text=f'Your companion is - {second_user_fname}.', reply_markup=G_MENU)
+        await bot.send_message(chat_id=int(second_tg_id), text=f'There is an companion for you for the time of {week_for_message}, {start_time}-00.')
+        await bot.send_message(chat_id=int(second_tg_id), text=f'Your companion is - {first_user_fname}.', reply_markup=G_MENU)
+        if week_for_message:    # этот кусок кода отвечет за формирование необходимых дат для отсрочки сообщений
             search_day = WEEKDAYS.index(week_for_message.lower())  
             time_now = datetime.now()
             date_now = datetime.date(time_now)
@@ -68,58 +80,86 @@ async def callback_find_companion(message: types.Message):
             dt_meet = datetime.strptime(datetime_meet, "%Y-%m-%d,%H,%M,%S")
             start_alert = dt_meet - timedelta(minutes=30)
 
-        scheduler.add_job(send_message_cron30, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
-            minute=30, kwargs={'message': message})
-        scheduler.add_job(send_message_cron15, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
-            minute=45, kwargs={'message': message})
-        scheduler.add_job(send_message_cron5, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
-            minute=55, kwargs={'message': message})
-        scheduler.add_job(send_message_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
-            minute=0, kwargs={'message': message})
-        scheduler.add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
-            minute=40, kwargs={'message': message})
-        scheduler.print_jobs()
-    else:
+        '''тут мы собираем квардс для передачи в планировщик'''
+        mess = {'first_tg_id': first_tg_id, 'second_tg_id': second_tg_id}
+        bd = {'first_record_id':first_record_id, 'second_record_id':second_record_id}
+        print(bd)
+
+        '''быстрые задания для тестов'''
+        # globals()[name_sched].add_job(send_message_cron30, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour, 
+        #     minute=int(time_now.minute)+1,second=10 , kwargs={'mess': mess})
+        # globals()[name_sched].add_job(send_message_cron15, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour, 
+        #     minute=int(time_now.minute)+1,second=15 , kwargs={'mess': mess})
+        # globals()[name_sched].add_job(send_message_cron5, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour, 
+        #     minute=int(time_now.minute)+1,second=20 , kwargs={'mess': mess})
+        # globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour,
+        #     minute=int(time_now.minute)+1,second=25 , kwargs={'mess': mess})
+        # globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour,
+        #     minute=int(time_now.minute)+1,second=30 , kwargs={'bd': bd}, misfire_grace_time=3)
+        # globals()[name_sched].print_jobs()
+
+        """непосредственно добавление заданий в обработчик"""
+        globals()[name_sched].add_job(send_message_cron30, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
+            minute=30, kwargs={'mess': mess})
+        globals()[name_sched].add_job(send_message_cron15, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
+            minute=45, kwargs={'mess': mess})
+        globals()[name_sched].add_job(send_message_cron5, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
+            minute=55, kwargs={'mess': mess})
+        globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
+            minute=0, kwargs={'mess': mess})
+        globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
+            minute=40, kwargs={'bd': bd}, misfire_grace_time=3)
+        globals()[name_sched].print_jobs()
+    else: # отработка цикла для тех кому пары не нашлось
+        list_TS = []
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] != str(message.from_user.id) \
                     and find_table[index]['fields']['UserEngLevel'] == first_user_eng_level \
                     and find_table[index]['fields']['UserTimeSlot'] != first_user_time_slot \
                     and find_table[index]['fields']['IsPared'] == 'False':
                 more_time_slot = find_table[index]['fields']['UserTimeSlot']
+                list_TS.append(more_time_slot)
                 is_found = False
                 more_found = True
-        if is_found == False and more_found == True:
+        if is_found == False and more_found == True: # уровень языка совпадает хоть с кем нибудь, смените ТаймСлот
+            list_time_slot = ' '.join([str(elem) for elem in list_TS])
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f'There are no coincidences for your time slopes, but there is at {more_time_slot}', reply_markup=G_MENU)).message_id
+                text=f'There are no coincidences for your Time-Slot, but there is at {list_time_slot}', reply_markup=G_MENU)).message_id
             print(msg_id)
-        else:
+        else: # уровень языка не совпадает вообще ни с кем 
             msg_id = (await bot.send_message(message.from_user.id, 
                 text='Sorry, but there is no one with your level of knowledge of the language. Try to change it.', reply_markup=G_MENU)).message_id
             print(msg_id)
         
-
-async def send_message_cron30(message: types.Message):
-    await bot.send_message(chat_id=int(first_user_tg_id), text='The meeting will begin after 30 minutes.')
-    await bot.send_message(chat_id=int(second_user_tg_id), text='The meeting will begin after 30 minutes.')
-
-async def send_message_cron15(message: types.Message):                                                                  
-    await bot.send_message(chat_id=int(first_user_tg_id), text='The meeting will begin after 15 minutes.')
-    await bot.send_message(chat_id=int(second_user_tg_id), text='The meeting will begin after 15 minutes.')
-
-async def send_message_cron5(message: types.Message):
-    await bot.send_message(chat_id=int(first_user_tg_id), text='The meeting will begin after 5 minutes.')
-    await bot.send_message(chat_id=int(second_user_tg_id), text='The meeting will begin after 5 minutes.')
-
-async def send_message_cron(message: types.Message):
+"""непосредственно наши сообщения которые будут приходить перед началом + работа с БД"""
+async def send_message_cron30(mess):
+    first_tg_id = mess['first_tg_id']
+    second_tg_id = mess['second_tg_id']
+    await bot.send_message(chat_id=int(first_tg_id), text='The meeting will begin after 30 minutes.')
+    await bot.send_message(chat_id=int(second_tg_id), text='The meeting will begin after 30 minutes.')
+    print(first_tg_id, second_tg_id)
+async def send_message_cron15(mess):
+    first_tg_id = mess['first_tg_id']
+    second_tg_id = mess['second_tg_id']
+    await bot.send_message(chat_id=int(first_tg_id), text='The meeting will begin after 15 minutes.')
+    await bot.send_message(chat_id=int(second_tg_id), text='The meeting will begin after 15 minutes.')
+async def send_message_cron5(mess):
+    first_tg_id = mess['first_tg_id']
+    second_tg_id = mess['second_tg_id']
+    await bot.send_message(chat_id=int(first_tg_id), text='The meeting will begin after 5 minutes.')
+    await bot.send_message(chat_id=int(second_tg_id), text='The meeting will begin after 5 minutes.')
+async def send_message_cron(mess):
+    first_tg_id = mess['first_tg_id']
+    second_tg_id = mess['second_tg_id']
     meeting_link, join_password = createMeeting()
-    await bot.send_message(chat_id=int(first_user_tg_id), text=f'Join new meeting: {meeting_link}')
-    await bot.send_message(chat_id=int(second_user_tg_id), text=f'Hi! You can join new meeting: {meeting_link}')
+    await bot.send_message(chat_id=int(first_tg_id), text=f'Join new meeting: {meeting_link}', reply_markup=G_MENU)
+    await bot.send_message(chat_id=int(second_tg_id), text=f'Join new meeting: {meeting_link}', reply_markup=G_MENU)
+async def update_cron(bd):
+    first_record_id = bd['first_record_id']
+    second_record_id = bd['second_record_id']
+    table.update(record_id=str(first_record_id), fields={'IsPared': "False"})
+    table.update(record_id=str(second_record_id), fields={'IsPared': "False"})
 
-async def update_cron(message: types.Message):
-    find_table = table.all()
-    table.update(record_id=str(first_user_record_id), fields={'IsPared': "False"})
-    table.update(record_id=str(second_user_record_id), fields={'IsPared': "False"})
-        
 
 
 async def find_companion(message: types.Message):
@@ -169,3 +209,4 @@ def register_handlers_find_interlocutor(dp: Dispatcher):
     dp.register_message_handler(send_message_cron5)
     dp.register_message_handler(send_message_cron)
     dp.register_message_handler(update_cron)
+    
