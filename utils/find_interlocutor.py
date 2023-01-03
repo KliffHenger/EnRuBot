@@ -12,6 +12,7 @@ import asyncio
 
 
 
+
 @dp.callback_query_handler(text='find_interlocutor')
 async def callback_find_companion(message: types.Message):
     meeting_link, join_password = createMeeting()
@@ -60,15 +61,14 @@ async def callback_find_companion(message: types.Message):
         
         '''тут мы пытаемся каждому пользователю выдать по планировщику'''
         name_sched = 'sched'+first_tg_id
-        # print(name_sched1)
         globals()[name_sched] = AsyncIOScheduler(timezone="Europe/Minsk")
         globals()[name_sched].start()
         
         '''тут у нас выдача сообщений про успешный метчинг'''
-        await bot.send_message(message.from_user.id, text=f'There is an companion for you for the time of {week_for_message}, {start_time}-00.')
-        await bot.send_message(message.from_user.id, text=f'Your companion is - {second_user_fname}.', reply_markup=G_MENU)
-        await bot.send_message(chat_id=int(second_tg_id), text=f'There is an companion for you for the time of {week_for_message}, {start_time}-00.')
-        await bot.send_message(chat_id=int(second_tg_id), text=f'Your companion is - {first_user_fname}.', reply_markup=G_MENU)
+        await bot.send_message(message.from_user.id, text=f'There is an peer for you for the time of {week_for_message}, {start_time}-00.')
+        await bot.send_message(message.from_user.id, text=f'Your peer is - {second_user_fname}.', reply_markup=G_MENU)
+        await bot.send_message(chat_id=int(second_tg_id), text=f'There is an peer for you for the time of {week_for_message}, {start_time}-00.')
+        await bot.send_message(chat_id=int(second_tg_id), text=f'Your peer is - {first_user_fname}.', reply_markup=G_MENU)
         if week_for_message:    # этот кусок кода отвечет за формирование необходимых дат для отсрочки сообщений
             search_day = WEEKDAYS.index(week_for_message.lower())  
             time_now = datetime.now()
@@ -87,26 +87,26 @@ async def callback_find_companion(message: types.Message):
 
         '''быстрые задания для тестов'''
         # globals()[name_sched].add_job(send_message_cron30, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour, 
-        #     minute=int(time_now.minute)+1,second=10 , kwargs={'mess': mess})
+        #     minute=int(time_now.minute)+1,second=10 , kwargs={'mess': mess}, misfire_grace_time=3)
         # globals()[name_sched].add_job(send_message_cron15, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour, 
-        #     minute=int(time_now.minute)+1,second=15 , kwargs={'mess': mess})
+        #     minute=int(time_now.minute)+1,second=15 , kwargs={'mess': mess}, misfire_grace_time=3)
         # globals()[name_sched].add_job(send_message_cron5, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour, 
-        #     minute=int(time_now.minute)+1,second=20 , kwargs={'mess': mess})
+        #     minute=int(time_now.minute)+1,second=20 , kwargs={'mess': mess}, misfire_grace_time=3)
         # globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour,
-        #     minute=int(time_now.minute)+1,second=25 , kwargs={'mess': mess})
+        #     minute=int(time_now.minute)+1,second=25 , kwargs={'mess': mess}, misfire_grace_time=3)
         # globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour,
         #     minute=int(time_now.minute)+1,second=30 , kwargs={'bd': bd}, misfire_grace_time=3)
         # globals()[name_sched].print_jobs()
 
         """непосредственно добавление заданий в обработчик"""
         globals()[name_sched].add_job(send_message_cron30, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
-            minute=30, kwargs={'mess': mess})
+            minute=30, kwargs={'mess': mess}, misfire_grace_time=3)
         globals()[name_sched].add_job(send_message_cron15, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
-            minute=45, kwargs={'mess': mess})
+            minute=45, kwargs={'mess': mess}, misfire_grace_time=3)
         globals()[name_sched].add_job(send_message_cron5, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
-            minute=55, kwargs={'mess': mess})
+            minute=55, kwargs={'mess': mess}, misfire_grace_time=3)
         globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
-            minute=0, kwargs={'mess': mess})
+            minute=0, kwargs={'mess': mess}, misfire_grace_time=3)
         globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
             minute=40, kwargs={'bd': bd}, misfire_grace_time=3)
         globals()[name_sched].print_jobs()

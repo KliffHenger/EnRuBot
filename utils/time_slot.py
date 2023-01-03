@@ -14,13 +14,13 @@ import re
 '''(1)Начало ввода ТаймСлота(старт "машины состояний")'''
 @dp.callback_query_handler(text='timeslot')
 async def callback_timeslot_input(message: types.Message):
-    msg_id = (await bot.send_message(message.from_user.id, "Choose the right day of the week.", reply_markup=WEEK)).message_id
+    msg_id = (await bot.send_message(message.from_user.id, "Please select your day of the week.", reply_markup=WEEK)).message_id
     print(msg_id)
     # await bot.delete_message(message.from_user.id, msg_id-1)
     await TimeSlot.week_day.set()
 
 async def time_slot_input(message: types.Message):
-    msg_id = (await bot.send_message(message.from_user.id, "Choose the right day of the week.", reply_markup=WEEK)).message_id
+    msg_id = (await bot.send_message(message.from_user.id, "Please select your day of the week.", reply_markup=WEEK)).message_id
     print(msg_id)
     await TimeSlot.week_day.set()
 
@@ -28,13 +28,19 @@ async def time_slot_input(message: types.Message):
 '''(2)Ввод дня недели'''
 
 async def get_week_day(message: types.Message,  state: FSMContext):
-    await state.update_data(week_day=message.text)
-    msg_id = (await bot.send_message(message.from_user.id, 
-        f"You choosed {message.text}\nNow enter what time it is convenient for you to start: \nFor example: 17")).message_id
-    print(msg_id)
-    # await bot.delete_message(message.from_user.id, msg_id-2)
-    # await message.delete()
-    await TimeSlot.start_time.set()
+    pattern = r'MO|TU|WE|TH|FR|SA|SU'
+    if re.fullmatch(pattern, message.text):
+        await state.update_data(week_day=message.text)
+        msg_id = (await bot.send_message(message.from_user.id, 
+            f"You choosed {message.text}\nNow enter what time it is convenient for you to start: \nFor example: 17.")).message_id
+        print(msg_id)
+        # await bot.delete_message(message.from_user.id, msg_id-2)
+        # await message.delete()
+        await TimeSlot.start_time.set()
+    else:
+        msg_id = (await bot.send_message(message.from_user.id, 
+            text='You enter something wrong. \nThe correct format is entered from the keyboard.')).message_id
+        print(msg_id)
 
 
 # '''(3)Ввод времени начала'''
@@ -97,7 +103,7 @@ async def get_start_time(message: types.Message, state: FSMContext):
         await state.finish()
     else:
         msg_id = (await bot.send_message(message.from_user.id, 
-            text='You introduced something wrong. \nCorrect format from 00 to 23')).message_id
+            text='You enter something wrong. \nCorrect format from 00 to 23')).message_id
         print(msg_id)
         # await bot.delete_message(message.from_user.id, msg_id-2)
         # await message.delete()
