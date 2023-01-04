@@ -5,8 +5,8 @@ from aiogram.dispatcher import FSMContext
 from airtable_config import table
 from keyboards.english_level import user_english_level
 from keyboards.menu import menu_button
-from keyboards.inline_menu import KB_MENU, G_MENU, START_MENU, NO_EN_LVL, NO_T_SLOT
-from config import bot, dp
+from keyboards.inline_menu import KB_MENU, G_MENU, START_MENU, NO_EN_LVL, NO_T_SLOT, PARED_MENU
+from config import bot, dp, week_dict
 import re
 
 
@@ -116,34 +116,45 @@ async def menu(message: types.Message):
 @dp.callback_query_handler(text='menu')
 async def callback_menu(message: types.Message):
     find_table = table.all()
-    # is_found = False
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
+            and find_table[index]['fields']['IsPared'] == 'True':
+            f_timeSlot = find_table[index]['fields']['UserTimeSlot']
+            week = f_timeSlot[0]+f_timeSlot[1]
+            start_time = f_timeSlot[2]+f_timeSlot[3]
+            week_for_message = week_dict.get(week)
+            pared_time = f'{week_for_message}, {start_time}-00'            
+            answer_message = f"\U000026A1 \U000026A1 \U000026A1 Main Menu: \U000026A1 \U000026A1 \U000026A1 \n\
+Функции:\n\
+\U0001F6AB \U0001F4DA Change the level of English\n\
+\U0001F6AB \U0001F551 Change Time-Slot\n\
+\U0001F6AB\U0001F6ABЗАБЛОКИРОВАНЫ\U0001F6AB\U0001F6AB\n\
+до того момента пока не состоится встреча в {pared_time}."
+            msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=PARED_MENU)).message_id
+            print(str(msg_id) + "MENU inline pared_true")
+        elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserEngLevel'] == str('None'):
             answer_message = """
-                <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
+                    <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
                 """
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)).message_id
-            print(str(msg_id) + "MENU")
-            # await bot.delete_message(message.from_user.id, msg_id-1)
+            print(str(msg_id) + "MENU inline")
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] == str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
             answer_message = """
-                <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
+                    <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
                 """
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
-            print(str(msg_id) + "MENU")
-            # await bot.delete_message(message.from_user.id, msg_id-1)
+            print(str(msg_id) + "MENU inline")
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] != str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
             answer_message = """
-                <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
+                    <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
                 """
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
-            print(str(msg_id) + "MENU")
-            # await bot.delete_message(message.from_user.id, msg_id-1)
+            print(str(msg_id) + "MENU inline")
 
 
 async def statistics(message: types.Message):
