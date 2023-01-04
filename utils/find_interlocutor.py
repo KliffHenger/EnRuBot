@@ -124,12 +124,14 @@ async def callback_find_companion(message: types.Message):
         if is_found == False and more_found == True: # уровень языка совпадает хоть с кем нибудь, смените ТаймСлот
             list_time_slot = ' '.join([str(elem) for elem in list_TS])
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f'There are no coincidences for your Time-Slot, but there is at {list_time_slot}', reply_markup=G_MENU)).message_id
+                text=f'There are no coincidences for your Time-Slot, but there is at {list_time_slot}')).message_id
             print(msg_id)
+            await menu(message)
         else: # уровень языка не совпадает вообще ни с кем 
             msg_id = (await bot.send_message(message.from_user.id, 
-                text='Sorry, but there is no one with your level of knowledge of the language. Try to change it.', reply_markup=G_MENU)).message_id
+                text='Sorry, but there is no one with your level of knowledge of the language. Try to change it.')).message_id
             print(msg_id)
+            await menu(message)
         
 """непосредственно наши сообщения которые будут приходить перед началом + работа с БД"""
 async def send_message_cron30(mess):

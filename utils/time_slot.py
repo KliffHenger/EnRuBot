@@ -96,11 +96,12 @@ async def get_start_time(message: types.Message, state: FSMContext):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 element_id = find_table[index]['id']
         msg_id = (await bot.send_message(message.from_user.id, 
-            f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.", reply_markup=G_MENU)).message_id
+            f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
         print(msg_id)
         # await bot.delete_message(message.from_user.id, msg_id-1)
         table.update(str(element_id), {'UserTimeSlot': user_time_slot})
         await state.finish()
+        await menu(message)
     else:
         msg_id = (await bot.send_message(message.from_user.id, 
             text='You enter something wrong. \nCorrect format from 00 to 23')).message_id
