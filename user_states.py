@@ -12,4 +12,8 @@ class TimeSlot(StatesGroup):
     start_time = State()
     # end_time = State() - раскомментить если понадобится
 
+# class SelectRole(StatesGroup):
+#     msgId = State()
+
+
 

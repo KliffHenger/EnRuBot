@@ -3,9 +3,10 @@ from airtable_config import table
 from .meeting import createMeeting
 from config import bot, dp, week_dict, WEEKDAYS
 from .menu import menu
-from keyboards.inline_menu import G_MENU
+from keyboards.inline_menu import G_MENU, U_STAT
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime, timedelta
+
 import asyncio
 
 
@@ -83,7 +84,8 @@ async def callback_find_companion(message: types.Message):
         '''тут мы собираем квардс для передачи в планировщик'''
         mess = {'first_tg_id': first_tg_id, 'second_tg_id': second_tg_id}
         bd = {'first_record_id':first_record_id, 'second_record_id':second_record_id}
-        print(bd)
+        mess_bd = {'first_tg_id': first_tg_id, 'second_tg_id': second_tg_id, 
+                'first_record_id':first_record_id, 'second_record_id':second_record_id}
 
         '''быстрые задания для тестов'''
         # globals()[name_sched].add_job(send_message_cron30, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour, 
@@ -94,6 +96,8 @@ async def callback_find_companion(message: types.Message):
         #     minute=int(time_now.minute)+1,second=20 , kwargs={'mess': mess}, misfire_grace_time=3)
         # globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour,
         #     minute=int(time_now.minute)+1,second=25 , kwargs={'mess': mess}, misfire_grace_time=3)
+        # globals()[name_sched].add_job(send_message_postmeet, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour,
+        #     minute=int(time_now.minute)+1,second=30 , kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
         # globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour,
         #     minute=int(time_now.minute)+1,second=30 , kwargs={'bd': bd}, misfire_grace_time=3)
         # globals()[name_sched].print_jobs()
@@ -107,6 +111,8 @@ async def callback_find_companion(message: types.Message):
             minute=55, kwargs={'mess': mess}, misfire_grace_time=3)
         globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
             minute=0, kwargs={'mess': mess}, misfire_grace_time=3)
+        globals()[name_sched].add_job(send_message_postmeet, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
+            minute=40, kwargs={'mess': mess}, misfire_grace_time=3)
         globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
             minute=40, kwargs={'bd': bd}, misfire_grace_time=3)
         globals()[name_sched].print_jobs()
@@ -139,7 +145,6 @@ async def send_message_cron30(mess):
     second_tg_id = mess['second_tg_id']
     await bot.send_message(chat_id=int(first_tg_id), text='The meeting will begin after 30 minutes.')
     await bot.send_message(chat_id=int(second_tg_id), text='The meeting will begin after 30 minutes.')
-    print(first_tg_id, second_tg_id)
 async def send_message_cron15(mess):
     first_tg_id = mess['first_tg_id']
     second_tg_id = mess['second_tg_id']
@@ -156,6 +161,15 @@ async def send_message_cron(mess):
     meeting_link, join_password = createMeeting()
     await bot.send_message(chat_id=int(first_tg_id), text=f'Join new meeting: {meeting_link}', reply_markup=G_MENU)
     await bot.send_message(chat_id=int(second_tg_id), text=f'Join new meeting: {meeting_link}', reply_markup=G_MENU)
+async def send_message_postmeet(mess_bd):
+    first_tg_id = mess_bd['first_tg_id']
+    second_tg_id = mess_bd['second_tg_id']
+    first_record_id = mess_bd['first_record_id']
+    second_record_id = mess_bd['second_record_id']
+    msg_id1 = (await bot.send_message(int(first_tg_id), text='Выберите в роли кого вы были на встрече.', reply_markup=U_STAT)).message_id
+    msg_id2 = (await bot.send_message(int(second_tg_id), text='Выберите в роли кого вы были на встрече.', reply_markup=U_STAT)).message_id
+    table.update(record_id=str(first_record_id), fields={'msgIDforDEL': str(msg_id1)})
+    table.update(record_id=str(second_record_id), fields={'msgIDforDEL': str(msg_id2)})
 async def update_cron(bd):
     first_record_id = bd['first_record_id']
     second_record_id = bd['second_record_id']
@@ -210,5 +224,6 @@ def register_handlers_find_interlocutor(dp: Dispatcher):
     dp.register_message_handler(send_message_cron15)
     dp.register_message_handler(send_message_cron5)
     dp.register_message_handler(send_message_cron)
+    dp.register_message_handler(send_message_postmeet)
     dp.register_message_handler(update_cron)
     

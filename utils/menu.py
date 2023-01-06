@@ -174,16 +174,6 @@ async def callback_menu(message: types.Message):
             print(str(msg_id) + "MENU inline")
 
 
-async def statistics(message: types.Message):
-    await message.answer("""
-    -уровень английского с 01.01.2022 - <b>B1</b>\n
-    -количество встреч в роли HR - 2\n
-    -количество встреч в роли кандидата - 3\n
-    -количество часов в каждой роли:\n
-    в роли HR - 2 часа\n
-    в роли кандидата - 1 час\n
-    """, parse_mode='HTML')
-
 
 async def english_level(message: types.Message):
     msg_id = (await message.answer(text='Please select your English level', reply_markup=user_english_level)).message_id
@@ -230,7 +220,6 @@ async def set_eng_level(message: types.Message, state: FSMContext):
 def register_handlers_menu(dp: Dispatcher):
     dp.register_message_handler(start_bot, Command('start'))
     dp.register_message_handler(menu, commands='menu')
-    dp.register_message_handler(statistics, commands='statistics')
     dp.register_message_handler(english_level, commands='eng_level')
     dp.register_message_handler(set_eng_level, state=Reg.user_eng_level)
 
