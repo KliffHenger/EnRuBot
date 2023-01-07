@@ -31,21 +31,21 @@ async def start_bot(message: types.Message):
                 is_found = True
         if is_found:
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Hello, {user_name} {user_surname}!\nYour level of English - {eng_level}.\nYour Time-Slot - {time_slot}." 
+                f"Hello, {user_name} {user_surname}!\nYou have a {eng_level} English level.\nYour Time-Slot - {time_slot}." 
                     )).message_id
             print(msg_id)
             await menu(message)
             # await message.delete()
         else:
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"1You are not authorized in the service of searching a peer. Want to log in?", 
+                f"Sorry, you are not authorized to join yet. Would you like to sign in?", 
                     reply_markup=START_MENU)).message_id
             print(msg_id)
             # await bot.delete_message(message.from_user.id, msg_id-1)
             
     except:
         msg_id = (await bot.send_message(message.from_user.id, 
-            f"2You are not authorized in the service of searching a peer. Want to log in?", 
+            f"Sorry, you are not authorized to join yet. Would you like to sign in?", 
                 reply_markup=START_MENU)).message_id
         print(msg_id)
         # await bot.delete_message(message.from_user.id, msg_id-1)
@@ -69,20 +69,20 @@ async def start_bot(message: types.Message):
                 time_slot = find_table[index]['fields']['UserTimeSlot']
                 is_found = True
         if is_found:
-            msg_id = (await message.answer(f"Hello, {user_name} {user_surname}!\nYour level of English - {eng_level}.\nYour Time-Slot - {time_slot}."
+            msg_id = (await message.answer(f"Hello, {user_name} {user_surname}!\nYou have a {eng_level} English level.\nYour Time-Slot - {time_slot}."
                 )).message_id
             print(msg_id)
             await menu(message)
             # await message.delete()
         else:
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"3You are not authorized in the service of searching a peer. Want to log in?", reply_markup=START_MENU)).message_id
+                f"Sorry, you are not authorized to join yet. Would you like to sign in?", reply_markup=START_MENU)).message_id
             print(msg_id)
             # await message.delete()
 
     except:
         msg_id = (await bot.send_message(message.from_user.id, 
-            f"4You are not authorized in the service of searching a peer. Want to log in?", reply_markup=START_MENU)).message_id
+            f"Sorry, you are not authorized to join yet. Would you like to sign in?", reply_markup=START_MENU)).message_id
         print(msg_id)
 
 async def menu(message: types.Message):
@@ -204,7 +204,7 @@ async def set_eng_level(message: types.Message, state: FSMContext):
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 element_id = find_table[index]['id']
-        msg_id = (await message.answer(f"Your level of English - {message.text}\n")).message_id
+        msg_id = (await message.answer(f"You have a {message.text} English level.")).message_id
         print(msg_id)
         user_level = str(message.text)
         table.update(record_id=str(element_id), fields={'UserEngLevel': user_level})

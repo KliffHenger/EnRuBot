@@ -66,10 +66,16 @@ async def callback_find_companion(message: types.Message):
         globals()[name_sched].start()
         
         '''тут у нас выдача сообщений про успешный метчинг'''
-        await bot.send_message(message.from_user.id, text=f'There is an peer for you for the time of {week_for_message}, {start_time}-00.')
-        await bot.send_message(message.from_user.id, text=f'Your peer is - {second_user_fname}.', reply_markup=G_MENU)
-        await bot.send_message(chat_id=int(second_tg_id), text=f'There is an peer for you for the time of {week_for_message}, {start_time}-00.')
-        await bot.send_message(chat_id=int(second_tg_id), text=f'Your peer is - {first_user_fname}.', reply_markup=G_MENU)
+        await bot.send_message(message.from_user.id, 
+            text=f'We have found a match for you. Your meeting starts at {week_for_message}, {start_time}-00.')
+        await bot.send_message(message.from_user.id, 
+            text=f'You will have a meeting with - {second_user_fname}. We would like to send a reminder half an hour prior to the call.', 
+            reply_markup=G_MENU)
+        await bot.send_message(chat_id=int(second_tg_id), 
+            text=f'We have found a match for you. Your meeting starts at {week_for_message}, {start_time}-00.')
+        await bot.send_message(chat_id=int(second_tg_id), 
+            text=f'You will have a meeting with - {first_user_fname}. We would like to send a reminder half an hour prior to the call.', 
+            reply_markup=G_MENU)
         if week_for_message:    # этот кусок кода отвечет за формирование необходимых дат для отсрочки сообщений
             search_day = WEEKDAYS.index(week_for_message.lower())  
             time_now = datetime.now()
@@ -112,7 +118,7 @@ async def callback_find_companion(message: types.Message):
         globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
             minute=0, kwargs={'mess': mess}, misfire_grace_time=3)
         globals()[name_sched].add_job(send_message_postmeet, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
-            minute=40, kwargs={'mess': mess}, misfire_grace_time=3)
+            minute=40, kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
         globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
             minute=40, kwargs={'bd': bd}, misfire_grace_time=3)
         globals()[name_sched].print_jobs()
@@ -130,12 +136,14 @@ async def callback_find_companion(message: types.Message):
         if is_found == False and more_found == True: # уровень языка совпадает хоть с кем нибудь, смените ТаймСлот
             list_time_slot = ' '.join([str(elem) for elem in list_TS])
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f'There are no coincidences for your Time-Slot, but there is at {list_time_slot}')).message_id
+                text=f'There are no available peer matches for a given slot. \
+                    We saved your choice and would like to send a notification once we find a peer. \
+                        There is an opportunity to chat at this time: {list_time_slot}.')).message_id
             print(msg_id)
             await menu(message)
         else: # уровень языка не совпадает вообще ни с кем 
             msg_id = (await bot.send_message(message.from_user.id, 
-                text='Sorry, but there is no one with your level of knowledge of the language. Try to change it.')).message_id
+                text='Sorry, we haven’t been able to find a match at that time. Please try another time slot.')).message_id
             print(msg_id)
             await menu(message)
         
