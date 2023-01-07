@@ -32,7 +32,7 @@ async def get_week_day(message: types.Message,  state: FSMContext):
     if re.fullmatch(pattern, message.text):
         await state.update_data(week_day=message.text)
         msg_id = (await bot.send_message(message.from_user.id, 
-            f"Great. You've selected {message.text}\nNext, please write in the time you would be comfortable to start at: \nFor example: 17 or 09.")).message_id
+            f"Great. You've selected - {message.text}.\nNext, please write in the time you would be comfortable to start at: \nFor example: 17 or 09.")).message_id
         print(msg_id)
         # await bot.delete_message(message.from_user.id, msg_id-2)
         # await message.delete()

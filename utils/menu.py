@@ -69,7 +69,7 @@ async def start_bot(message: types.Message):
                 time_slot = find_table[index]['fields']['UserTimeSlot']
                 is_found = True
         if is_found:
-            msg_id = (await message.answer(f"Hello, {user_name} {user_surname}!\nYou have a {eng_level} English level.\nYour Time-Slot - {time_slot}."
+            msg_id = (await message.answer(f"Hello, {user_name} {user_surname}!\nYou have a - {eng_level} English level.\nYour Time-Slot - {time_slot}."
                 )).message_id
             print(msg_id)
             await menu(message)
