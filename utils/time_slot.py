@@ -14,15 +14,30 @@ import re
 '''(1)Начало ввода ТаймСлота(старт "машины состояний")'''
 @dp.callback_query_handler(text='timeslot')
 async def callback_timeslot_input(message: types.Message):
-    msg_id = (await bot.send_message(message.from_user.id, "Please select a possible day for your meeting.", reply_markup=WEEK)).message_id
-    print(msg_id)
-    # await bot.delete_message(message.from_user.id, msg_id-1)
-    await TimeSlot.week_day.set()
+    all_table = table.all()
+    for index in range(len(all_table)):
+        if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+            record_id = all_table[index]['id']  # достает record_id из БД
+            msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+            await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+            msg_id = (await bot.send_message(message.from_user.id, 
+                text=f"Please select a possible day for your meeting.", reply_markup=WEEK)).message_id
+            print(msg_id)
+            table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
+            await TimeSlot.week_day.set()
 
 async def time_slot_input(message: types.Message):
-    msg_id = (await bot.send_message(message.from_user.id, "Please select a possible day for your meeting.", reply_markup=WEEK)).message_id
-    print(msg_id)
-    await TimeSlot.week_day.set()
+    all_table = table.all()
+    for index in range(len(all_table)):
+        if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+            record_id = all_table[index]['id']  # достает record_id из БД
+            msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+            await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+            msg_id = (await bot.send_message(message.from_user.id, 
+                text=f"Please select a possible day for your meeting.", reply_markup=WEEK)).message_id
+            print(msg_id)
+            table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
+            await TimeSlot.week_day.set()
 
 
 '''(2)Ввод дня недели'''
@@ -31,16 +46,28 @@ async def get_week_day(message: types.Message,  state: FSMContext):
     pattern = r'MO|TU|WE|TH|FR|SA|SU'
     if re.fullmatch(pattern, message.text):
         await state.update_data(week_day=message.text)
-        msg_id = (await bot.send_message(message.from_user.id, 
-            f"Great. You've selected - {message.text}.\nNext, please write in the time you would be comfortable to start at: \nFor example: 17 or 09.")).message_id
-        print(msg_id)
-        # await bot.delete_message(message.from_user.id, msg_id-2)
-        # await message.delete()
-        await TimeSlot.start_time.set()
+        all_table = table.all()
+        for index in range(len(all_table)):
+            if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                record_id = all_table[index]['id']  # достает record_id из БД
+                msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    f"Great. You've selected - {message.text}.\nNext, please write in the time you would be comfortable to start at: \nFor example: 17 or 09.")).message_id
+                print(msg_id)
+                table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
+                await TimeSlot.start_time.set()
     else:
-        msg_id = (await bot.send_message(message.from_user.id, 
-            text='Вы вводите что-то не так.\nПравильный формат введен с клавиатуры.')).message_id
-        print(msg_id)
+        all_table = table.all()
+        for index in range(len(all_table)):
+            if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                record_id = all_table[index]['id']  # достает record_id из БД
+                msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text='Something has been entered incorrectly.\nPlease use the keypad to enter the valid format.', reply_markup=WEEK)).message_id
+                print(msg_id)
+                table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
 
 
 # '''(3)Ввод времени начала'''
@@ -95,13 +122,13 @@ async def get_start_time(message: types.Message, state: FSMContext):
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 element_id = find_table[index]['id']
-        msg_id = (await bot.send_message(message.from_user.id, 
-            f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
-        print(msg_id)
-        # await bot.delete_message(message.from_user.id, msg_id-1)
-        table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-        await state.finish()
-        await menu(message)
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                print(msg_id)
+                # await bot.delete_message(message.from_user.id, msg_id-1)
+                table.update(str(element_id), {'UserTimeSlot': user_time_slot})
+                await state.finish()
+                await menu(message)
     else:
         msg_id = (await bot.send_message(message.from_user.id, 
             text='Sorry, this is not a valid time value. \nPlease re-enter numbers from 00 to 23.')).message_id

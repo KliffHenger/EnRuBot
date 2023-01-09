@@ -143,7 +143,7 @@ async def callback_find_companion(message: types.Message):
             await menu(message)
         else: # уровень языка не совпадает вообще ни с кем 
             msg_id = (await bot.send_message(message.from_user.id, 
-                text='Sorry, we haven’t been able to find a match at that time. Please try another time slot.')).message_id
+                text="Sorry, we haven't been able to find a match at that time. Please try another time slot.")).message_id
             print(msg_id)
             await menu(message)
         
@@ -151,18 +151,18 @@ async def callback_find_companion(message: types.Message):
 async def send_message_cron30(mess):
     first_tg_id = mess['first_tg_id']
     second_tg_id = mess['second_tg_id']
-    await bot.send_message(chat_id=int(first_tg_id), text='The meeting will begin after 30 minutes.')
-    await bot.send_message(chat_id=int(second_tg_id), text='The meeting will begin after 30 minutes.')
+    await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin after 30 minutes.')
+    await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin after 30 minutes.')
 async def send_message_cron15(mess):
     first_tg_id = mess['first_tg_id']
     second_tg_id = mess['second_tg_id']
-    await bot.send_message(chat_id=int(first_tg_id), text='The meeting will begin after 15 minutes.')
-    await bot.send_message(chat_id=int(second_tg_id), text='The meeting will begin after 15 minutes.')
+    await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin after 15 minutes.')
+    await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin after 15 minutes.')
 async def send_message_cron5(mess):
     first_tg_id = mess['first_tg_id']
     second_tg_id = mess['second_tg_id']
-    await bot.send_message(chat_id=int(first_tg_id), text='The meeting will begin after 5 minutes.')
-    await bot.send_message(chat_id=int(second_tg_id), text='The meeting will begin after 5 minutes.')
+    await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin after 5 minutes.')
+    await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin after 5 minutes.')
 async def send_message_cron(mess):
     first_tg_id = mess['first_tg_id']
     second_tg_id = mess['second_tg_id']
@@ -174,8 +174,8 @@ async def send_message_postmeet(mess_bd):
     second_tg_id = mess_bd['second_tg_id']
     first_record_id = mess_bd['first_record_id']
     second_record_id = mess_bd['second_record_id']
-    msg_id1 = (await bot.send_message(int(first_tg_id), text='Выберите в роли кого вы были на встрече.', reply_markup=U_STAT)).message_id
-    msg_id2 = (await bot.send_message(int(second_tg_id), text='Выберите в роли кого вы были на встрече.', reply_markup=U_STAT)).message_id
+    msg_id1 = (await bot.send_message(int(first_tg_id), text=f'Choose the role you had in the meeting:', reply_markup=U_STAT)).message_id
+    msg_id2 = (await bot.send_message(int(second_tg_id), text=f'Choose the role you had in the meeting:', reply_markup=U_STAT)).message_id
     table.update(record_id=str(first_record_id), fields={'msgIDforDEL': str(msg_id1)})
     table.update(record_id=str(second_record_id), fields={'msgIDforDEL': str(msg_id2)})
 async def update_cron(bd):
@@ -221,17 +221,17 @@ async def find_companion(message: types.Message):
         table.update(record_id=str(first_user_record_id), fields={'IsPared': "False"})
         table.update(record_id=str(second_user_record_id), fields={'IsPared': "False"})
     else:
-        await message.answer(text='Извините, мы никого не смогли найти....')
+        await message.answer(tex=f'Извините, мы никого не смогли найти....')
         await menu(message)
 
 
 
 def register_handlers_find_interlocutor(dp: Dispatcher):
     dp.register_message_handler(find_companion, commands=['find_interlocutor'])
-    dp.register_message_handler(send_message_cron30)
-    dp.register_message_handler(send_message_cron15)
-    dp.register_message_handler(send_message_cron5)
-    dp.register_message_handler(send_message_cron)
-    dp.register_message_handler(send_message_postmeet)
-    dp.register_message_handler(update_cron)
+    dp.register_message_handler(send_message_cron30, commands=['40000_monkeys_put_a_banana_up_their_butt'])
+    dp.register_message_handler(send_message_cron15, commands=['40000_monkeys_put_a_banana_up_their_butt'])
+    dp.register_message_handler(send_message_cron5, commands=['40000_monkeys_put_a_banana_up_their_butt'])
+    dp.register_message_handler(send_message_cron, commands=['40000_monkeys_put_a_banana_up_their_butt'])
+    dp.register_message_handler(send_message_postmeet, commands=['40000_monkeys_put_a_banana_up_their_butt'])
+    dp.register_message_handler(update_cron, commands=['40000_monkeys_put_a_banana_up_their_butt'])
     

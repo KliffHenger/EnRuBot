@@ -21,7 +21,7 @@ async def bot_register(message: types.Message):
     msg_id = (await bot.send_message(message.from_user.id,
         f"Please share your email to sign up:")).message_id
     print(msg_id)
-    # await bot.delete_message(message.from_user.id, msg_id-1)
+    await bot.delete_message(message.from_user.id, msg_id-1)
     await Reg.user_email.set()
 
 async def set_user_email(message: types.Message, state=FSMContext):
@@ -58,14 +58,14 @@ async def set_user_email(message: types.Message, state=FSMContext):
                 "We didn't find you in the student database. Please contact the school to find out more.", reply_markup=START)).message_id
             print(msg_id)
             # await message.delete()
-            # await bot.delete_message(message.from_user.id, msg_id-2)
+            await bot.delete_message(message.from_user.id, msg_id-2)
             await state.finish()
     else:
         msg_id = (await bot.send_message(message.from_user.id,
-            text='Please enter the valid email address.')).message_id
+            text='Please enter the valid email address:')).message_id
         print(msg_id)
         # await message.delete()
-        # await bot.delete_message(message.from_user.id, msg_id-2)
+        await bot.delete_message(message.from_user.id, msg_id-2)
         
 
 
