@@ -149,8 +149,8 @@ async def callback_find_companion(message: types.Message):
             list_time_slot = ' '.join([str(elem) for elem in list_TS])
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f'There are no available peer matches for a given slot. \
-                    We saved your choice and would like to send a notification once we find a peer. \
-                        There is an opportunity to chat at this time: {list_time_slot}.')).message_id
+We saved your choice and would like to send a notification once we find a peer. \
+There is an opportunity to chat at this time: {list_time_slot}.')).message_id
             print(msg_id)
             await menu(message)
         else: # уровень языка не совпадает вообще ни с кем 
