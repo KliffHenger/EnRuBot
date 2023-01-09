@@ -68,14 +68,26 @@ async def callback_find_companion(message: types.Message):
         '''тут у нас выдача сообщений про успешный метчинг'''
         await bot.send_message(message.from_user.id, 
             text=f'We have found a match for you. Your meeting starts at {week_for_message}, {start_time}-00.')
-        await bot.send_message(message.from_user.id, 
-            text=f'You will have a meeting with - {second_user_fname}. We would like to send a reminder half an hour prior to the call.', 
-            reply_markup=G_MENU)
+        for index in range(len(find_table)):
+            if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                
+                msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                msg_id1 = (await bot.send_message(message.from_user.id, 
+                    text=f'You will have a meeting with - {second_user_fname}. We would like to send a reminder half an hour prior to the call.', 
+                    reply_markup=G_MENU)).message_id
+                table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
         await bot.send_message(chat_id=int(second_tg_id), 
             text=f'We have found a match for you. Your meeting starts at {week_for_message}, {start_time}-00.')
-        await bot.send_message(chat_id=int(second_tg_id), 
-            text=f'You will have a meeting with - {first_user_fname}. We would like to send a reminder half an hour prior to the call.', 
-            reply_markup=G_MENU)
+        for index in range(len(find_table)):
+            if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                
+                msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
+                    text=f'You will have a meeting with - {first_user_fname}. We would like to send a reminder half an hour prior to the call.', 
+                    reply_markup=G_MENU)).message_id
+                table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
         if week_for_message:    # этот кусок кода отвечет за формирование необходимых дат для отсрочки сообщений
             search_day = WEEKDAYS.index(week_for_message.lower())  
             time_now = datetime.now()

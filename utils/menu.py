@@ -136,12 +136,12 @@ async def callback_menu(message: types.Message):
             week_for_message = week_dict.get(week)
             pared_time = f'{week_for_message}, {start_time}-00'
             record_id = find_table[index]['id']
+            msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+            await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             answer_message = f"\U000026A1 \U000026A1 \U000026A1 Main Menu: \U000026A1 \U000026A1 \U000026A1 \n\
-Функции:\n\
-\U0001F6AB \U0001F4DA Change the level of English\n\
-\U0001F6AB \U0001F551 Change Time-Slot\n\
-\U0001F6AB\U0001F6ABЗАБЛОКИРОВАНЫ\U0001F6AB\U0001F6AB\n\
-до того момента пока не состоится встреча в {pared_time}."
+The following functions are disabled before the meeting at: {pared_time}.\n\
+\U0001F6AB \U0001F4DA Select my English Level \U0001F6AB\n\
+\U0001F6AB \U0001F551 Change the time slot \U0001F6AB"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=PARED_MENU)).message_id
             print(str(msg_id) + "MENU inline pared_true")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})
