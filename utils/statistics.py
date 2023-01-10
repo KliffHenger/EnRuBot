@@ -17,8 +17,8 @@ async def save_role_hr(message: types.Message):
     for index in range(len(all_table)):
         if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and all_table[index]['fields']['UserHourGoal'] != '0':
-            user_record_id = all_table[index]['id']
-            msg_id = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+            user_record_id = all_table[index]['id']  # достает record_id из БД
+            msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
             '''тут у нас ковыряние json-а и обновление его на +1'''
             eng_level = str(all_table[index]['fields']['UserEngLevel'])
             u_stat = eval(all_table[index]['fields']['UserStatistics'])
@@ -30,8 +30,11 @@ async def save_role_hr(message: types.Message):
             '''тут отнимаем от цели 1 встречу'''
             hour_goal = int(all_table[index]['fields']['UserHourGoal']) - 1
             table.update(record_id=str(user_record_id), fields={'UserHourGoal': str(hour_goal)})
-            await bot.send_message(message.from_user.id, text='Thanks! Your reply has been saved!', reply_markup=G_MENU)
-            await bot.delete_message(message.from_user.id, message_id=msg_id) # удаляет сообщение по msg_id из БД
+            await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+            msg_id = (await bot.send_message(message.from_user.id, 
+                text='Thanks! Your reply has been saved!', reply_markup=G_MENU)).message_id
+            print(msg_id)
+            table.update(record_id=str(user_record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif all_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and all_table[index]['fields']['UserHourGoal'] == '0':
             user_record_id = all_table[index]['id']
@@ -56,8 +59,8 @@ async def save_role_candidate(message: types.Message):
     for index in range(len(all_table)):
         if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and all_table[index]['fields']['UserHourGoal'] != '0':
-            user_record_id = all_table[index]['id']
-            msg_id = int(all_table[index]['fields']['msgIDforDEL'])
+            user_record_id = all_table[index]['id']  # достает record_id из БД
+            msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
             '''тут у нас ковыряние json-а и обновление его на +1'''
             eng_level = str(all_table[index]['fields']['UserEngLevel'])
             u_stat = eval(all_table[index]['fields']['UserStatistics'])
@@ -69,8 +72,11 @@ async def save_role_candidate(message: types.Message):
             '''тут отнимаем от цели 1 встречу'''
             hour_goal = int(all_table[index]['fields']['UserHourGoal']) - 1
             table.update(record_id=str(user_record_id), fields={'UserHourGoal': str(hour_goal)})
-            await bot.send_message(message.from_user.id, text='Thanks! Your reply has been saved!', reply_markup=G_MENU)
-            await bot.delete_message(message.from_user.id, message_id=msg_id)
+            await bot.delete_message(message.from_user.id, message_id=msg_id_get)   # удаляет сообщение по msg_id из БД
+            msg_id = (await bot.send_message(message.from_user.id, 
+                text='Thanks! Your reply has been saved!', reply_markup=G_MENU)).message_id
+            print(msg_id)
+            table.update(record_id=str(user_record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif all_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and all_table[index]['fields']['UserHourGoal'] == '0':
             user_record_id = all_table[index]['id']

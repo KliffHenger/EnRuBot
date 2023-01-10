@@ -67,27 +67,28 @@ async def callback_find_companion(message: types.Message):
         
         '''тут у нас выдача сообщений про успешный метчинг'''
         await bot.send_message(message.from_user.id, 
-            text=f'We have found a match for you. Your meeting starts at {week_for_message}, {start_time}-00.')
+            text=f'We have found a match for you. Your meeting starts on \U0001F5D3 {week_for_message}, {start_time}-00 \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 
                 msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                 msg_id1 = (await bot.send_message(message.from_user.id, 
-                    text=f'You will have a meeting with - {second_user_fname}. We would like to send a reminder half an hour prior to the call.', 
+                    text=f'You will have a meeting with - \U0001F464 {second_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
                     reply_markup=G_MENU)).message_id
                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
-        await bot.send_message(chat_id=int(second_tg_id), 
-            text=f'We have found a match for you. Your meeting starts at {week_for_message}, {start_time}-00.')
+
         for index in range(len(find_table)):
-            if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
-                
+            if find_table[index]['fields']['UserIDTG'] == second_tg_id:
                 msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
-                msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
-                    text=f'You will have a meeting with - {first_user_fname}. We would like to send a reminder half an hour prior to the call.', 
-                    reply_markup=G_MENU)).message_id
-                table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
+                await bot.delete_message(int(second_tg_id), message_id=msg_id_get) # удаляет сообщение по msg_id из БД        
+        await bot.send_message(chat_id=int(second_tg_id), 
+            text=f'We have found a match for you. Your meeting starts on \U0001F5D3 {week_for_message}, {start_time}-00 \U0001F5D3')
+        
+        msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
+            text=f'You will have a meeting with - \U0001F464 {first_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
+            reply_markup=G_MENU)).message_id
+        table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
         if week_for_message:    # этот кусок кода отвечет за формирование необходимых дат для отсрочки сообщений
             search_day = WEEKDAYS.index(week_for_message.lower())  
             time_now = datetime.now()
@@ -106,34 +107,34 @@ async def callback_find_companion(message: types.Message):
                 'first_record_id':first_record_id, 'second_record_id':second_record_id}
 
         '''быстрые задания для тестов'''
-        # globals()[name_sched].add_job(send_message_cron30, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour, 
-        #     minute=int(time_now.minute)+1,second=10 , kwargs={'mess': mess}, misfire_grace_time=3)
-        # globals()[name_sched].add_job(send_message_cron15, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour, 
-        #     minute=int(time_now.minute)+1,second=15 , kwargs={'mess': mess}, misfire_grace_time=3)
-        # globals()[name_sched].add_job(send_message_cron5, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour, 
-        #     minute=int(time_now.minute)+1,second=20 , kwargs={'mess': mess}, misfire_grace_time=3)
-        # globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour,
-        #     minute=int(time_now.minute)+1,second=25 , kwargs={'mess': mess}, misfire_grace_time=3)
-        # globals()[name_sched].add_job(send_message_postmeet, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour,
-        #     minute=int(time_now.minute)+1,second=30 , kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
-        # globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour,
-        #     minute=int(time_now.minute)+1,second=30 , kwargs={'bd': bd}, misfire_grace_time=3)
-        # globals()[name_sched].print_jobs()
+        globals()[name_sched].add_job(send_message_cron30, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour, 
+            minute=int(time_now.minute)+1,second=10 , kwargs={'mess': mess}, misfire_grace_time=3)
+        globals()[name_sched].add_job(send_message_cron15, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour, 
+            minute=int(time_now.minute)+1,second=15 , kwargs={'mess': mess}, misfire_grace_time=3)
+        globals()[name_sched].add_job(send_message_cron5, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour, 
+            minute=int(time_now.minute)+1,second=20 , kwargs={'mess': mess}, misfire_grace_time=3)
+        globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour,
+            minute=int(time_now.minute)+1,second=25 , kwargs={'mess': mess}, misfire_grace_time=3)
+        globals()[name_sched].add_job(send_message_postmeet, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour,
+            minute=int(time_now.minute)+1,second=30 , kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
+        globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=time_now.weekday(), hour=time_now.hour,
+            minute=int(time_now.minute)+1,second=30 , kwargs={'bd': bd}, misfire_grace_time=3)
+        globals()[name_sched].print_jobs()
 
         """непосредственно добавление заданий в обработчик"""
-        globals()[name_sched].add_job(send_message_cron30, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
-            minute=30, kwargs={'mess': mess}, misfire_grace_time=3)
-        globals()[name_sched].add_job(send_message_cron15, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
-            minute=45, kwargs={'mess': mess}, misfire_grace_time=3)
-        globals()[name_sched].add_job(send_message_cron5, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
-            minute=55, kwargs={'mess': mess}, misfire_grace_time=3)
-        globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
-            minute=0, kwargs={'mess': mess}, misfire_grace_time=3)
-        globals()[name_sched].add_job(send_message_postmeet, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
-            minute=40, kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
-        globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
-            minute=40, kwargs={'bd': bd}, misfire_grace_time=3)
-        globals()[name_sched].print_jobs()
+        # globals()[name_sched].add_job(send_message_cron30, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
+        #     minute=30, kwargs={'mess': mess}, misfire_grace_time=3)
+        # globals()[name_sched].add_job(send_message_cron15, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
+        #     minute=45, kwargs={'mess': mess}, misfire_grace_time=3)
+        # globals()[name_sched].add_job(send_message_cron5, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
+        #     minute=55, kwargs={'mess': mess}, misfire_grace_time=3)
+        # globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
+        #     minute=0, kwargs={'mess': mess}, misfire_grace_time=3)
+        # globals()[name_sched].add_job(send_message_postmeet, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
+        #     minute=40, kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
+        # globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
+        #     minute=40, kwargs={'bd': bd}, misfire_grace_time=3)
+        # globals()[name_sched].print_jobs()
     else: # отработка цикла для тех кому пары не нашлось
         list_TS = []
         for index in range(len(find_table)):
@@ -148,8 +149,8 @@ async def callback_find_companion(message: types.Message):
         if is_found == False and more_found == True: # уровень языка совпадает хоть с кем нибудь, смените ТаймСлот
             list_time_slot = ' '.join([str(elem) for elem in list_TS])
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f'There are no available peer matches for a given slot. \
-We saved your choice and would like to send a notification once we find a peer. \
+                text=f'There are no available peer matches for a given slot.\n\
+We saved your choice and would like to send a notification once we find a peer.\n\
 There is an opportunity to chat at this time: {list_time_slot}.')).message_id
             print(msg_id)
             await menu(message)

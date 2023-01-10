@@ -65,7 +65,7 @@ async def get_week_day(message: types.Message,  state: FSMContext):
                 msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text='Something has been entered incorrectly.\nPlease use the keypad to enter the valid format.', reply_markup=WEEK)).message_id
+                    text='Oops! Wrong format!\nTry again, please. Make sure you use the keyboard.', reply_markup=WEEK)).message_id
                 print(msg_id)
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
 
