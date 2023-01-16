@@ -175,18 +175,18 @@ There is an opportunity to chat at this time: {list_time_slot}.')).message_id
 async def send_message_cron30(mess):
     first_tg_id = mess['first_tg_id']
     second_tg_id = mess['second_tg_id']
-    await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin after 30 minutes.')
-    await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin after 30 minutes.')
+    await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin in 30 minutes.')
+    await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin in 30 minutes.')
 async def send_message_cron15(mess):
     first_tg_id = mess['first_tg_id']
     second_tg_id = mess['second_tg_id']
-    await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin after 15 minutes.')
-    await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin after 15 minutes.')
+    await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin in 15 minutes.')
+    await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin in 15 minutes.')
 async def send_message_cron5(mess):
     first_tg_id = mess['first_tg_id']
     second_tg_id = mess['second_tg_id']
-    await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin after 5 minutes.')
-    await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin after 5 minutes.')
+    await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin in 5 minutes.')
+    await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin in 5 minutes.')
 async def send_message_cron(mess):
     first_tg_id = mess['first_tg_id']
     second_tg_id = mess['second_tg_id']
