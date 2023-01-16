@@ -18,8 +18,14 @@ async def callback_timeslot_input(message: types.Message):
     for index in range(len(all_table)):
         if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             record_id = all_table[index]['id']  # достает record_id из БД
-            msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-            await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+            try:
+                msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+            except:
+                pass
+            try:
+                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+            except:
+                pass
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Please select a possible day for your meeting.", reply_markup=WEEK)).message_id
             print(msg_id)

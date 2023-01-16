@@ -70,9 +70,14 @@ async def callback_find_companion(message: types.Message):
             text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}-00 \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
-                
-                msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                try:
+                    msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                except:
+                    pass
+                try:
+                    await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                except:
+                    pass
                 msg_id1 = (await bot.send_message(message.from_user.id, 
                     text=f'You will have a meeting with - \U0001F464 {second_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
                     reply_markup=G_MENU)).message_id
@@ -80,8 +85,14 @@ async def callback_find_companion(message: types.Message):
 
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == second_tg_id:
-                msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-                await bot.delete_message(int(second_tg_id), message_id=msg_id_get) # удаляет сообщение по msg_id из БД        
+                try:
+                    msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                except:
+                    pass
+                try:
+                    await bot.delete_message(int(second_tg_id), message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                except:
+                    pass
         await bot.send_message(chat_id=int(second_tg_id), 
             text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}-00 \U0001F5D3')
         
