@@ -121,8 +121,14 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
             and find_table[index]['fields']['UserTimeSlot'] != str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
             record_id = find_table[index]['id']  # достает record_id из БД
-            msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-            # await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+            try:
+                msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+            except:
+                pass
+            try:
+                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+            except:
+                pass
             answer_message = """
                     <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
                 """
@@ -181,8 +187,14 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
             and find_table[index]['fields']['UserTimeSlot'] != str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
             record_id = find_table[index]['id']  # достает record_id из БД
-            msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-            await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+            try:
+                msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+            except:
+                pass
+            try:
+                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+            except:
+                pass
             answer_message = """
                     <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
                 """

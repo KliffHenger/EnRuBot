@@ -3,7 +3,7 @@ from airtable_config import table
 from .meeting import createMeeting
 from config import bot, dp, week_dict, WEEKDAYS
 from .menu import menu
-from keyboards.inline_menu import G_MENU, U_STAT
+from keyboards.inline_menu import G_MENU, U_STAT, C_MEET_MENU
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime, timedelta
 
@@ -64,6 +64,8 @@ async def callback_find_companion(message: types.Message):
         name_sched = 'sched'+first_tg_id
         globals()[name_sched] = AsyncIOScheduler(timezone="Europe/Minsk")
         globals()[name_sched].start()
+        table.update(record_id=str(first_user_record_id), fields={'JobName': name_sched})
+        table.update(record_id=str(second_user_record_id), fields={'JobName': name_sched})
         
         '''тут у нас выдача сообщений про успешный метчинг'''
         await bot.send_message(message.from_user.id, 
@@ -80,9 +82,11 @@ async def callback_find_companion(message: types.Message):
                     pass
                 msg_id1 = (await bot.send_message(message.from_user.id, 
                     text=f'You will have a meeting with - \U0001F464 {second_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
-                    reply_markup=G_MENU)).message_id
+                    reply_markup=C_MEET_MENU)).message_id
                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
 
+        await bot.send_message(chat_id=int(second_tg_id), 
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}-00 \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == second_tg_id:
                 try:
@@ -93,13 +97,11 @@ async def callback_find_companion(message: types.Message):
                     await bot.delete_message(int(second_tg_id), message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                 except:
                     pass
-        await bot.send_message(chat_id=int(second_tg_id), 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}-00 \U0001F5D3')
-        
-        msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
-            text=f'You will have a meeting with - \U0001F464 {first_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
-            reply_markup=G_MENU)).message_id
-        table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
+                msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
+                    text=f'You will have a meeting with - \U0001F464 {first_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
+                    reply_markup=C_MEET_MENU)).message_id
+                table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
+
         if week_for_message:    # этот кусок кода отвечет за формирование необходимых дат для отсрочки сообщений
             search_day = WEEKDAYS.index(week_for_message.lower())  
             time_now = datetime.now()
@@ -207,6 +209,66 @@ async def update_cron(bd):
     second_record_id = bd['second_record_id']
     table.update(record_id=str(first_record_id), fields={'IsPared': "False"})
     table.update(record_id=str(second_record_id), fields={'IsPared': "False"})
+
+
+@dp.callback_query_handler(text='cancel_meet')
+async def callback_find_companion(message: types.Message):
+    find_table = table.all()
+    # global first_user_record_id, second_user_record_id, second_tg_id, job_name, first_user_tg_id
+    first_user_record_id, second_user_record_id, second_tg_id = '', '', ''
+    job_name = ''
+    # first_user_tg_id = str(message.from_user.id)
+    is_found = False
+    for index in range(len(find_table)): # вытягивание инициатора отмены из БД
+        if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+            first_user_record_id = find_table[index]['id']
+            job_name = str(find_table[index]['fields']['JobName'])
+            second_tg_id = find_table[index]['fields']['IsParedID']
+            print(second_tg_id)
+
+    for index in range(len(find_table)):  # вытягивание собеседника для отмены из БД
+        if find_table[index]['fields']['UserIDTG'] == second_tg_id:
+            second_user_record_id = find_table[index]['id']
+            is_found = True
+    
+    if is_found == True:
+        '''начинаем обновлять данные в БД'''
+        table.update(record_id=str(first_user_record_id), fields={'IsPared': 'False'})
+        table.update(record_id=str(second_user_record_id), fields={'IsPared': 'False'})
+        table.update(record_id=str(first_user_record_id), fields={'UserTimeSlot': 'None'})
+        table.update(record_id=str(second_user_record_id), fields={'UserTimeSlot': 'None'})
+        globals()[job_name].shutdown(wait=False)
+
+        for index in range(len(find_table)):
+            if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                try:
+                    msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                except:
+                    pass
+                try:
+                    await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                except:
+                    pass
+                msg_id1 = (await bot.send_message(message.from_user.id, 
+                    text=f'Встреча отменена.', 
+                    reply_markup=G_MENU)).message_id
+                table.update(record_id=str(first_user_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
+        
+        for index in range(len(find_table)):
+            if find_table[index]['fields']['UserIDTG'] == second_tg_id:
+                try:
+                    msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                except:
+                    pass
+                try:
+                    await bot.delete_message(int(second_tg_id), message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                except:
+                    pass
+                msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
+                    text=f'Встреча отменена вашим партнером.', 
+                    reply_markup=G_MENU)).message_id
+                table.update(record_id=str(second_user_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
+
 
 
 

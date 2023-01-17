@@ -11,6 +11,7 @@ BTN_NET = InlineKeyboardButton('\U0000274C No', callback_data='start')
 BTN_START = InlineKeyboardButton('Start', callback_data='start')
 BTN_HR = InlineKeyboardButton('\U00002714 HR', callback_data='role_hr')
 BTN_CANDIDATE = InlineKeyboardButton('\U0000274C Candidate', callback_data='role_candidate')
+BTN_CANCEL_MEET = InlineKeyboardButton('\U000026D4 Cancel a Meeting', callback_data='cancel_meet')
 
 
 START = InlineKeyboardMarkup().add(BTN_START)
@@ -21,4 +22,5 @@ NO_EN_LVL = InlineKeyboardMarkup().add(BTN_ENG_LEVEL)
 NO_T_SLOT = InlineKeyboardMarkup().add(BTN_TIME_SLOT) 
 START_MENU = InlineKeyboardMarkup().add(BTN_DA, BTN_NET)
 U_STAT = InlineKeyboardMarkup().add(BTN_HR, BTN_CANDIDATE)
+C_MEET_MENU = InlineKeyboardMarkup().add(BTN_CANCEL_MEET, BTN_GEN_MENU)
 
