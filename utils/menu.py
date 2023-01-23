@@ -1,13 +1,13 @@
 from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Command
-from user_states import Reg
-from aiogram.dispatcher import FSMContext
+# from user_states import Reg
+# from aiogram.dispatcher import FSMContext
 from airtable_config import table
-from keyboards.english_level import user_english_level
+# from keyboards.inline_english_level import user_english_level
 from keyboards.menu import menu_button
 from keyboards.inline_menu import KB_MENU, G_MENU, START_MENU, NO_EN_LVL, NO_T_SLOT, PARED_MENU
 from config import bot, dp, week_dict
-import re
+# import re
 
 
 
@@ -204,75 +204,13 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
 
 
 
-async def english_level(message: types.Message):
-    msg_id = (await message.answer(text='Please select your English level', reply_markup=user_english_level)).message_id
-    print(msg_id)
-    # await bot.delete_message(message.from_user.id, msg_id-1)
-    # await message.delete()
-    await Reg.user_eng_level.set()
 
-@dp.callback_query_handler(text='eng_level')
-async def eng_level(message: types.Message):
-    all_table = table.all()
-    for index in range(len(all_table)):
-        if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
-            record_id = all_table[index]['id']  # достает record_id из БД
-            try:
-                msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-            except:
-                pass
-            try:
-                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
-            except:
-                pass
-            msg_id = (await bot.send_message(message.from_user.id, 
-                'Please select your English level', reply_markup=user_english_level)).message_id
-            print(msg_id)
-            table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
-            await Reg.user_eng_level.set()
-
-
-async def set_eng_level(message: types.Message, state: FSMContext):
-    """
-    Дла начала нам нужно найти record_id нашего пользователя. Далее
-    мы обновляем его параметр уровня владения языка в базе
-    """
-    pattern = r'A0|A0-A1|A1|A1-A2|A2|A2-B1|B1|B1-B2|B2|B2-C1|C1|C1-C2|C2'
-    if re.fullmatch(pattern, message.text):
-        await state.update_data(user_eng_level=message.text)
-        find_table = table.all()
-        element_id = ''
-        for index in range(len(find_table)):
-            if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
-                element_id = find_table[index]['id']
-                msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
-                msg_id = (await message.answer(f"You have a {message.text} English level.")).message_id
-                print(msg_id)
-                user_level = str(message.text)
-                table.update(record_id=str(element_id), fields={"msgIDforDEL": str(msg_id)})
-                table.update(record_id=str(element_id), fields={'UserEngLevel': user_level})
-                await state.finish()
-                await menu(message)
-    else:
-        find_table = table.all()
-        element_id = ''
-        for index in range(len(find_table)):
-            if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
-                element_id = find_table[index]['id']
-                msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
-                msg_id = (await bot.send_message(message.from_user.id, 
-                    text='Oops! Wrong format!\nTry again, please. Make sure you use the keyboard.', 
-                    reply_markup=user_english_level)).message_id
-                print(msg_id)
-                table.update(record_id=str(element_id), fields={"msgIDforDEL": str(msg_id)})
 
 
 
 def register_handlers_menu(dp: Dispatcher):
     dp.register_message_handler(start_bot, Command('start'))
     dp.register_message_handler(menu, commands='menu')
-    dp.register_message_handler(english_level, commands='eng_level')
-    dp.register_message_handler(set_eng_level, state=Reg.user_eng_level)
+    # dp.register_message_handler(english_level, commands='eng_level')
+    # dp.register_message_handler(set_eng_level, state=Reg.user_eng_level)
 

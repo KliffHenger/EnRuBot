@@ -1,6 +1,6 @@
 from config import dp #, scheduler
 from aiogram.utils import executor
-from utils import registration, menu, time_slot, find_interlocutor, hour_goal
+from utils import registration, menu, time_slot, find_interlocutor, hour_goal, english_level
 
 
 
@@ -17,6 +17,7 @@ time_slot.register_handlers_time_slot(dp)
 menu.register_handlers_menu(dp)
 find_interlocutor.register_handlers_find_interlocutor(dp)
 hour_goal.register_handlers_hour_goal(dp)
+english_level.register_handlers_english_level(dp)
 
 
 

@@ -9,8 +9,8 @@ BTN_GEN_MENU = InlineKeyboardButton('\U000026A1\U000026A1\U000026A1 Main Menu \U
 BTN_DA = InlineKeyboardButton('\U00002714 Yes', callback_data='register')
 BTN_NET = InlineKeyboardButton('\U0000274C No', callback_data='start')
 BTN_START = InlineKeyboardButton('Start', callback_data='start')
-BTN_HR = InlineKeyboardButton('\U00002714 HR', callback_data='role_hr')
-BTN_CANDIDATE = InlineKeyboardButton('\U0000274C Candidate', callback_data='role_candidate')
+BTN_HR = InlineKeyboardButton('\U0001F60E HR', callback_data='role_hr')
+BTN_CANDIDATE = InlineKeyboardButton('\U0001F913 Candidate', callback_data='role_candidate')
 BTN_CANCEL_MEET = InlineKeyboardButton('\U000026D4 Cancel a Meeting', callback_data='cancel_meet')
 
 
