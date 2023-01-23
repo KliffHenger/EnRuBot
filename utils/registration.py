@@ -31,7 +31,7 @@ async def set_user_email(message: types.Message, state=FSMContext):
     Если почта есть в базе, то значение tg_id будет обновлено, а бот
     пустит пользователя дальше.
     """
-    pattern = r'^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,3}$'
+    pattern = r'^([a-zA-Z0-9_-]+\.)*[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)*\.[a-zA-Z]{2,3}$'
     is_found = False
     if re.fullmatch(pattern, message.text):
         is_found = False
