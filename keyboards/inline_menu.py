@@ -25,6 +25,6 @@ NO_T_SLOT = InlineKeyboardMarkup().add(BTN_TIME_SLOT)
 START_MENU = InlineKeyboardMarkup().add(BTN_DA, BTN_NET)
 U_STAT = InlineKeyboardMarkup().add(BTN_HR, BTN_CANDIDATE)
 C_MEET_MENU = InlineKeyboardMarkup().add(BTN_CANCEL_MEET, BTN_GEN_MENU)
-GO_FIND = InlineKeyboardMarkup().add(BTN_FIND_INTERLOCUTOR)
+GO_FIND = InlineKeyboardMarkup().add(BTN_FIND_INTERLOCUTOR).add(BTN_GEN_MENU)
 
 
