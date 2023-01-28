@@ -1,6 +1,6 @@
 from aiogram import Bot, Dispatcher, executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
 
 
 
@@ -13,7 +13,7 @@ TOKEN_API = "5988049870:AAF9JgMZQjX3jL55y9p8RVE2UDVMqIBBN5k" # токен Ник
 bot = Bot(TOKEN_API)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
-# scheduler = AsyncIOScheduler(timezone="Europe/Minsk")
+
 week_dict = {'MO':'Monday', 'TU':'Tuesday', 'WE':'Wednesday', 'TH':'Thursday', 'FR':'Friday', 'SA':'Saturday', 'SU':'Sunday'}
 WEEKDAYS = ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday')
 

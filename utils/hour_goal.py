@@ -5,6 +5,7 @@ from keyboards.inline_menu import G_MENU
 from .menu import menu
 
 
+'''получение и вывод цели встреч'''
 @dp.callback_query_handler(text='hour_goal')
 async def get_hour_goal(message: types.Message):
     find_table = table.all()

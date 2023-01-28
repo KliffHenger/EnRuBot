@@ -5,13 +5,12 @@ from keyboards.inline_menu import G_MENU
 
 
 
-
+'''очень соообщение с инструкцией и ссылкой которой нет'''
 @dp.callback_query_handler(text='instruction')
 async def get_instruction(message: types.Message):
     find_table = table.all()
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
-            user_hour_goal = find_table[index]['fields']['UserHourGoal']
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
                 msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД

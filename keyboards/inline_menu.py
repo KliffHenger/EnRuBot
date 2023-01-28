@@ -19,10 +19,12 @@ BTN_CANCEL_MEET = InlineKeyboardButton('\U000026D4 Cancel a Meeting', callback_d
 START = InlineKeyboardMarkup().add(BTN_START)
 G_MENU = InlineKeyboardMarkup().add(BTN_GEN_MENU)
 KB_MENU = InlineKeyboardMarkup().add(BTN_INSTR).add(BTN_ENG_LEVEL).add(BTN_TIME_SLOT).add(BTN_STATISTICS).add(BTN_FIND_INTERLOCUTOR).add(BTN_HOUR_GOAL)
-PARED_MENU = InlineKeyboardMarkup().add(BTN_INSTR).add(BTN_STATISTICS).add(BTN_HOUR_GOAL)
+PARED_MENU = InlineKeyboardMarkup().add(BTN_CANCEL_MEET).add(BTN_INSTR).add(BTN_STATISTICS).add(BTN_HOUR_GOAL)
 NO_EN_LVL = InlineKeyboardMarkup().add(BTN_ENG_LEVEL)
 NO_T_SLOT = InlineKeyboardMarkup().add(BTN_TIME_SLOT) 
 START_MENU = InlineKeyboardMarkup().add(BTN_DA, BTN_NET)
 U_STAT = InlineKeyboardMarkup().add(BTN_HR, BTN_CANDIDATE)
 C_MEET_MENU = InlineKeyboardMarkup().add(BTN_CANCEL_MEET, BTN_GEN_MENU)
+GO_FIND = InlineKeyboardMarkup().add(BTN_FIND_INTERLOCUTOR)
+
 

@@ -1,4 +1,4 @@
-from config import dp #, scheduler
+from config import dp
 from aiogram.utils import executor
 from utils import registration, menu, time_slot, find_interlocutor, hour_goal, english_level
 

@@ -1,5 +1,4 @@
 from aiogram import types, Dispatcher
-from aiogram.types import ContentTypes
 from user_states import Reg
 from aiogram.dispatcher import FSMContext
 from airtable_config import table
@@ -8,14 +7,9 @@ from config import bot, dp
 from utils.menu import menu
 import re
 
-
-# async def english_level(message: types.Message):
-#     msg_id = (await message.answer(text='Please select your English level', reply_markup=user_english_level)).message_id
-#     print(msg_id)
-#     # await bot.delete_message(message.from_user.id, msg_id-1)
-#     # await message.delete()
-#     await Reg.user_eng_level.set()
-
+'''
+Вход в режим выбора уровня языка
+'''
 @dp.callback_query_handler(text='eng_level')
 async def eng_level(message: types.Message):
     all_table = table.all()
@@ -33,10 +27,11 @@ async def eng_level(message: types.Message):
             msg_id = (await bot.send_message(message.from_user.id, 
                 'Please select your English level', reply_markup=user_english_level)).message_id
             print(msg_id)
-            
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
-            # await Reg.user_eng_level.set()
-
+            
+'''
+Кусок старого ввода Уровня Языка может пригодиться для ручного ввода с клавиатуры.
+'''
 async def set_eng_level(message: types.Message, state: FSMContext):
     """
     Дла начала нам нужно найти record_id нашего пользователя. Далее
@@ -73,7 +68,9 @@ async def set_eng_level(message: types.Message, state: FSMContext):
                 print(msg_id)
                 table.update(record_id=str(element_id), fields={"msgIDforDEL": str(msg_id)})
 
-
+'''
+Тут описанны все кнопки выбора Уровней Языка
+'''
 @dp.callback_query_handler(text='A0')
 async def set_level_A0(message: types.Message, state: FSMContext):
     txt = 'A0'
@@ -88,8 +85,8 @@ async def set_level_A0(message: types.Message, state: FSMContext):
             print(msg_id)
             user_level = str(txt)
             table.update(record_id=str(element_id), fields={"msgIDforDEL": str(msg_id)}) # запись msg_id в БД
-            table.update(record_id=str(element_id), fields={'UserEngLevel': user_level})
-            await menu(message)
+            table.update(record_id=str(element_id), fields={'UserEngLevel': user_level}) # запись EngLevel в БД
+            await menu(message) # выдача всего Главного Меню
 
 @dp.callback_query_handler(text='A0-A1')
 async def set_level_A0_A1(message: types.Message, state: FSMContext):
@@ -295,12 +292,16 @@ async def set_level_C2(message: types.Message, state: FSMContext):
             table.update(record_id=str(element_id), fields={'UserEngLevel': user_level})
             await menu(message)
 
+'''
+Тут все сообщения написаные пользователем отлавливаются и получают реакцию.
+Надо бы его перенести куда-нибудь в более очевидное место. Но потом.
+'''
 async def echo_message(message: types.Message):
     find_table = table.all()
-    element_id = ''
+    # element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
-            element_id = find_table[index]['id']
+            # element_id = find_table[index]['id']
             # msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
             # await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             msg_id = (await bot.send_message(message.from_user.id, 
