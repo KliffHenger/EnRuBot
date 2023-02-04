@@ -23,7 +23,7 @@ async def get_hour_goal(message: types.Message):
             except:
                 pass
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"You have {user_hour_goal} meetings left to the goal.", reply_markup=G_MENU)).message_id
+                text=f"You have {user_hour_goal} meetings (for 40 min) left to the goal.", reply_markup=G_MENU)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
     
@@ -35,7 +35,7 @@ async def get_hour_goal(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             user_hour_goal = find_table[index]['fields']['UserHourGoal']
-    msg_id = (await message.answer(text=f"You have {user_hour_goal} meetings left to the goal.")).message_id
+    msg_id = (await message.answer(text=f"You have {user_hour_goal} meetings (for 40 min) left to the goal.")).message_id
     print(msg_id)
     await menu(message)
     

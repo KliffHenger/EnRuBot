@@ -86,7 +86,7 @@ async def set_week_MO(message: types.Message, state: FSMContext):
             msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at: \nFor example: 17 or 09.", 
+                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -103,7 +103,7 @@ async def set_week_TU(message: types.Message, state: FSMContext):
             msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at: \nFor example: 17 or 09.", 
+                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -120,7 +120,7 @@ async def set_week_WE(message: types.Message, state: FSMContext):
             msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at: \nFor example: 17 or 09.", 
+                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -137,7 +137,7 @@ async def set_week_TH(message: types.Message, state: FSMContext):
             msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at: \nFor example: 17 or 09.", 
+                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -154,7 +154,7 @@ async def set_week_FR(message: types.Message, state: FSMContext):
             msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at: \nFor example: 17 or 09.", 
+                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -171,7 +171,7 @@ async def set_week_SA(message: types.Message, state: FSMContext):
             msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at: \nFor example: 17 or 09.", 
+                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -188,7 +188,7 @@ async def set_week_SU(message: types.Message, state: FSMContext):
             msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at: \nFor example: 17 or 09.", 
+                f"Great. You've selected - {txt}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД

@@ -27,7 +27,7 @@ async def start_bot(message: types.Message):
             is_found = True
     if is_found:
         msg_id = (await bot.send_message(message.from_user.id, 
-            text=f"Hello, {user_name} {user_surname}!\nYou have a {eng_level} English level.\nYour Time-Slot - {time_slot}." 
+            text=f"Hello, {user_name} {user_surname}!" 
                 )).message_id
         print(msg_id)
         await menu(message)
@@ -58,7 +58,7 @@ async def start_bot(message: types.Message, state: FSMContext):
             # time_slot = find_table[index]['fields']['UserTimeSlot']
             is_found = True
     if is_found:
-        msg_id = (await message.answer(f"Hello, {user_name} {user_surname}!\nYou have a - {eng_level} English level.\nYour Time-Slot - {time_slot}."
+        msg_id = (await message.answer(f"Hello, {user_name} {user_surname}!"
             )).message_id
         print(msg_id)
         await menu(message)
@@ -75,6 +75,9 @@ async def menu(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['IsPared'] == 'True':
+            eng_level = find_table[index]['fields']['UserEngLevel']
+            time_slot = find_table[index]['fields']['UserTimeSlot']
+
             f_timeSlot = find_table[index]['fields']['UserTimeSlot']
             week = f_timeSlot[0]+f_timeSlot[1]
             start_time = f_timeSlot[2]+f_timeSlot[3]
@@ -89,7 +92,8 @@ async def menu(message: types.Message):
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"\U000026A1 \U000026A1 \U000026A1 Main Menu: \U000026A1 \U000026A1 \U000026A1 \n\
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - {time_slot}.\n\n\
+\U000026A1 \U000026A1 \U000026A1 Main Menu: \U000026A1 \U000026A1 \U000026A1 \n\
 The following functions are disabled before the meeting at: {pared_time}.\n\
 \U0001F6AB \U0001F4DA Select my English Level \U0001F6AB\n\
 \U0001F6AB \U0001F551 Change the time slot \U0001F6AB"
@@ -98,26 +102,33 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserEngLevel'] == str('None'):
+            eng_level = find_table[index]['fields']['UserEngLevel']
+            time_slot = find_table[index]['fields']['UserTimeSlot']
+
             record_id = find_table[index]['id']  # достает record_id из БД
-            answer_message = """
-                    <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
-                """
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - {time_slot}.\n\n\
+\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)).message_id
             print(str(msg_id) + "MENU")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] == str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
+            eng_level = find_table[index]['fields']['UserEngLevel']
+            time_slot = find_table[index]['fields']['UserTimeSlot']
+
             record_id = find_table[index]['id']  # достает record_id из БД
-            answer_message = """
-                    <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
-                """
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - {time_slot}.\n\n\
+\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
             print(str(msg_id) + "MENU")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] != str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
+            eng_level = find_table[index]['fields']['UserEngLevel']
+            time_slot = find_table[index]['fields']['UserTimeSlot']
+
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
                 msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
@@ -127,9 +138,8 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = """
-                    <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
-                """
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - {time_slot}.\n\n\
+\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
             print(str(msg_id) + "MENU")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -141,6 +151,9 @@ async def callback_menu(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['IsPared'] == 'True':
+            eng_level = find_table[index]['fields']['UserEngLevel']
+            time_slot = find_table[index]['fields']['UserTimeSlot']
+
             f_timeSlot = find_table[index]['fields']['UserTimeSlot']
             week = f_timeSlot[0]+f_timeSlot[1]
             start_time = f_timeSlot[2]+f_timeSlot[3]
@@ -155,7 +168,8 @@ async def callback_menu(message: types.Message):
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"\U000026A1 \U000026A1 \U000026A1 Main Menu: \U000026A1 \U000026A1 \U000026A1 \n\
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - {time_slot}.\n\n\
+\U000026A1 \U000026A1 \U000026A1 Main Menu: \U000026A1 \U000026A1 \U000026A1 \n\
 The following functions are disabled before the meeting at: {pared_time}.\n\
 \U0001F6AB \U0001F4DA Select my English Level \U0001F6AB\n\
 \U0001F6AB \U0001F551 Change the time slot \U0001F6AB"
@@ -164,26 +178,33 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserEngLevel'] == str('None'):
+            eng_level = find_table[index]['fields']['UserEngLevel']
+            time_slot = find_table[index]['fields']['UserTimeSlot']
+
             record_id = find_table[index]['id']  # достает record_id из БД
-            answer_message = """
-                    <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
-                """
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - {time_slot}.\n\n\
+\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)).message_id
             print(str(msg_id) + "MENU inline")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] == str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
+            eng_level = find_table[index]['fields']['UserEngLevel']
+            time_slot = find_table[index]['fields']['UserTimeSlot']
+
             record_id = find_table[index]['id']  # достает record_id из БД
-            answer_message = """
-                    <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
-                """
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - {time_slot}.\n\n\
+\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
             print(str(msg_id) + "MENU inline")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] != str('None') \
                 and find_table[index]['fields']['UserEngLevel'] != str('None'):
+            eng_level = find_table[index]['fields']['UserEngLevel']
+            time_slot = find_table[index]['fields']['UserTimeSlot']
+
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
                 msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
@@ -193,9 +214,8 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = """
-                    <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
-                """
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - {time_slot}.\n\n\
+\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
             print(str(msg_id) + "MENU inline")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
