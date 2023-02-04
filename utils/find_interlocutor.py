@@ -190,10 +190,24 @@ There is an opportunity to chat at this time:',
                     print(msg_id)
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
         else: # уровень языка не совпадает вообще ни с кем 
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text="Sorry, we haven't been able to find a match at that time. Please try another time slot.")).message_id
-            print(msg_id)
-            await menu(message)
+            find_table = table.all()
+            for index in range(len(find_table)):
+                if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                    record_id = find_table[index]['id']  # достает record_id из БД
+                    try:
+                        msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                    except:
+                        pass
+                    try:
+                        await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                    except:
+                        pass
+                    msg_id = (await bot.send_message(message.from_user.id, 
+                        text="Sorry, we haven't been able to find a match at that time. Please try another time slot.",
+                        reply_markup=G_MENU)).message_id
+                    table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
+                    print(msg_id)
+                
         
 
 
@@ -491,10 +505,24 @@ There is an opportunity to chat at this time: {list_time_slot}.',
             print(list_TS)
             await menu(message)
         else: # уровень языка не совпадает вообще ни с кем 
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text="Sorry, we haven't been able to find a match at that time. Please try another time slot.")).message_id
-            print(msg_id)
-            await menu(message)
+            find_table = table.all()
+            for index in range(len(find_table)):
+                if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                    record_id = find_table[index]['id']  # достает record_id из БД
+                    try:
+                        msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                    except:
+                        pass
+                    try:
+                        await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                    except:
+                        pass
+                    msg_id = (await bot.send_message(message.from_user.id, 
+                        text="Sorry, we haven't been able to find a match at that time. Please try another time slot.",
+                        reply_markup=G_MENU)).message_id
+                    table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
+                    print(msg_id)
+            
 
 
 
