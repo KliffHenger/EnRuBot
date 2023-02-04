@@ -1,13 +1,10 @@
 from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Command
-# from user_states import Reg
-# from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher import FSMContext
 from airtable_config import table
-# from keyboards.inline_english_level import user_english_level
-from keyboards.menu import menu_button
 from keyboards.inline_menu import KB_MENU, G_MENU, START_MENU, NO_EN_LVL, NO_T_SLOT, PARED_MENU
 from config import bot, dp, week_dict
-# import re
+
 
 
 
@@ -16,7 +13,7 @@ async def start_bot(message: types.Message):
     """
     если ник пользователя лежит в базе, то бот поприветствует юзера.
     если же нет, то попросит почту. Если почта есть в БД - пустит дальше.
-    Если нет - по факту будет "тупик"
+    Если нет - сообщит про это.
     """
     find_table = table.all()
     is_found = False
@@ -25,8 +22,8 @@ async def start_bot(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             user_name = find_table[index]['fields']['UserName']
             user_surname = find_table[index]['fields']['UserSurname']
-            eng_level = find_table[index]['fields']['UserEngLevel']
-            time_slot = find_table[index]['fields']['UserTimeSlot']
+            # eng_level = find_table[index]['fields']['UserEngLevel']
+            # time_slot = find_table[index]['fields']['UserTimeSlot']
             is_found = True
     if is_found:
         msg_id = (await bot.send_message(message.from_user.id, 
@@ -43,12 +40,13 @@ async def start_bot(message: types.Message):
         await bot.delete_message(message.from_user.id, msg_id-1)
 
 
-async def start_bot(message: types.Message):
+async def start_bot(message: types.Message, state: FSMContext):
     """
     если ник пользователя лежит в базе, то бот поприветствует юзера.
     если же нет, то попросит почту. Если почта есть в БД - пустит дальше.
     Если нет - по факту будет "тупик"
     """
+    await state.finish()
     find_table = table.all()
     is_found = False
     user_name, user_surname, eng_level, time_slot = '', '', '', ''
@@ -56,8 +54,8 @@ async def start_bot(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             user_name = find_table[index]['fields']['UserName']
             user_surname = find_table[index]['fields']['UserSurname']
-            eng_level = find_table[index]['fields']['UserEngLevel']
-            time_slot = find_table[index]['fields']['UserTimeSlot']
+            # eng_level = find_table[index]['fields']['UserEngLevel']
+            # time_slot = find_table[index]['fields']['UserTimeSlot']
             is_found = True
     if is_found:
         msg_id = (await message.answer(f"Hello, {user_name} {user_surname}!\nYou have a - {eng_level} English level.\nYour Time-Slot - {time_slot}."
@@ -96,7 +94,7 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
 \U0001F6AB \U0001F4DA Select my English Level \U0001F6AB\n\
 \U0001F6AB \U0001F551 Change the time slot \U0001F6AB"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=PARED_MENU)).message_id
-            print(str(msg_id) + "MENU inline pared_true")
+            print(str(msg_id) + "MENU pared_true")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserEngLevel'] == str('None'):
@@ -105,7 +103,7 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
                     <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
                 """
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)).message_id
-            print(str(msg_id) + "MENU inline")
+            print(str(msg_id) + "MENU")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] == str('None') \
@@ -115,7 +113,7 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
                     <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
                 """
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
-            print(str(msg_id) + "MENU inline")
+            print(str(msg_id) + "MENU")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] != str('None') \
@@ -133,7 +131,7 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
                     <b>\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1</b>
                 """
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
-            print(str(msg_id) + "MENU inline")
+            print(str(msg_id) + "MENU")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
 
 
@@ -201,9 +199,6 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
             print(str(msg_id) + "MENU inline")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
-
-
-
 
 
 

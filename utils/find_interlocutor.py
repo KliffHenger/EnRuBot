@@ -9,6 +9,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime, timedelta
 from user_states import TS
 from aiogram.dispatcher import FSMContext
+import re
 import asyncio
 
 
@@ -184,6 +185,7 @@ async def callback_find_companion(message: types.Message):
 We saved your choice and would like to send a notification once we find a peer.\n\
 There is an opportunity to chat at this time:',
                         reply_markup=genmarkup(list_TS))).message_id
+                    # await bot.send_message(message.from_user.id, reply_markup=G_MENU)
                     await TS.time_slot.set()
                     print(msg_id)
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
@@ -201,21 +203,38 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
     all_table = table.all() # получаем всю таблицу
     for index in range(len(all_table)):
         if all_table[index]['fields']['UserIDTG'] == str(callback_query.from_user.id):
+            old_TS = all_table[index]['fields']['UserTimeSlot']
             record_id = all_table[index]['id']  # достает record_id из БД
             time_slot = callback_query.data
-            try:
-                msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-            except:
-                pass
-            try:
-                await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
-            except:
-                pass
-            msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {time_slot}.', 
-                reply_markup=GO_FIND)).message_id
-            table.update(record_id=str(record_id), fields={'UserTimeSlot': time_slot})
-            table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
-            await state.finish()
+            pattern = r'^[MO|TU|WE|TH|FR|SA|SU]+(0[0-9]|1[0-9]|2[0-3])$'
+            if re.fullmatch(pattern, time_slot):
+                try:
+                    msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                except:
+                    pass
+                try:
+                    await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                except:
+                    pass
+                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {time_slot}.', 
+                    reply_markup=GO_FIND)).message_id
+                table.update(record_id=str(record_id), fields={'UserTimeSlot': time_slot})
+                table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
+                await state.finish()
+            else:
+                try:
+                    msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                except:
+                    pass
+                try:
+                    await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                except:
+                    pass
+                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {old_TS}.', 
+                    reply_markup=G_MENU)).message_id
+                table.update(record_id=str(record_id), fields={'UserTimeSlot': old_TS})
+                table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
+                await state.finish()
 
     
 

@@ -1,7 +1,7 @@
 from aiogram import types, Dispatcher
 from user_states import Reg
 from aiogram.dispatcher import FSMContext
-from airtable_config import table
+from airtable_config import table, table_view
 from utils.menu import menu
 from keyboards.inline_menu import START
 from config import bot, dp
@@ -37,20 +37,33 @@ async def set_user_email(message: types.Message, state=FSMContext):
         is_found = False
         await state.update_data(user_email=message.text)
         find_table = table.all()
-        for index in range(len(find_table)):
-            if find_table[index]['fields']['UserEmail'] == message.text:
+        view_table = table_view.all()
+        for index in range(len(view_table)):
+            if view_table[index]['fields']['UserEmail'] == message.text:
                 is_found = True
-                wrong_date = None
+                # wrong_date = None
                 wrong_status = False
                 element_id = find_table[index]['id']
                 msg_id = (await bot.send_message(message.from_user.id,
-                    f"Welcome, {find_table[index]['fields']['UserName']} {find_table[index]['fields']['UserSurname']}")).message_id
+                    f"Welcome, {view_table[index]['fields']['UserName']} {view_table[index]['fields']['UserSurname']}")).message_id
                 print(msg_id)
                 await state.finish()
-                table.update(record_id=str(element_id), fields={"UserIDTG": str(message.from_user.id)})
-                table.update(record_id=str(element_id), fields={"UserEngLevel": str(wrong_date)})
-                table.update(record_id=str(element_id), fields={"UserTimeSlot": str(wrong_date)})
-                table.update(record_id=str(element_id), fields={"IsPared": str(wrong_status)})
+                table.create({'UserName': str(view_table[index]['fields']['UserName']), 
+                    'UserSurname': str(view_table[index]['fields']['UserSurname']),
+                    'UserEmail': str(view_table[index]['fields']['UserEmail']),
+                    'UserIDTG': str(message.from_user.id),
+                    'UserEngLevel': 'None',
+                    'UserHourGoal': '4',
+                    'UserTimeSlot': 'None',
+                    'IsPared': 'False',
+                    'IsParedID': 'None',
+                    'JobName': 'None',
+                    'msgIDforDEL': 'None',
+                    'UserStatistics': str({"A0":{"HR":0,"Candidate":0,},"A0-A1":{"HR":0,"Candidate":0,},"A1":{"HR":0,"Candidate":0,},"A1-A2":{"HR":0,"Candidate":0,},"A2":{"HR":0,"Candidate":0,},"A2-B1":{"HR":0,"Candidate":0,},"B1":{"HR":0,"Candidate":0,},"B1-B2":{"HR":0,"Candidate":0,},"B2":{"HR":0,"Candidate":0,},"B2-C1":{"HR":0,"Candidate":0,},"C1":{"HR":0,"Candidate":0,},"C1-C2":{"HR":0,"Candidate":0,},"C2":{"HR":0,"Candidate":0,}})})
+                # table.update(record_id=str(element_id), fields={"UserIDTG": str(message.from_user.id)})
+                # table.update(record_id=str(element_id), fields={"UserEngLevel": str(wrong_date)})
+                # table.update(record_id=str(element_id), fields={"UserTimeSlot": str(wrong_date)})
+                # table.update(record_id=str(element_id), fields={"IsPared": str(wrong_status)})
                 await menu(message)
                 
         if not is_found:
