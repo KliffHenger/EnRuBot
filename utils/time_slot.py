@@ -212,7 +212,7 @@ async def set_start_00(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -234,7 +234,7 @@ async def set_start_01(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -256,7 +256,7 @@ async def set_start_02(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -278,7 +278,7 @@ async def set_start_03(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -300,7 +300,7 @@ async def set_start_04(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -322,7 +322,7 @@ async def set_start_05(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -344,7 +344,7 @@ async def set_start_06(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -366,7 +366,7 @@ async def set_start_07(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -388,7 +388,7 @@ async def set_start_08(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -410,7 +410,7 @@ async def set_start_09(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -432,7 +432,7 @@ async def set_start_10(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -454,7 +454,7 @@ async def set_start_11(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -476,7 +476,7 @@ async def set_start_12(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -498,7 +498,7 @@ async def set_start_13(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -520,7 +520,7 @@ async def set_start_14(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -542,7 +542,7 @@ async def set_start_15(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -564,7 +564,7 @@ async def set_start_16(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -586,7 +586,7 @@ async def set_start_17(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -608,7 +608,7 @@ async def set_start_18(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -630,7 +630,7 @@ async def set_start_19(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -652,7 +652,7 @@ async def set_start_20(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -674,7 +674,7 @@ async def set_start_21(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -696,7 +696,7 @@ async def set_start_22(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -718,7 +718,7 @@ async def set_start_23(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -742,7 +742,7 @@ async def set_start_23(message: types.Message, state: FSMContext):
 #             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
 #                 element_id = find_table[index]['id']
 #                 msg_id = (await bot.send_message(message.from_user.id, 
-#                     text=f"Your Time-Slot - {user_time_slot}-00 - {start_time}-40.")).message_id
+#                     text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
 #                 print(msg_id)
 #                 table.update(str(element_id), {'UserTimeSlot': user_time_slot})
 #                 await state.finish()

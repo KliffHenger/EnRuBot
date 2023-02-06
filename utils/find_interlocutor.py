@@ -75,7 +75,7 @@ async def callback_find_companion(message: types.Message):
         
         '''тут у нас выдача сообщений про успешный метчинг'''
         await bot.send_message(message.from_user.id, 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}-00 \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}:00 \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 try:
@@ -92,7 +92,7 @@ async def callback_find_companion(message: types.Message):
                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
 
         await bot.send_message(chat_id=int(second_tg_id), 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}-00 \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}:00 \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == second_tg_id:
                 try:
@@ -402,7 +402,7 @@ async def find_companion(message: types.Message):
         
         '''тут у нас выдача сообщений про успешный метчинг'''
         await bot.send_message(message.from_user.id, 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}-00 \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}:00 \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 try:
@@ -419,7 +419,7 @@ async def find_companion(message: types.Message):
                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
 
         await bot.send_message(chat_id=int(second_tg_id), 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}-00 \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}:00 \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == second_tg_id:
                 try:
@@ -507,6 +507,7 @@ async def find_companion(message: types.Message):
                         await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                     except:
                         pass
+                    
                     msg_id = (await bot.send_message(message.from_user.id, 
                         text=f'There are no available peer matches for a given slot.\n\
 We saved your choice and would like to send a notification once we find a peer.\n\

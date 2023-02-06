@@ -81,7 +81,7 @@ async def menu(message: types.Message):
             week = time_slot[0]+time_slot[1]
             start_time = time_slot[2]+time_slot[3]
             week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}-00'
+            pared_time = f'{week_for_message}, {start_time}:00'
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
                 msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
@@ -107,7 +107,7 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
             week = time_slot[0]+time_slot[1]
             start_time = time_slot[2]+time_slot[3]
             week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}-00'
+            pared_time = f'{week_for_message}, {start_time}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - {pared_time}.\n\n\
@@ -124,7 +124,7 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
             week = time_slot[0]+time_slot[1]
             start_time = time_slot[2]+time_slot[3]
             week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}-00'
+            pared_time = f'{week_for_message}, {start_time}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - {pared_time}.\n\n\
@@ -141,7 +141,7 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
             week = time_slot[0]+time_slot[1]
             start_time = time_slot[2]+time_slot[3]
             week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}-00'
+            pared_time = f'{week_for_message}, {start_time}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
@@ -171,7 +171,7 @@ async def callback_menu(message: types.Message):
             week = time_slot[0]+time_slot[1]
             start_time = time_slot[2]+time_slot[3]
             week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}-00'
+            pared_time = f'{week_for_message}, {start_time}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
@@ -198,7 +198,7 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
             week = time_slot[0]+time_slot[1]
             start_time = time_slot[2]+time_slot[3]
             week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}-00'
+            pared_time = f'{week_for_message}, {start_time}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - {pared_time}.\n\n\
@@ -215,7 +215,7 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
             week = time_slot[0]+time_slot[1]
             start_time = time_slot[2]+time_slot[3]
             week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}-00'
+            pared_time = f'{week_for_message}, {start_time}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - {pared_time}.\n\n\
@@ -232,7 +232,7 @@ The following functions are disabled before the meeting at: {pared_time}.\n\
             week = time_slot[0]+time_slot[1]
             start_time = time_slot[2]+time_slot[3]
             week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}-00'
+            pared_time = f'{week_for_message}, {start_time}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
