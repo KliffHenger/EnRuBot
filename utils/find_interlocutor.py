@@ -221,6 +221,12 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
             record_id = all_table[index]['id']  # достает record_id из БД
             time_slot = callback_query.data
             pattern = r'^[MO|TU|WE|TH|FR|SA|SU]+(0[0-9]|1[0-9]|2[0-3])$'
+
+            week = time_slot[0]+time_slot[1]
+            start_time = time_slot[2]+time_slot[3]
+            week_for_message = week_dict.get(week)
+            pared_time = f'\U0001F5D3 {week_for_message}, {start_time}:00 \U0001F5D3'
+
             if re.fullmatch(pattern, time_slot):
                 try:
                     msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
@@ -230,7 +236,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                     await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                 except:
                     pass
-                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {time_slot}.', 
+                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {pared_time}.', 
                     reply_markup=GO_FIND)).message_id
                 table.update(record_id=str(record_id), fields={'UserTimeSlot': time_slot})
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД

@@ -5,7 +5,7 @@ from keyboards.inline_time_slot import WEEK, HOUR
 from keyboards.inline_menu import G_MENU
 from airtable_config import table
 from utils.menu import menu
-from config import dp, bot
+from config import dp, bot, week_dict
 
 import re
 
@@ -206,13 +206,19 @@ async def set_start_00(message: types.Message, state: FSMContext):
     week_day = data.get('week_day')
     start_time = data.get('start_time')
     user_time_slot = week_day + start_time
+
+    week = user_time_slot[0]+user_time_slot[1]
+    s_time = user_time_slot[2]+user_time_slot[3]
+    week_for_message = week_dict.get(week)
+    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
+
     find_table = table.all()
     element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {user_time_slot}:00 - {start_time}:40.")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
