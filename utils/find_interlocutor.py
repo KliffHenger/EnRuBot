@@ -3,7 +3,7 @@ from airtable_config import table
 from .meeting import createMeeting
 from config import bot, dp, week_dict, WEEKDAYS
 from .menu import menu
-from keyboards.inline_menu import G_MENU, U_STAT, C_MEET_MENU, GO_FIND
+from keyboards.inline_menu import G_MENU, U_STAT, C_MEET_MENU, GO_FIND, CONF_MEET
 from keyboards.inline_free_timeslot import genmarkup
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime, timedelta
@@ -203,7 +203,7 @@ There is an opportunity to chat at this time:',
                     except:
                         pass
                     msg_id = (await bot.send_message(message.from_user.id, 
-                        text="Sorry, we haven't been able to find a match at that time. Please try another time slot.",
+                        text="Sorry, we haven't been able to find a match at that time. Please try another level of the language.",
                         reply_markup=G_MENU)).message_id
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
                     print(msg_id)
@@ -290,8 +290,8 @@ async def send_message_postmeet(mess_bd):
     second_tg_id = mess_bd['second_tg_id']
     first_record_id = mess_bd['first_record_id']
     second_record_id = mess_bd['second_record_id']
-    msg_id1 = (await bot.send_message(int(first_tg_id), text=f'Choose the role you had in the meeting:', reply_markup=U_STAT)).message_id
-    msg_id2 = (await bot.send_message(int(second_tg_id), text=f'Choose the role you had in the meeting:', reply_markup=U_STAT)).message_id
+    msg_id1 = (await bot.send_message(int(first_tg_id), text=f'Встреча состоялась?', reply_markup=CONF_MEET)).message_id
+    msg_id2 = (await bot.send_message(int(second_tg_id), text=f'Встреча состоялась?', reply_markup=CONF_MEET)).message_id
     table.update(record_id=str(first_record_id), fields={'msgIDforDEL': str(msg_id1)})
     table.update(record_id=str(second_record_id), fields={'msgIDforDEL': str(msg_id2)})
 async def update_cron(bd):
@@ -299,6 +299,34 @@ async def update_cron(bd):
     second_record_id = bd['second_record_id']
     table.update(record_id=str(first_record_id), fields={'IsPared': "False"})
     table.update(record_id=str(second_record_id), fields={'IsPared': "False"})
+
+
+'''выбор роли после успешного митинга'''
+@dp.callback_query_handler(text='select_role')
+async def callback_select_role(message: types.Message):
+    all_table = table.all()
+    for index in range(len(all_table)):
+        if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+            record_id = all_table[index]['id']  # достает record_id из БД
+            msg_id = (await bot.send_message(
+                message.from_user.id, text=f'Заполните форму - [LINK]\n\n\
+                    Choose the role you had in the meeting:', reply_markup=U_STAT)).message_id
+            table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
+
+
+"""сценарий при неуспешном митинге"""
+@dp.callback_query_handler(text='fail_meet')
+async def callback_fail_meet(message: types.Message):
+    all_table = table.all()
+    for index in range(len(all_table)):
+        if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+            record_id = all_table[index]['id']  # достает record_id из БД
+            leave_score = int(all_table[index]['fields']['LeaveMeeting'])
+            new_leave = leave_score+1
+            msg_id = (await bot.send_message(
+                message.from_user.id, text=f'\U0001F62D Очень жаль. Надеемся в следующий раз всё получится.', reply_markup=G_MENU)).message_id
+            table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
+            table.update(record_id=str(record_id), fields={"LeaveMeeting": str(new_leave)})  #запись Ливнувших в БД
 
 
 '''функция отмены митинга'''
@@ -542,7 +570,7 @@ There is an opportunity to chat at this time:',
                     except:
                         pass
                     msg_id = (await bot.send_message(message.from_user.id, 
-                        text="Sorry, we haven't been able to find a match at that time. Please try another time slot.",
+                        text="Sorry, we haven't been able to find a match at that time. Please try another level of the language.",
                         reply_markup=G_MENU)).message_id
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
                     print(msg_id)

@@ -54,6 +54,7 @@ async def set_user_email(message: types.Message, state=FSMContext):
                     'UserIDTG': str(message.from_user.id),
                     'UserEngLevel': 'None',
                     'UserHourGoal': '4',
+                    'LeaveMeeting': '0',    # для отслеживания случаев слива с мита
                     'UserTimeSlot': 'None',
                     'IsPared': 'False',
                     'IsParedID': 'None',
