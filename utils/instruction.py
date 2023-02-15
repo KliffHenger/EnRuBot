@@ -28,7 +28,7 @@ We believe that after these meetings you will be more confident, relaxed and pre
 \n\
 During these meetings you will be able to play the role of a recruiter or a candidate or both.\n\
 \n\
-Please use the following lists of questions {hlink ('[LINK]', 'https://enru.me/chatbot/?utm=user')}. In our collection you will find General questions (about your education, experience, personality, behavioral questions) or Questions about your potential position or role, your expertise.\n\
+Please use the following {hlink ('lists of questions', 'https://enru.me/chatbot/?utm=user')}. In our collection you will find General questions (about your education, experience, personality, behavioral questions) or Questions about your potential position or role, your expertise.\n\
 \n\
 Our bot will help you:\n\
 \U000025AA to select your English level\n\

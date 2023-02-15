@@ -310,7 +310,7 @@ async def callback_select_role(message: types.Message):
             record_id = all_table[index]['id']  # достает record_id из БД
             msg_id = (await bot.send_message(
                 message.from_user.id, text=f'Заполните форму - [LINK]\n\n\
-                    Choose the role you had in the meeting:', reply_markup=U_STAT)).message_id
+Choose the role you had in the meeting:', reply_markup=U_STAT)).message_id
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
 
 
@@ -351,7 +351,7 @@ async def callback_find_companion(message: types.Message):
         table.update(record_id=str(first_user_record_id), fields={'IsPared': 'False'})
         table.update(record_id=str(second_user_record_id), fields={'IsPared': 'False'})
         table.update(record_id=str(first_user_record_id), fields={'UserTimeSlot': 'None'}) # это сделано для исключения спама
-        table.update(record_id=str(second_user_record_id), fields={'UserTimeSlot': 'None'}) # это сделано для исключения спама
+        # table.update(record_id=str(second_user_record_id), fields={'UserTimeSlot': 'None'}) # это сделано для исключения спама
         globals()[job_name].shutdown(wait=False) # отключение планировщика
         '''выдача сообщения отмены инициатору'''
         for index in range(len(find_table)):
