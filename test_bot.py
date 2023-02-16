@@ -4,8 +4,6 @@ from utils import registration, menu, time_slot, find_interlocutor, hour_goal, e
 
 
 
-
-
 async def on_startup(_):
     print('The bot is online!')
  
