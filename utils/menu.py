@@ -91,7 +91,7 @@ async def menu(message: types.Message):
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time} \U0001F5D3\n\n\
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot (UTC +0) - \U0001F5D3 {pared_time} \U0001F5D3\n\n\
 \U000026A1 \U000026A1 \U000026A1 Main Menu: \U000026A1 \U000026A1 \U000026A1 \n\
 The following functions are disabled before the meeting at: \U0001F5D3 {pared_time} \U0001F5D3\n\
 \U0001F6AB \U0001F4DA Select my English Level \U0001F6AB\n\
@@ -150,7 +150,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time} \U0001F5D3\n\n\
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot (UTC +0) - \U0001F5D3 {pared_time} \U0001F5D3\n\n\
 \U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
             print(str(msg_id) + "MENU")
@@ -180,7 +180,7 @@ async def callback_menu(message: types.Message):
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time} \U0001F5D3\n\n\
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot (UTC +0) - \U0001F5D3 {pared_time} \U0001F5D3\n\n\
 \U000026A1 \U000026A1 \U000026A1 Main Menu: \U000026A1 \U000026A1 \U000026A1 \n\
 The following functions are disabled before the meeting at: \U0001F5D3 {pared_time} \U0001F5D3\n\
 \U0001F6AB \U0001F4DA Select my English Level \U0001F6AB\n\
@@ -239,7 +239,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time} \U0001F5D3\n\n\
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot (UTC +0) - \U0001F5D3 {pared_time} \U0001F5D3\n\n\
 \U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
             print(str(msg_id) + "MENU inline")

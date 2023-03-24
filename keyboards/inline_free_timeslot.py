@@ -10,7 +10,7 @@ def genmarkup(list_TS): # передаём в функцию data
         week = i[0]+i[1]
         start_time = i[2]+i[3]
         week_for_message = week_dict.get(week)
-        pared_time = f'\U0001F5D3 {week_for_message}, {start_time}:00 \U0001F5D3'
+        pared_time = f'\U0001F5D3 {week_for_message}, {start_time}:00 (UTC +0)\U0001F5D3'
         markup.add(InlineKeyboardButton(pared_time, callback_data=i)) # Создаём кнопки, pared_time - название, i - каллбек дата
     markup.add(InlineKeyboardButton('\U000026A1\U000026A1\U000026A1 Main Menu \U000026A1\U000026A1\U000026A1', callback_data='menu'))
     return markup # возвращаем клавиатуру

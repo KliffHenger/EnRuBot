@@ -10,7 +10,8 @@ from datetime import datetime, timedelta
 from user_states import TS
 from aiogram.dispatcher import FSMContext
 import re
-import asyncio
+
+
 
 
 
@@ -68,7 +69,7 @@ async def callback_find_companion(message: types.Message):
         
         '''тут мы пытаемся каждому пользователю выдать по планировщику'''
         name_sched = 'sched'+first_tg_id
-        globals()[name_sched] = AsyncIOScheduler(timezone="Europe/Minsk")
+        globals()[name_sched] = AsyncIOScheduler()
         globals()[name_sched].start()
         table.update(record_id=str(first_user_record_id), fields={'JobName': name_sched})
         table.update(record_id=str(second_user_record_id), fields={'JobName': name_sched})
@@ -127,17 +128,17 @@ async def callback_find_companion(message: types.Message):
 
         '''быстрые задания для тестов'''
         # globals()[name_sched].add_job(send_message_cron30, trigger='cron', day_of_week=time_now.weekday(), hour=int(time_now.hour),
-        #     minute=int(time_now.minute)+1,second=10 , kwargs={'mess': mess}, misfire_grace_time=3)
+            # minute=int(time_now.minute)+1,second=10 , kwargs={'mess': mess}, misfire_grace_time=3)
         # globals()[name_sched].add_job(send_message_cron15, trigger='cron', day_of_week=time_now.weekday(), hour=int(time_now.hour),
-        #     minute=int(time_now.minute)+1,second=15 , kwargs={'mess': mess}, misfire_grace_time=3)
+            # minute=int(time_now.minute)+1,second=15 , kwargs={'mess': mess}, misfire_grace_time=3)
         # globals()[name_sched].add_job(send_message_cron5, trigger='cron', day_of_week=time_now.weekday(), hour=int(time_now.hour),
-        #     minute=int(time_now.minute)+1,second=20 , kwargs={'mess': mess}, misfire_grace_time=3)
+            # minute=int(time_now.minute)+1,second=20 , kwargs={'mess': mess}, misfire_grace_time=3)
         # globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=time_now.weekday(), hour=int(time_now.hour),
-        #     minute=int(time_now.minute)+1,second=25 , kwargs={'mess': mess}, misfire_grace_time=3)
+            # minute=int(time_now.minute)+1,second=25 , kwargs={'mess': mess}, misfire_grace_time=3)
         # globals()[name_sched].add_job(send_message_postmeet, trigger='cron', day_of_week=time_now.weekday(), hour=int(time_now.hour),
-        #     minute=int(time_now.minute)+1,second=30 , kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
+            # minute=int(time_now.minute)+1,second=30 , kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
         # globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=time_now.weekday(), hour=int(time_now.hour),
-        #     minute=int(time_now.minute)+1,second=30 , kwargs={'bd': bd}, misfire_grace_time=3)
+            # minute=int(time_now.minute)+1,second=30 , kwargs={'bd': bd}, misfire_grace_time=3)
         # globals()[name_sched].print_jobs()
 
         """непосредственно добавление заданий в обработчик"""
@@ -153,7 +154,7 @@ async def callback_find_companion(message: types.Message):
             minute=40, kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
         globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
             minute=40, kwargs={'bd': bd}, misfire_grace_time=3)
-        globals()[name_sched].print_jobs()
+        globals()[name_sched].print_jobs()        
     else: # отработка цикла для тех кому пары не нашлось
         list_TS = []
         for index in range(len(find_table)):
@@ -241,7 +242,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                     await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                 except:
                     pass
-                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {pared_time}.', 
+                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot (UTC +0) - {pared_time}.', 
                     reply_markup=GO_FIND)).message_id
                 table.update(record_id=str(record_id), fields={'UserTimeSlot': time_slot})
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
@@ -255,7 +256,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                     await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                 except:
                     pass
-                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {old_pared_time}.', 
+                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot (UTC +0) - {old_pared_time}.', 
                     reply_markup=G_MENU)).message_id
                 table.update(record_id=str(record_id), fields={'UserTimeSlot': old_TS})
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
@@ -434,7 +435,7 @@ async def find_companion(message: types.Message):
         
         '''тут мы пытаемся каждому пользователю выдать по планировщику'''
         name_sched = 'sched'+first_tg_id
-        globals()[name_sched] = AsyncIOScheduler(timezone="Europe/Minsk")
+        globals()[name_sched] = AsyncIOScheduler()
         globals()[name_sched].start()
         table.update(record_id=str(first_user_record_id), fields={'JobName': name_sched})
         table.update(record_id=str(second_user_record_id), fields={'JobName': name_sched})
@@ -504,7 +505,9 @@ async def find_companion(message: types.Message):
             minute=int(time_now.minute)+1,second=30 , kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
         globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=time_now.weekday(), hour=int(time_now.hour)+3,
             minute=int(time_now.minute)+1,second=30 , kwargs={'bd': bd}, misfire_grace_time=3)
-        globals()[name_sched].print_jobs()
+        log_text = globals()[name_sched].print_jobs()
+        await bot.send_message(814844310, text=log_text)
+
 
         """непосредственно добавление заданий в обработчик"""
         # globals()[name_sched].add_job(send_message_cron30, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 

@@ -43,7 +43,7 @@ async def set_user_email(message: types.Message, state=FSMContext):
                 is_found = True
                 # wrong_date = None
                 wrong_status = False
-                element_id = find_table[index]['id']
+                # element_id = find_table[index]['id']
                 msg_id = (await bot.send_message(message.from_user.id,
                     f"Welcome, {view_table[index]['fields']['UserName']} {view_table[index]['fields']['UserSurname']}")).message_id
                 print(msg_id)

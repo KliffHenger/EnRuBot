@@ -3,7 +3,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 BTN_INSTR = InlineKeyboardButton('\U00002753 Instruction', callback_data='instruction')
 BTN_ENG_LEVEL = InlineKeyboardButton('\U0001F4DA Select my English Level', callback_data='eng_level')
-BTN_TIME_SLOT = InlineKeyboardButton('\U0001F551 Change the time slot', callback_data='timeslot')
+BTN_TIME_SLOT = InlineKeyboardButton('\U0001F551 Change the time slot (UTC +0)', callback_data='timeslot')
 BTN_STATISTICS = InlineKeyboardButton('\U0001F4C8 Show stats', callback_data='statistics')
 BTN_FIND_INTERLOCUTOR = InlineKeyboardButton('\U0001F91D Find a Peer',  callback_data='find_interlocutor')
 BTN_HOUR_GOAL = InlineKeyboardButton('\U0001F3C6 See the Goal', callback_data='hour_goal')

@@ -1,11 +1,13 @@
 from config import dp
 from aiogram.utils import executor
 from utils import registration, menu, time_slot, find_interlocutor, hour_goal, english_level
+from datetime import datetime
 
 
 
 async def on_startup(_):
     print('The bot is online!')
+    print(datetime.now())
  
 
 

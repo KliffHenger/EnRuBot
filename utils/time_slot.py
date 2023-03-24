@@ -87,7 +87,7 @@ async def set_week_MO(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -105,7 +105,7 @@ async def set_week_TU(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -123,7 +123,7 @@ async def set_week_WE(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -141,7 +141,7 @@ async def set_week_TH(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -159,7 +159,7 @@ async def set_week_FR(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -177,7 +177,7 @@ async def set_week_SA(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -195,7 +195,7 @@ async def set_week_SU(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -225,7 +225,7 @@ async def set_start_00(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -253,7 +253,7 @@ async def set_start_01(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -281,7 +281,7 @@ async def set_start_02(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -309,7 +309,7 @@ async def set_start_03(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -337,7 +337,7 @@ async def set_start_04(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -365,7 +365,7 @@ async def set_start_05(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -393,7 +393,7 @@ async def set_start_06(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -421,7 +421,7 @@ async def set_start_07(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -449,7 +449,7 @@ async def set_start_08(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -477,7 +477,7 @@ async def set_start_09(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -505,7 +505,7 @@ async def set_start_10(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -533,7 +533,7 @@ async def set_start_11(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -561,7 +561,7 @@ async def set_start_12(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -589,7 +589,7 @@ async def set_start_13(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -617,7 +617,7 @@ async def set_start_14(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -645,7 +645,7 @@ async def set_start_15(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -673,7 +673,7 @@ async def set_start_16(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -701,7 +701,7 @@ async def set_start_17(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -729,7 +729,7 @@ async def set_start_18(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -757,7 +757,7 @@ async def set_start_19(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -785,7 +785,7 @@ async def set_start_20(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -813,7 +813,7 @@ async def set_start_21(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -841,7 +841,7 @@ async def set_start_22(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
@@ -869,7 +869,7 @@ async def set_start_23(message: types.Message, state: FSMContext):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
+                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
             table.update(str(element_id), {'UserTimeSlot': user_time_slot})
             await state.finish()
