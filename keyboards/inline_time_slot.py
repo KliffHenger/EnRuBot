@@ -1,6 +1,7 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
+
 BTN_Monday = InlineKeyboardButton(text='Monday', callback_data='MO')
 BTN_Tuesday = InlineKeyboardButton(text='Tuesday', callback_data='TU')
 BTN_Wednesday = InlineKeyboardButton(text='Wednesday', callback_data='WE')

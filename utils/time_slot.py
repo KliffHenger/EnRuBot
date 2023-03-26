@@ -5,19 +5,31 @@ from keyboards.inline_time_slot import WEEK, HOUR
 from keyboards.inline_menu import G_MENU
 from airtable_config import table
 from utils.menu import menu
-from config import dp, bot, week_dict
-
+from config import dp, bot, week_dict, WEEKDAYS
+from datetime import datetime, timedelta
+from aiogram_calendar import simple_cal_callback, SimpleCalendar
+from aiogram.dispatcher.filters import Text
 import re
 
 
 
 '''(1)Начало ввода ТаймСлота(старт "машины состояний")'''
-@dp.callback_query_handler(text='timeslot')
+@dp.callback_query_handler(Text(equals=['timeslot'], ignore_case=True))
 async def callback_timeslot_input(message: types.Message):
     all_table = table.all()
     for index in range(len(all_table)):
         if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             record_id = all_table[index]['id']  # достает record_id из БД
+            # first_user_time_slot = all_table[index]['fields']['UserTimeSlot']
+            # week = first_user_time_slot[0]+first_user_time_slot[1]
+            # week_for_message = week_dict.get(week)
+            # search_day = WEEKDAYS.index(week_for_message.lower())
+            # mo,  = 
+            # time_now = datetime.now()
+            # date_now = datetime.date(time_now)
+            # day_now = time_now.weekday()
+
+
             try:
                 msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
             except:
@@ -26,11 +38,11 @@ async def callback_timeslot_input(message: types.Message):
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Please select a possible day for your meeting.", reply_markup=WEEK)).message_id
-            print(msg_id)
-            table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
-            await TimeSlot.week_day.set()
+            await bot.send_message(message.from_user.id, 
+                text=f"Please select a possible day for your meeting.", reply_markup=await SimpleCalendar().start_calendar())
+            # print(msg_id)
+            # table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
+            # await TimeSlot.week_day.set()
 
 async def time_slot_input(message: types.Message):
     all_table = table.all()
@@ -40,10 +52,10 @@ async def time_slot_input(message: types.Message):
             msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Please select a possible day for your meeting.", reply_markup=WEEK)).message_id
+                text=f"Please select a possible day for your meeting.", reply_markup=await SimpleCalendar().start_calendar())).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
-            await TimeSlot.week_day.set()
+            # await TimeSlot.week_day.set()
 
 
 '''(2)Ввод дня недели'''
@@ -74,6 +86,32 @@ async def time_slot_input(message: types.Message):
 #                     text='Oops! Wrong format!\nTry again, please. Make sure you use the keyboard.', reply_markup=WEEK)).message_id
 #                 print(msg_id)
 #                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
+
+@dp.callback_query_handler(simple_cal_callback.filter())
+async def process_simple_calendar(message: types.Message, callback_data: dict):
+    selected, date = await SimpleCalendar().process_selection(message, callback_data)
+    print(selected)
+    if selected:
+        correct_week = f'{date.strftime("%Y-%m-%d")}'
+        print(correct_week)
+
+        print(message.from_user.id)
+        # await state.update_data(week_day={date.strftime("%d/%m/%Y")})
+        all_table = table.all()
+        for index in range(len(all_table)):
+            if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                record_id = all_table[index]['id']  # достает record_id из БД
+                msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                # await bot.delete_message(callback_query.message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
+                    reply_markup=HOUR)).message_id
+                print(msg_id)
+                table.update(record_id=str(record_id), fields={"UserDateSlot": str(correct_week)})
+                table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
+                # await TimeSlot.start_time.set()
+
 
 @dp.callback_query_handler(text='MO', state=TimeSlot.week_day)
 async def set_week_MO(message: types.Message, state: FSMContext):
@@ -203,678 +241,437 @@ async def set_week_SU(message: types.Message, state: FSMContext):
 
 '''(3)Ввод времени начала'''
 
-@dp.callback_query_handler(text='00', state=TimeSlot.start_time)
-async def set_start_00(message: types.Message, state: FSMContext):
-    txt = '00'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='00')
+async def set_start_00(message: types.Message):
+    start_time = '00'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='01', state=TimeSlot.start_time)
-async def set_start_01(message: types.Message, state: FSMContext):
-    txt = '01'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='01')
+async def set_start_00(message: types.Message):
+    start_time = '01'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='02', state=TimeSlot.start_time)
-async def set_start_02(message: types.Message, state: FSMContext):
-    txt = '02'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='02')
+async def set_start_00(message: types.Message):
+    start_time = '02'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='03', state=TimeSlot.start_time)
-async def set_start_03(message: types.Message, state: FSMContext):
-    txt = '03'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='03')
+async def set_start_00(message: types.Message):
+    start_time = '03'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='04', state=TimeSlot.start_time)
-async def set_start_04(message: types.Message, state: FSMContext):
-    txt = '04'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='04')
+async def set_start_00(message: types.Message):
+    start_time = '04'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='05', state=TimeSlot.start_time)
-async def set_start_05(message: types.Message, state: FSMContext):
-    txt = '05'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='05')
+async def set_start_00(message: types.Message):
+    start_time = '05'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='06', state=TimeSlot.start_time)
-async def set_start_06(message: types.Message, state: FSMContext):
-    txt = '06'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='06')
+async def set_start_00(message: types.Message):
+    start_time = '06'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='07', state=TimeSlot.start_time)
-async def set_start_07(message: types.Message, state: FSMContext):
-    txt = '07'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='07')
+async def set_start_00(message: types.Message):
+    start_time = '07'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='08', state=TimeSlot.start_time)
-async def set_start_08(message: types.Message, state: FSMContext):
-    txt = '08'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='08')
+async def set_start_00(message: types.Message):
+    start_time = '08'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='09', state=TimeSlot.start_time)
-async def set_start_09(message: types.Message, state: FSMContext):
-    txt = '09'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='09')
+async def set_start_00(message: types.Message):
+    start_time = '09'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='10', state=TimeSlot.start_time)
-async def set_start_10(message: types.Message, state: FSMContext):
-    txt = '10'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='10')
+async def set_start_00(message: types.Message):
+    start_time = '10'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='11', state=TimeSlot.start_time)
-async def set_start_11(message: types.Message, state: FSMContext):
-    txt = '11'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='11')
+async def set_start_00(message: types.Message):
+    start_time = '11'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='12', state=TimeSlot.start_time)
-async def set_start_12(message: types.Message, state: FSMContext):
-    txt = '12'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='12')
+async def set_start_00(message: types.Message):
+    start_time = '12'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='13', state=TimeSlot.start_time)
-async def set_start_13(message: types.Message, state: FSMContext):
-    txt = '13'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='13')
+async def set_start_00(message: types.Message):
+    start_time = '13'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='14', state=TimeSlot.start_time)
-async def set_start_14(message: types.Message, state: FSMContext):
-    txt = '14'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='14')
+async def set_start_00(message: types.Message):
+    start_time = '14'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='15', state=TimeSlot.start_time)
-async def set_start_15(message: types.Message, state: FSMContext):
-    txt = '15'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='15')
+async def set_start_00(message: types.Message):
+    start_time = '15'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='16', state=TimeSlot.start_time)
-async def set_start_16(message: types.Message, state: FSMContext):
-    txt = '16'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='16')
+async def set_start_00(message: types.Message):
+    start_time = '16'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='17', state=TimeSlot.start_time)
-async def set_start_17(message: types.Message, state: FSMContext):
-    txt = '17'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='17')
+async def set_start_00(message: types.Message):
+    start_time = '17'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='18', state=TimeSlot.start_time)
-async def set_start_18(message: types.Message, state: FSMContext):
-    txt = '18'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='18')
+async def set_start_00(message: types.Message):
+    start_time = '18'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='19', state=TimeSlot.start_time)
-async def set_start_19(message: types.Message, state: FSMContext):
-    txt = '19'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='19')
+async def set_start_00(message: types.Message):
+    start_time = '19'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='20', state=TimeSlot.start_time)
-async def set_start_20(message: types.Message, state: FSMContext):
-    txt = '20'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='20')
+async def set_start_00(message: types.Message):
+    start_time = '20'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='21', state=TimeSlot.start_time)
-async def set_start_21(message: types.Message, state: FSMContext):
-    txt = '21'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='21')
+async def set_start_00(message: types.Message):
+    start_time = '21'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='22', state=TimeSlot.start_time)
-async def set_start_22(message: types.Message, state: FSMContext):
-    txt = '22'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='22')
+async def set_start_00(message: types.Message):
+    start_time = '22'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
 
-@dp.callback_query_handler(text='23', state=TimeSlot.start_time)
-async def set_start_23(message: types.Message, state: FSMContext):
-    txt = '23'
-    await state.update_data(start_time=txt)
-    msg_id = (await bot.send_message(message.from_user.id, f"You chose {txt}.")).message_id
+@dp.callback_query_handler(text='23')
+async def set_start_00(message: types.Message):
+    start_time = '23'
+    msg_id = (await bot.send_message(message.from_user.id, f"You chose {start_time}.")).message_id
     print(msg_id)
-    data = await state.get_data()
-    week_day = data.get('week_day')
-    start_time = data.get('start_time')
-    user_time_slot = week_day + start_time
-
-    week = user_time_slot[0]+user_time_slot[1]
-    s_time = user_time_slot[2]+user_time_slot[3]
-    week_for_message = week_dict.get(week)
-    pared_time = f'\U0001F5D3 {week_for_message}, {s_time}:00 - {s_time}:40 \U0001F5D3'
-
     find_table = table.all()
-    element_id = ''
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
+            day_meet = find_table[index]['fields']['UserDateSlot']
+            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
                 text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
             print(msg_id)
-            table.update(str(element_id), {'UserTimeSlot': user_time_slot})
-            await state.finish()
+            new_time_slot = day_meet+', '+start_time
+            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             await menu(message)
-
 
 
 # async def get_start_time(message: types.Message, state: FSMContext):

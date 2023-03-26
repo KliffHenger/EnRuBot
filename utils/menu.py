@@ -78,10 +78,8 @@ async def menu(message: types.Message):
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
-            week = time_slot[0]+time_slot[1]
-            start_time = time_slot[2]+time_slot[3]
-            week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}:00'
+            pared_time = f'{time_slot}:00'
+
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
                 msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
@@ -104,10 +102,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
-            week = time_slot[0]+time_slot[1]
-            start_time = time_slot[2]+time_slot[3]
-            week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}:00'
+            pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             answer_message = f"\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
@@ -120,10 +115,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
-            week = time_slot[0]+time_slot[1]
-            start_time = time_slot[2]+time_slot[3]
-            week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}:00'
+            pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             answer_message = f"\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
@@ -136,10 +128,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
-            week = time_slot[0]+time_slot[1]
-            start_time = time_slot[2]+time_slot[3]
-            week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}:00'
+            pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
@@ -165,11 +154,8 @@ async def callback_menu(message: types.Message):
             and find_table[index]['fields']['IsPared'] == 'True':
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
-
-            week = time_slot[0]+time_slot[1]
-            start_time = time_slot[2]+time_slot[3]
-            week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}:00'
+            
+            pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
@@ -193,10 +179,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
-            week = time_slot[0]+time_slot[1]
-            start_time = time_slot[2]+time_slot[3]
-            week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}:00'
+            pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             answer_message = f"\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
@@ -209,10 +192,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
-            week = time_slot[0]+time_slot[1]
-            start_time = time_slot[2]+time_slot[3]
-            week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}:00'
+            pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             answer_message = f"\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
@@ -225,10 +205,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
-            week = time_slot[0]+time_slot[1]
-            start_time = time_slot[2]+time_slot[3]
-            week_for_message = week_dict.get(week)
-            pared_time = f'{week_for_message}, {start_time}:00'
+            pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             try:

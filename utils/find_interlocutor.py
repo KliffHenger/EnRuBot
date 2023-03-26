@@ -38,9 +38,6 @@ async def callback_find_companion(message: types.Message):
             first_user_eng_level = find_table[index]['fields']['UserEngLevel']
             first_user_time_slot = find_table[index]['fields']['UserTimeSlot']
             first_user_fname = find_table[index]['fields']['UserName']
-            week = first_user_time_slot[0]+first_user_time_slot[1]
-            start_time = first_user_time_slot[2]+first_user_time_slot[3]
-            week_for_message = week_dict.get(week)
             first_user_record_id = find_table[index]['id']
     for index in range(len(find_table)):  # вытягивание собеседника из БД
         if find_table[index]['fields']['UserIDTG'] != str(message.from_user.id) \
@@ -76,7 +73,7 @@ async def callback_find_companion(message: types.Message):
         
         '''тут у нас выдача сообщений про успешный метчинг'''
         await bot.send_message(message.from_user.id, 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}:00 \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot}:00 \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 try:
@@ -93,7 +90,7 @@ async def callback_find_companion(message: types.Message):
                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
 
         await bot.send_message(chat_id=int(second_tg_id), 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}:00 \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot}:00 \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == second_tg_id:
                 try:
@@ -109,15 +106,10 @@ async def callback_find_companion(message: types.Message):
                     reply_markup=C_MEET_MENU)).message_id
                 table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
 
-        if week_for_message:    # этот кусок кода отвечет за формирование необходимых дат для отсрочки сообщений
-            search_day = WEEKDAYS.index(week_for_message.lower())  
-            time_now = datetime.now()
-            date_now = datetime.date(time_now)
-            day_now = time_now.weekday()
-            different_days = search_day - day_now if day_now <= search_day else 7 - day_now + search_day
-            date_meet = date_now + timedelta(days=different_days)
-            datetime_meet = str(date_meet)+","+str(start_time)+",00,00"
-            dt_meet = datetime.strptime(datetime_meet, "%Y-%m-%d,%H,%M,%S")
+        if first_user_time_slot:    # этот кусок кода отвечет за формирование необходимых дат для отсрочки сообщений
+            
+            datetime_meet = str(first_user_time_slot)+",00,00"
+            dt_meet = datetime.strptime(datetime_meet, "%Y-%m-%d, %H,%M,%S")
             start_alert = dt_meet - timedelta(minutes=30)
 
         '''тут мы собираем квардс для передачи в планировщик'''
@@ -148,11 +140,11 @@ async def callback_find_companion(message: types.Message):
             minute=45, kwargs={'mess': mess}, misfire_grace_time=3)
         globals()[name_sched].add_job(send_message_cron5, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
             minute=55, kwargs={'mess': mess}, misfire_grace_time=3)
-        globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
+        globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=dt_meet.weekday(), hour=int(dt_meet.strftime('%H')),
             minute=0, kwargs={'mess': mess}, misfire_grace_time=3)
-        globals()[name_sched].add_job(send_message_postmeet, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
+        globals()[name_sched].add_job(send_message_postmeet, trigger='cron', day_of_week=dt_meet.weekday(), hour=int(dt_meet.strftime('%H')),
             minute=40, kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
-        globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=search_day, hour=int(dt_meet.strftime('%H')),
+        globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=dt_meet.weekday(), hour=int(dt_meet.strftime('%H')),
             minute=40, kwargs={'bd': bd}, misfire_grace_time=3)
         globals()[name_sched].print_jobs()        
     else: # отработка цикла для тех кому пары не нашлось
@@ -187,7 +179,7 @@ We saved your choice and would like to send a notification once we find a peer.\
 There is an opportunity to chat at this time:',
                         reply_markup=genmarkup(list_TS))).message_id
                     # await bot.send_message(message.from_user.id, reply_markup=G_MENU)
-                    await TS.time_slot.set()
+                    # await TS.time_slot.set()
                     print(msg_id)
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
         else: # уровень языка не совпадает вообще ни с кем 
@@ -212,26 +204,20 @@ There is an opportunity to chat at this time:',
 
 
 
-@dp.callback_query_handler(state=TS.time_slot)
-async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
-    await state.update_data(time_slot=callback_query.data)
+@dp.callback_query_handler()
+async def set_timeslot(callback_query: types.CallbackQuery):
+    # await state.update_data(time_slot=callback_query.data)
     all_table = table.all() # получаем всю таблицу
     for index in range(len(all_table)):
         if all_table[index]['fields']['UserIDTG'] == str(callback_query.from_user.id):
             old_TS = all_table[index]['fields']['UserTimeSlot']
             record_id = all_table[index]['id']  # достает record_id из БД
             time_slot = callback_query.data
-            pattern = r'^[MO|TU|WE|TH|FR|SA|SU]+(0[0-9]|1[0-9]|2[0-3])$'
+            pattern = r'^(?:19[0-9][0-9]|20[0-9][0-9])-(?:0?[1-9]|1[0-2])-(?:0?[1-9]|[12][0-9]|3[01])+([, ])+(0[0-9]|1[0-9]|2[0-3])$'
             
-            week = time_slot[0]+time_slot[1]
-            start_time = time_slot[2]+time_slot[3]
-            week_for_message = week_dict.get(week)
-            pared_time = f'\U0001F5D3 {week_for_message}, {start_time}:00 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {time_slot}:00 \U0001F5D3'
 
-            old_week = old_TS[0]+old_TS[1]
-            old_start_time = old_TS[2]+old_TS[3]
-            old_week_for_message = week_dict.get(old_week)
-            old_pared_time = f'\U0001F5D3 {old_week_for_message}, {old_start_time}:00 \U0001F5D3'
+            old_pared_time = f'\U0001F5D3 {old_TS}:00 \U0001F5D3'
 
             if re.fullmatch(pattern, time_slot):
                 try:
@@ -246,7 +232,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                     reply_markup=GO_FIND)).message_id
                 table.update(record_id=str(record_id), fields={'UserTimeSlot': time_slot})
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
-                await state.finish()
+                # await state.finish()
             else:
                 try:
                     msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
@@ -260,7 +246,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                     reply_markup=G_MENU)).message_id
                 table.update(record_id=str(record_id), fields={'UserTimeSlot': old_TS})
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
-                await state.finish()
+                # await state.finish()
 
     
 
