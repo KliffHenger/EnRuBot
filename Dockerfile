@@ -19,4 +19,4 @@ COPY . .
 RUN ls -la
 RUN pip install -r requirements.txt
 
-CMD ["python3", "bot.py"]
+CMD ["python3", "test_bot.py"]
