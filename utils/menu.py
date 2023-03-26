@@ -78,8 +78,10 @@ async def menu(message: types.Message):
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
+            week = time_slot[0]+time_slot[1]
+            start_time = time_slot[2]+time_slot[3]
+            week_for_message = week_dict.get(week)
             pared_time = f'{time_slot}:00'
-
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
                 msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
@@ -102,6 +104,9 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
+            week = time_slot[0]+time_slot[1]
+            start_time = time_slot[2]+time_slot[3]
+            week_for_message = week_dict.get(week)
             pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
@@ -115,6 +120,9 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
+            week = time_slot[0]+time_slot[1]
+            start_time = time_slot[2]+time_slot[3]
+            week_for_message = week_dict.get(week)
             pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
@@ -128,6 +136,9 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
+            week = time_slot[0]+time_slot[1]
+            start_time = time_slot[2]+time_slot[3]
+            week_for_message = week_dict.get(week)
             pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
@@ -154,7 +165,10 @@ async def callback_menu(message: types.Message):
             and find_table[index]['fields']['IsPared'] == 'True':
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
-            
+
+            week = time_slot[0]+time_slot[1]
+            start_time = time_slot[2]+time_slot[3]
+            week_for_message = week_dict.get(week)
             pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
@@ -172,19 +186,22 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
 \U0001F6AB \U0001F4DA Select my English Level \U0001F6AB\n\
 \U0001F6AB \U0001F551 Change the time slot \U0001F6AB"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=PARED_MENU)).message_id
-            print(str(msg_id) + "MENU inline pared_true")
+            print(str(msg_id) + " MENU inline pared_truee")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserEngLevel'] == str('None'):
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
+            week = time_slot[0]+time_slot[1]
+            start_time = time_slot[2]+time_slot[3]
+            week_for_message = week_dict.get(week)
             pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             answer_message = f"\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)).message_id
-            print(str(msg_id) + "MENU inline")
+            print(str(msg_id) + " MENU inline non EL")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] == str('None') \
@@ -192,12 +209,15 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
+            week = time_slot[0]+time_slot[1]
+            start_time = time_slot[2]+time_slot[3]
+            week_for_message = week_dict.get(week)
             pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             answer_message = f"\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
-            print(str(msg_id) + "MENU inline")
+            print(str(msg_id) + " MENU inline non TS")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
             and find_table[index]['fields']['UserTimeSlot'] != str('None') \
@@ -205,6 +225,9 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             eng_level = find_table[index]['fields']['UserEngLevel']
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
+            week = time_slot[0]+time_slot[1]
+            start_time = time_slot[2]+time_slot[3]
+            week_for_message = week_dict.get(week)
             pared_time = f'{time_slot}:00'
 
             record_id = find_table[index]['id']  # достает record_id из БД
@@ -219,7 +242,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot (UTC +0) - \U0001F5D3 {pared_time} \U0001F5D3\n\n\
 \U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
-            print(str(msg_id) + "MENU inline")
+            print(str(msg_id) + " MENU inline")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
 
 
@@ -230,4 +253,3 @@ def register_handlers_menu(dp: Dispatcher):
     dp.register_message_handler(menu, commands='menu')
     # dp.register_message_handler(english_level, commands='eng_level')
     # dp.register_message_handler(set_eng_level, state=Reg.user_eng_level)
-

@@ -179,7 +179,7 @@ We saved your choice and would like to send a notification once we find a peer.\
 There is an opportunity to chat at this time:',
                         reply_markup=genmarkup(list_TS))).message_id
                     # await bot.send_message(message.from_user.id, reply_markup=G_MENU)
-                    # await TS.time_slot.set()
+                    await TS.time_slot.set()
                     print(msg_id)
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
         else: # уровень языка не совпадает вообще ни с кем 
@@ -204,9 +204,9 @@ There is an opportunity to chat at this time:',
 
 
 
-@dp.callback_query_handler()
-async def set_timeslot(callback_query: types.CallbackQuery):
-    # await state.update_data(time_slot=callback_query.data)
+@dp.callback_query_handler(state=TS.time_slot)
+async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
+    await state.update_data(time_slot=callback_query.data)
     all_table = table.all() # получаем всю таблицу
     for index in range(len(all_table)):
         if all_table[index]['fields']['UserIDTG'] == str(callback_query.from_user.id):
@@ -232,7 +232,7 @@ async def set_timeslot(callback_query: types.CallbackQuery):
                     reply_markup=GO_FIND)).message_id
                 table.update(record_id=str(record_id), fields={'UserTimeSlot': time_slot})
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
-                # await state.finish()
+                await state.finish()
             else:
                 try:
                     msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
@@ -246,7 +246,7 @@ async def set_timeslot(callback_query: types.CallbackQuery):
                     reply_markup=G_MENU)).message_id
                 table.update(record_id=str(record_id), fields={'UserTimeSlot': old_TS})
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
-                # await state.finish()
+                await state.finish()
 
     
 
@@ -318,7 +318,8 @@ async def callback_fail_meet(message: types.Message):
 
 '''функция отмены митинга'''
 @dp.callback_query_handler(text='cancel_meet')
-async def callback_find_companion(message: types.Message):
+async def callback_cancel_meet(message: types.Message):
+    print('Hi loh')
     find_table = table.all()
     first_user_record_id, second_user_record_id, second_tg_id = '', '', ''
     job_name = ''
@@ -370,8 +371,6 @@ async def callback_find_companion(message: types.Message):
                     text=f'The meeting was canceled by your peer.', 
                     reply_markup=G_MENU)).message_id
                 table.update(record_id=str(second_user_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
-
-
 
 '''кусок подбора собеседника через команду в боте'''
 async def find_companion(message: types.Message):
