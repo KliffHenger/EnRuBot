@@ -6,6 +6,7 @@ class Reg(StatesGroup):
     user_surname = State()
     user_email = State()
     user_eng_level = State()
+    user_utc = State()
 
 class TimeSlot(StatesGroup):
     week_day = State()

@@ -90,27 +90,38 @@ async def time_slot_input(message: types.Message):
 @dp.callback_query_handler(simple_cal_callback.filter())
 async def process_simple_calendar(message: types.Message, callback_data: dict):
     selected, date = await SimpleCalendar().process_selection(message, callback_data)
-    print(selected)
+    # print(selected)
     if selected:
-        correct_week = f'{date.strftime("%Y-%m-%d")}'
-        print(correct_week)
-
-        print(message.from_user.id)
-        # await state.update_data(week_day={date.strftime("%d/%m/%Y")})
-        all_table = table.all()
-        for index in range(len(all_table)):
-            if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
-                record_id = all_table[index]['id']  # достает record_id из БД
-                msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-                # await bot.delete_message(callback_query.message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
-                
-                msg_id = (await bot.send_message(message.from_user.id, 
-                    f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
-                    reply_markup=HOUR)).message_id
-                print(msg_id)
-                table.update(record_id=str(record_id), fields={"UserDateSlot": str(correct_week)})
-                table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
+        sel_date = date.date()
+        print(sel_date)
+        correct_date = f'{date.strftime("%Y-%m-%d")}'
+        user_date_now = datetime.now().date()
+        if user_date_now < sel_date:
+            # await state.update_data(week_day={date.strftime("%d/%m/%Y")})
+            all_table = table.all()
+            for index in range(len(all_table)):
+                if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                    record_id = all_table[index]['id']  # достает record_id из БД
+                    msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                    # await bot.delete_message(callback_query.message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                    
+                    msg_id = (await bot.send_message(message.from_user.id, 
+                        f"Great. You've selected - {correct_date}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
+                        reply_markup=HOUR)).message_id
+                    print(msg_id)
+                    table.update(record_id=str(record_id), fields={"UserDateSlot": str(correct_date)})
+                    table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
                 # await TimeSlot.start_time.set()
+        else:
+            all_table = table.all()
+            for index in range(len(all_table)):
+                if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                    record_id = all_table[index]['id']  # достает record_id из БД
+                    # msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                    # await bot.delete_message(callback_query.message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                    msg_id = (await bot.send_message(message.from_user.id, 
+                        f"\U0000203C Вы выбрали уже прошедшую дату, попробуйте выбрать будущую дату:", 
+                        reply_markup=await SimpleCalendar().start_calendar())).message_id
 
 
 @dp.callback_query_handler(text='MO', state=TimeSlot.week_day)
@@ -257,6 +268,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='01')
@@ -275,6 +291,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='02')
@@ -293,6 +314,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='03')
@@ -311,6 +337,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='04')
@@ -329,6 +360,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='05')
@@ -347,6 +383,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='06')
@@ -365,6 +406,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='07')
@@ -383,6 +429,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='08')
@@ -401,6 +452,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='09')
@@ -419,6 +475,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='10')
@@ -437,6 +498,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='11')
@@ -455,6 +521,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='12')
@@ -473,6 +544,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='13')
@@ -491,6 +567,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='14')
@@ -509,6 +590,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='15')
@@ -527,6 +613,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='16')
@@ -545,6 +636,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='17')
@@ -563,6 +659,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='18')
@@ -581,6 +682,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='19')
@@ -599,6 +705,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='20')
@@ -617,6 +728,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='21')
@@ -635,6 +751,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='22')
@@ -653,6 +774,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 @dp.callback_query_handler(text='23')
@@ -671,6 +797,11 @@ async def set_start_00(message: types.Message):
             print(msg_id)
             new_time_slot = day_meet+', '+start_time
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+            user_UTC = find_table[index]['fields']['UTC']
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                          minutes=int(user_UTC[3]+user_UTC[4]))
+            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
             await menu(message)
 
 

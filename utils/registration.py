@@ -6,8 +6,10 @@ from utils.menu import menu
 from keyboards.inline_menu import START
 from config import bot, dp
 import re
-
-
+import geopy
+from timezonefinder import TimezoneFinder
+from datetime import datetime
+import pytz
 
 
 async def bot_register(message: types.Message):
@@ -47,7 +49,6 @@ async def set_user_email(message: types.Message, state=FSMContext):
                 msg_id = (await bot.send_message(message.from_user.id,
                     f"Welcome, {view_table[index]['fields']['UserName']} {view_table[index]['fields']['UserSurname']}")).message_id
                 print(msg_id)
-                await state.finish()
                 table.create({'UserName': str(view_table[index]['fields']['UserName']), 
                     'UserSurname': str(view_table[index]['fields']['UserSurname']),
                     'UserEmail': str(view_table[index]['fields']['UserEmail']),
@@ -55,7 +56,9 @@ async def set_user_email(message: types.Message, state=FSMContext):
                     'UserEngLevel': 'None',
                     'UserHourGoal': '4',
                     'LeaveMeeting': '0',    # для отслеживания случаев слива с мита
+                    'ServerTimeSlot': 'None',
                     'UserTimeSlot': 'None',
+                    'UTC': 'None',
                     'IsPared': 'False',
                     'IsParedID': 'None',
                     'JobName': 'None',
@@ -65,8 +68,9 @@ async def set_user_email(message: types.Message, state=FSMContext):
                 # table.update(record_id=str(element_id), fields={"UserEngLevel": str(wrong_date)})
                 # table.update(record_id=str(element_id), fields={"UserTimeSlot": str(wrong_date)})
                 # table.update(record_id=str(element_id), fields={"IsPared": str(wrong_status)})
-                await menu(message)
-                
+                await bot.send_message(message.from_user.id, f"Введите ваш город:")
+                await Reg.user_utc.set()
+
         if not is_found:
             msg_id = (await bot.send_message(message.from_user.id,
                 "We didn't find you in the student database. Please contact the school to find out more.", reply_markup=START)).message_id
@@ -80,10 +84,37 @@ async def set_user_email(message: types.Message, state=FSMContext):
         print(msg_id)
         # await message.delete()
         await bot.delete_message(message.from_user.id, msg_id-2)
+
+
+async def set_user_utc(message: types.Message, state=FSMContext):
+    await state.update_data(user_utc=message.text)
+    user_city = message.text
+    geo = geopy.geocoders.Nominatim(user_agent="SuperMon_Bot")
+    location = geo.geocode(user_city) # преобразуе 
+    print(location.latitude,location.longitude)
+    find_table = table.all()
+    if location is None:
+        await bot.send_message(message.from_user.id, 
+                        f"Не удалось найти такой город. Попробуйте написать его название латиницей или указать более крупный город поблизости.")
+    else:  
+        tf = TimezoneFinder()
+        tz_user = tf.timezone_at(lng=location.longitude, lat=location.latitude)
+        print(tz_user)
+        tzUser = pytz.timezone(tz_user)
+        user_time = datetime.now(tzUser)
+        user_utc = user_time.strftime("%z")
+        utc_f_msg = str(user_utc[0]+user_utc[1]+user_utc[2]+':'+user_utc[3]+user_utc[4])
+        await bot.send_message(message.from_user.id,f"Часовой пояс установлен в {user_city} ({tz_user} / UTC{utc_f_msg}).")
+        for index in range(len(find_table)):
+            if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                element_id = find_table[index]['id']
+                table.update(record_id=str(element_id), fields={"UTC": str(user_utc)})
+                await state.finish()
+                await menu(message)
         
-
-
+    
 
 def register_handlers_registration(dp: Dispatcher):
     dp.register_message_handler(bot_register, commands=['register'])
     dp.register_message_handler(set_user_email, state=Reg.user_email)
+    dp.register_message_handler(set_user_utc, state=Reg.user_utc)
