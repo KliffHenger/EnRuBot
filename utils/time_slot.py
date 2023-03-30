@@ -106,7 +106,7 @@ async def process_simple_calendar(message: types.Message, callback_data: dict):
                     # await bot.delete_message(callback_query.message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                     
                     msg_id = (await bot.send_message(message.from_user.id, 
-                        f"Great. You've selected - {correct_date}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
+                        f"Great. You've selected - {correct_date}.\nNext, please write in the time you would be comfortable to start at:", 
                         reply_markup=HOUR)).message_id
                     print(msg_id)
                     table.update(record_id=str(record_id), fields={"UserDateSlot": str(correct_date)})
@@ -136,7 +136,7 @@ async def set_week_MO(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -154,7 +154,7 @@ async def set_week_TU(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -172,7 +172,7 @@ async def set_week_WE(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -190,7 +190,7 @@ async def set_week_TH(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -208,7 +208,7 @@ async def set_week_FR(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -226,7 +226,7 @@ async def set_week_SA(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -244,7 +244,7 @@ async def set_week_SU(message: types.Message, state: FSMContext):
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             correct_week = week_dict.get(txt)
             msg_id = (await bot.send_message(message.from_user.id, 
-                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at (UTC +0):", 
+                f"Great. You've selected - {correct_week}.\nNext, please write in the time you would be comfortable to start at:", 
                 reply_markup=HOUR)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -262,14 +262,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -285,14 +285,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -308,14 +308,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -331,14 +331,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -354,14 +354,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -377,14 +377,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -400,14 +400,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -423,14 +423,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -446,14 +446,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -469,14 +469,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -492,14 +492,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -515,14 +515,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -538,14 +538,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -561,14 +561,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -584,14 +584,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -607,14 +607,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -630,14 +630,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -653,14 +653,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -676,14 +676,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -699,14 +699,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -722,14 +722,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -745,14 +745,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -768,14 +768,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
@@ -791,14 +791,14 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet}, {start_time}:00 - {start_time}:40 \U0001F5D3'
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot (UTC +0) - {pared_time}")).message_id
+                text=f"Your Time-Slot - {pared_time}")).message_id
             print(msg_id)
-            new_time_slot = day_meet+', '+start_time
+            new_time_slot = day_meet+' '+start_time+':00:00'
             table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d, %H') # 2023-03-02, 00
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
             table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})

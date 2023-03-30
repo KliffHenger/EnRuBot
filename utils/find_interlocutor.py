@@ -29,22 +29,25 @@ async def callback_find_companion(message: types.Message):
     global second_user_record_id
     global second_user_tg_id
     global first_user_tg_id
-    first_user_record_id, first_user_eng_level, first_user_time_slot, second_user_record_id, second_user_tg_id = '', '', '', '', ''
+    global first_UTC
+    first_user_record_id, first_user_eng_level, first_user_time_slot, first_server_time_slot, first_UTC, second_user_record_id, second_user_tg_id = '', '', '', '', '', '', ''
     first_user_tg_id = str(message.from_user.id)
     more_found = False
     is_found = False
     for index in range(len(find_table)): # начало цикла подбора, вытягивание инициатора из БД
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             first_user_eng_level = find_table[index]['fields']['UserEngLevel']
+            first_server_time_slot = find_table[index]['fields']['ServerTimeSlot']
             first_user_time_slot = find_table[index]['fields']['UserTimeSlot']
             first_user_fname = find_table[index]['fields']['UserName']
             first_user_record_id = find_table[index]['id']
     for index in range(len(find_table)):  # вытягивание собеседника из БД
         if find_table[index]['fields']['UserIDTG'] != str(message.from_user.id) \
                 and find_table[index]['fields']['UserEngLevel'] == first_user_eng_level \
-                and find_table[index]['fields']['UserTimeSlot'] == first_user_time_slot \
+                and find_table[index]['fields']['ServerTimeSlot'] == first_server_time_slot \
                 and find_table[index]['fields']['IsPared'] == 'False':
-            second_user_tg_id = str(find_table[index]['fields']['UserIDTG'])
+            second_user_time_slot = find_table[index]['fields']['UserTimeSlot']
+            second_user_tg_id = find_table[index]['fields']['UserIDTG']
             second_user_fname = find_table[index]['fields']['UserName']
             second_user_record_id = find_table[index]['id']
             is_found = True
@@ -64,7 +67,7 @@ async def callback_find_companion(message: types.Message):
         first_record_id = first_user_record_id 
         second_record_id = second_user_record_id
         
-        '''тут мы пытаемся каждому пользователю выдать по планировщику'''
+        '''тут мы каждому пользователю выдаем по планировщику'''
         name_sched = 'sched'+first_tg_id
         globals()[name_sched] = AsyncIOScheduler()
         globals()[name_sched].start()
@@ -73,7 +76,7 @@ async def callback_find_companion(message: types.Message):
         
         '''тут у нас выдача сообщений про успешный метчинг'''
         await bot.send_message(message.from_user.id, 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot}:00 \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]} \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 try:
@@ -90,7 +93,7 @@ async def callback_find_companion(message: types.Message):
                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
 
         await bot.send_message(chat_id=int(second_tg_id), 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot}:00 \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]} \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == second_tg_id:
                 try:
@@ -106,10 +109,9 @@ async def callback_find_companion(message: types.Message):
                     reply_markup=C_MEET_MENU)).message_id
                 table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
 
-        if first_user_time_slot:    # этот кусок кода отвечет за формирование необходимых дат для отсрочки сообщений
-            
-            datetime_meet = str(first_user_time_slot)+",00,00"
-            dt_meet = datetime.strptime(datetime_meet, "%Y-%m-%d, %H,%M,%S")
+        if first_server_time_slot:    # этот кусок кода отвечет за формирование необходимых дат для отсрочки сообщений
+            # datetime_meet = str(first_user_time_slot)+",00,00"
+            dt_meet = datetime.strptime(first_server_time_slot, "%Y-%m-%d %H:%M:%S") # 2023-03-30 23:00:00
             start_alert = dt_meet - timedelta(minutes=30)
 
         '''тут мы собираем квардс для передачи в планировщик'''
@@ -148,23 +150,28 @@ async def callback_find_companion(message: types.Message):
             minute=40, kwargs={'bd': bd}, misfire_grace_time=3)
         globals()[name_sched].print_jobs()        
     else: # отработка цикла для тех кому пары не нашлось
-        list_TS = []
+        list_TS = [first_server_time_slot, ]
         for index in range(len(find_table)):
-            if find_table[index]['fields']['UserIDTG'] != str(message.from_user.id) \
-                    and find_table[index]['fields']['UserEngLevel'] == first_user_eng_level \
-                    and find_table[index]['fields']['UserTimeSlot'] != first_user_time_slot \
-                    and find_table[index]['fields']['UserTimeSlot'] != 'None' \
-                    and find_table[index]['fields']['IsPared'] == 'False':
-                more_time_slot = find_table[index]['fields']['UserTimeSlot']
-                list_TS.append(more_time_slot)
-                is_found = False
-                more_found = True
+            if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+                f_UTC = find_table[index]['fields']['UTC']
+                for index in range(len(find_table)):
+                    if find_table[index]['fields']['UserIDTG'] != str(message.from_user.id) \
+                            and find_table[index]['fields']['UserEngLevel'] == first_user_eng_level \
+                            and find_table[index]['fields']['ServerTimeSlot'] != first_server_time_slot \
+                            and find_table[index]['fields']['ServerTimeSlot'] != 'None' \
+                            and find_table[index]['fields']['IsPared'] == 'False':
+                        more_time_slot = str(find_table[index]['fields']['ServerTimeSlot'])
+                        for_list = more_time_slot+str(f_UTC)
+                        list_TS.append(for_list)
+                        is_found = False
+                        more_found = True
                 
         if is_found == False and more_found == True: # уровень языка совпадает хоть с кем нибудь, смените ТаймСлот
             find_table = table.all()
             for index in range(len(find_table)):
                 if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                     record_id = find_table[index]['id']  # достает record_id из БД
+                    old_uTS = str(find_table[index]['fields']['UserTimeSlot'])
                     try:
                         msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
                     except:
@@ -178,7 +185,7 @@ async def callback_find_companion(message: types.Message):
 We saved your choice and would like to send a notification once we find a peer.\n\
 There is an opportunity to chat at this time:',
                         reply_markup=genmarkup(list_TS))).message_id
-                    # await bot.send_message(message.from_user.id, reply_markup=G_MENU)
+                    # await bot.send_message(message.from_user.id, text=f'Your old Time-Slot - \U0001F5D3 {old_uTS[:16]} \U0001F5D3.', reply_markup=G_MENU)
                     await TS.time_slot.set()
                     print(msg_id)
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
@@ -187,6 +194,7 @@ There is an opportunity to chat at this time:',
             for index in range(len(find_table)):
                 if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                     record_id = find_table[index]['id']  # достает record_id из БД
+                    
                     try:
                         msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
                     except:
@@ -210,14 +218,19 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
     all_table = table.all() # получаем всю таблицу
     for index in range(len(all_table)):
         if all_table[index]['fields']['UserIDTG'] == str(callback_query.from_user.id):
-            old_TS = all_table[index]['fields']['UserTimeSlot']
+            old_sTS = str(all_table[index]['fields']['ServerTimeSlot'])
+            old_uTS = str(all_table[index]['fields']['UserTimeSlot'])
+            first_UTC = all_table[index]['fields']['UTC']
             record_id = all_table[index]['id']  # достает record_id из БД
             time_slot = callback_query.data
-            pattern = r'^(?:19[0-9][0-9]|20[0-9][0-9])-(?:0?[1-9]|1[0-2])-(?:0?[1-9]|[12][0-9]|3[01])+([, ])+(0[0-9]|1[0-9]|2[0-3])$'
-            
-            pared_time = f'\U0001F5D3 {time_slot}:00 \U0001F5D3'
+            pattern = r'^(?:19[0-9][0-9]|20[0-9][0-9])-(?:0?[1-9]|1[0-2])-(?:0?[1-9]|[12][0-9]|3[01])+([, ])+(0[0-9]|1[0-9]|2[0-3])+(:)+([0-5][0-9])+(:)+([0-5][0-9])$'
+            delta_hours = int(first_UTC[1]+first_UTC[2]) # +0100
+            delta_minutes = int(first_UTC[3]+first_UTC[4])
+            s_time = datetime.strptime(time_slot, "%Y-%m-%d %H:%M:%S")
+            u_time = str(s_time + timedelta(hours=delta_hours, minutes=delta_minutes))
+            pared_time = f'\U0001F5D3 {u_time[:16]} \U0001F5D3'
 
-            old_pared_time = f'\U0001F5D3 {old_TS}:00 \U0001F5D3'
+            old_pared_time = f'\U0001F5D3 {old_sTS[:16]} \U0001F5D3'
 
             if re.fullmatch(pattern, time_slot):
                 try:
@@ -228,9 +241,10 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                     await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                 except:
                     pass
-                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot (UTC +0) - {pared_time}.', 
+                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {pared_time}.', 
                     reply_markup=GO_FIND)).message_id
-                table.update(record_id=str(record_id), fields={'UserTimeSlot': time_slot})
+                table.update(record_id=str(record_id), fields={'ServerTimeSlot': time_slot})
+                table.update(record_id=str(record_id), fields={'UserTimeSlot': u_time})
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
                 await state.finish()
             else:
@@ -242,9 +256,9 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                     await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                 except:
                     pass
-                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot (UTC +0) - {old_pared_time}.', 
+                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your old Time-Slot - {old_pared_time}.', 
                     reply_markup=G_MENU)).message_id
-                table.update(record_id=str(record_id), fields={'UserTimeSlot': old_TS})
+                table.update(record_id=str(record_id), fields={'UserTimeSlot': old_sTS})
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
                 await state.finish()
 
@@ -319,7 +333,6 @@ async def callback_fail_meet(message: types.Message):
 '''функция отмены митинга'''
 @dp.callback_query_handler(text='cancel_meet')
 async def callback_cancel_meet(message: types.Message):
-    print('Hi loh')
     find_table = table.all()
     first_user_record_id, second_user_record_id, second_tg_id = '', '', ''
     job_name = ''
@@ -427,7 +440,7 @@ async def find_companion(message: types.Message):
         
         '''тут у нас выдача сообщений про успешный метчинг'''
         await bot.send_message(message.from_user.id, 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time}:00 \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {week_for_message}, {start_time} \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 try:
