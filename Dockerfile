@@ -4,8 +4,8 @@ RUN apk --no-cache --update --virtual build-dependencies add \
     make \
     g++
 RUN rm -rf /etc/localtime
-RUN ln -s /usr/share/zoneinfo/Europe/Minsk /etc/localtime
-RUN echo "Europe/Minsk" > /etc/timezone
+RUN ln -s /usr/share/zoneinfo/Atlantic/Reykjavik /etc/localtime
+RUN echo "Atlantic/Reykjavik" > /etc/timezone
 
 RUN pip3 install --upgrade setuptools && pip3 install --upgrade pip
 
