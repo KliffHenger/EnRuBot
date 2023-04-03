@@ -40,6 +40,7 @@ BTN_20 = InlineKeyboardButton(text='20', callback_data='20')
 BTN_21 = InlineKeyboardButton(text='21', callback_data='21')
 BTN_22 = InlineKeyboardButton(text='22', callback_data='22')
 BTN_23 = InlineKeyboardButton(text='23', callback_data='23')
+BTN_Back = InlineKeyboardButton(text='Back', callback_data='timeslot')
 
 
 HOUR = InlineKeyboardMarkup().row(
@@ -54,4 +55,6 @@ HOUR = InlineKeyboardMarkup().row(
     BTN_16, BTN_17, BTN_18, BTN_19
 ).row(
     BTN_20, BTN_21, BTN_22, BTN_23
+).row(
+    BTN_Back
 )

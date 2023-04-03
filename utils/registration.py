@@ -86,12 +86,20 @@ async def set_user_email(message: types.Message, state=FSMContext):
         await bot.delete_message(message.from_user.id, msg_id-2)
 
 
+@dp.callback_query_handler(text='set_city')
+async def bot_register(message: types.Message):
+    msg_id = (await bot.send_message(message.from_user.id,
+        f"Введите ваш город:")).message_id
+    print(msg_id)
+    await Reg.user_utc.set()
+
+
 async def set_user_utc(message: types.Message, state=FSMContext):
     await state.update_data(user_utc=message.text)
     user_city = message.text
     geo = geopy.geocoders.Nominatim(user_agent="SuperMon_Bot")
     location = geo.geocode(user_city) # преобразуе 
-    print(location.latitude,location.longitude)
+    # print(location.latitude,location.longitude)
     find_table = table.all()
     if location is None:
         await bot.send_message(message.from_user.id, 

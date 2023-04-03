@@ -33,7 +33,7 @@ Please use the following {hlink ('lists of questions', 'https://enru.me/chatbot/
 Our bot will help you:\n\
 \U000025AA to select your English level\n\
 \U000025AA set a convenient time for a meeting\n\
-\U000025AA to find a peer", parse_mode='HTML',
+\U000025AA to find a partner", parse_mode='HTML',
                 reply_markup=G_MENU)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД

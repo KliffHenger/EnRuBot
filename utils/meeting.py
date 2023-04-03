@@ -3,8 +3,11 @@ import jwt
 import json
 from time import time
 
-API_KEY = '8qtIsmFBRTaBH6lP3jZiHw'
-API_SEC = 'LbGxOENDtYjokwnXWyTE9VxKpXza7FhO87vS'
+# API_KEY = '8qtIsmFBRTaBH6lP3jZiHw'
+# API_SEC = 'LbGxOENDtYjokwnXWyTE9VxKpXza7FhO87vS'
+API_KEY = 'EQprxPTASa6UZc57sfDMPw' # frederfred1@gmail.com
+API_SEC = 'BSZEcp9NY1nuTyZ9nI1DiXu3tm14kVaNt0M8'
+
 
 
 def generateToken():
