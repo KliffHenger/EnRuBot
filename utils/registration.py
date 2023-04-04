@@ -57,6 +57,7 @@ async def set_user_email(message: types.Message, state=FSMContext):
                     'UserHourGoal': '4',
                     'LeaveMeeting': '0',    # для отслеживания случаев слива с мита
                     'ServerTimeSlot': 'None',
+                    'UserDateSlot': 'None',
                     'UserTimeSlot': 'None',
                     'UTC': 'None',
                     'IsPared': 'False',
