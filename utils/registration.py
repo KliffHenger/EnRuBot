@@ -61,6 +61,7 @@ async def set_user_email(message: types.Message, state=FSMContext):
                     'UserTimeSlot': 'None',
                     'UTC': 'None',
                     'IsPared': 'False',
+                    'LastFindPeer': 'None',
                     'IsParedID': 'None',
                     'JobName': 'None',
                     'msgIDforDEL': 'None',

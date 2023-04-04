@@ -91,7 +91,7 @@ async def callback_find_companion(message: types.Message):
                     text=f'You will have a meeting with - \U0001F464 {second_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
                     reply_markup=C_MEET_MENU)).message_id
                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
-
+        '''тут сообщение для сабмисива'''
         await bot.send_message(chat_id=int(second_tg_id), 
             text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]} \U0001F5D3')
         for index in range(len(find_table)):
@@ -136,6 +136,8 @@ async def callback_find_companion(message: types.Message):
         # globals()[name_sched].print_jobs()
 
         """непосредственно добавление заданий в обработчик"""
+        globals()[name_sched].add_job(send_message_cron60, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
+            minute=00, kwargs={'mess': mess}, misfire_grace_time=3)
         globals()[name_sched].add_job(send_message_cron30, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
             minute=30, kwargs={'mess': mess}, misfire_grace_time=3)
         globals()[name_sched].add_job(send_message_cron15, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
@@ -265,6 +267,11 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
     
 
 """непосредственно наши сообщения которые будут приходить перед началом + работа с БД"""
+async def send_message_cron60(mess):
+    first_tg_id = mess['first_tg_id']
+    second_tg_id = mess['second_tg_id']
+    await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin in 1 hour.')
+    await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin in 1 hour.')
 async def send_message_cron30(mess):
     first_tg_id = mess['first_tg_id']
     second_tg_id = mess['second_tg_id']
@@ -581,6 +588,7 @@ There is an opportunity to chat at this time:',
 
 def register_handlers_find_interlocutor(dp: Dispatcher):
     dp.register_message_handler(find_companion, commands=['find_interlocutor'])
+    dp.register_message_handler(send_message_cron60, commands=['40000_monkeys_put_a_banana_up_their_butt'])
     dp.register_message_handler(send_message_cron30, commands=['40000_monkeys_put_a_banana_up_their_butt'])
     dp.register_message_handler(send_message_cron15, commands=['40000_monkeys_put_a_banana_up_their_butt'])
     dp.register_message_handler(send_message_cron5, commands=['40000_monkeys_put_a_banana_up_their_butt'])
