@@ -96,7 +96,7 @@ async def process_simple_calendar(message: types.Message, callback_data: dict):
         print(sel_date)
         correct_date = f'{date.strftime("%Y-%m-%d")}'
         user_date_now = datetime.now().date()
-        if user_date_now < sel_date:
+        if user_date_now <= sel_date:
             # await state.update_data(week_day={date.strftime("%d/%m/%Y")})
             all_table = table.all()
             for index in range(len(all_table)):
