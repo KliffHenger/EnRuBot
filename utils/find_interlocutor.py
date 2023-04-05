@@ -54,6 +54,10 @@ async def callback_find_companion(message: types.Message):
             more_found = False
     if is_found == True and more_found == False:
         '''начинаем обновлять данные в БД и тут же получаем кое что обратно'''
+        last_find = datetime.now() # тут получаем текущее время на момент поиска собеседника
+        str_last_find = last_find.strftime('%Y-%m-%d %H:%M:%S') # приводим datetime к формату для БД
+        table.update(record_id=str(first_user_record_id), fields={'LastFindPeer': str_last_find}) # пишем в БД время последнего поиска собеседника для доминанта
+        table.update(record_id=str(second_user_record_id), fields={'LastFindPeer': str_last_find}) # пишем в БД время последнего поиска собеседника для сабмисива
         table.update(record_id=str(first_user_record_id), fields={'IsPared': "True"})
         table.update(record_id=str(second_user_record_id), fields={'IsPared': "True"})
         table.update(record_id=str(first_user_record_id), fields={'IsParedID': second_user_tg_id})
