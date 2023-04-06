@@ -5,7 +5,7 @@ from keyboards.inline_time_slot import WEEK, HOUR
 from keyboards.inline_menu import G_MENU
 from airtable_config import table
 from utils.menu import menu
-from config import dp, bot, week_dict, WEEKDAYS
+from config import dp, bot
 from datetime import datetime, timedelta
 from aiogram_calendar import simple_cal_callback, SimpleCalendar
 from aiogram.dispatcher.filters import Text
@@ -137,17 +137,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='01')
 async def set_start_00(message: types.Message):
@@ -160,17 +173,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='02')
 async def set_start_00(message: types.Message):
@@ -183,17 +209,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='03')
 async def set_start_00(message: types.Message):
@@ -206,17 +245,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='04')
 async def set_start_00(message: types.Message):
@@ -229,17 +281,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='05')
 async def set_start_00(message: types.Message):
@@ -252,17 +317,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='06')
 async def set_start_00(message: types.Message):
@@ -275,17 +353,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='07')
 async def set_start_00(message: types.Message):
@@ -298,17 +389,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='08')
 async def set_start_00(message: types.Message):
@@ -321,17 +425,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='09')
 async def set_start_00(message: types.Message):
@@ -344,17 +461,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='10')
 async def set_start_00(message: types.Message):
@@ -367,17 +497,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='11')
 async def set_start_00(message: types.Message):
@@ -390,17 +533,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='12')
 async def set_start_00(message: types.Message):
@@ -413,17 +569,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='13')
 async def set_start_00(message: types.Message):
@@ -436,17 +605,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='14')
 async def set_start_00(message: types.Message):
@@ -459,17 +641,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='15')
 async def set_start_00(message: types.Message):
@@ -482,17 +677,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='16')
 async def set_start_00(message: types.Message):
@@ -505,17 +713,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='17')
 async def set_start_00(message: types.Message):
@@ -528,17 +749,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='18')
 async def set_start_00(message: types.Message):
@@ -551,17 +785,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='19')
 async def set_start_00(message: types.Message):
@@ -574,17 +821,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='20')
 async def set_start_00(message: types.Message):
@@ -597,17 +857,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='21')
 async def set_start_00(message: types.Message):
@@ -620,17 +893,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='22')
 async def set_start_00(message: types.Message):
@@ -643,17 +929,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 @dp.callback_query_handler(text='23')
 async def set_start_00(message: types.Message):
@@ -666,17 +965,30 @@ async def set_start_00(message: types.Message):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot']
             pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Your Time-Slot - {pared_time}")).message_id
-            print(msg_id)
             new_time_slot = day_meet+' '+start_time+':00:00'
-            table.update(str(element_id), {'UserTimeSlot': new_time_slot})
             user_UTC = find_table[index]['fields']['UTC']
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
                                                           minutes=int(user_UTC[3]+user_UTC[4]))
-            table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
-            await menu(message)
+            s_now = datetime.now().strftime('%H')
+            serv_now = day_meet+' '+s_now+':00:00'
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
+            server_simile = server_now + timedelta(hours=2)
+            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4]))
+            u_TS_min = user_ts_min + timedelta(hours=2)
+            user_min_TS = u_TS_min.strftime('%H')
+            if server_simile <= server_time_slot:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Your Time-Slot - {pared_time}")).message_id
+                print(msg_id)
+                table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
+                table.update(str(element_id), {'UserTimeSlot': new_time_slot})
+                await menu(message)
+            else:
+                msg_id = (await bot.send_message(message.from_user.id, 
+                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                print(msg_id)
 
 
 # async def get_start_time(message: types.Message, state: FSMContext):

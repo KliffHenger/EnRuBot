@@ -116,7 +116,12 @@ async def callback_find_companion(message: types.Message):
         if first_server_time_slot:    # этот кусок кода отвечет за формирование необходимых дат для отсрочки сообщений
             # datetime_meet = str(first_user_time_slot)+",00,00"
             dt_meet = datetime.strptime(first_server_time_slot, "%Y-%m-%d %H:%M:%S") # 2023-03-30 23:00:00
-            start_alert = dt_meet - timedelta(minutes=30)
+            start_alert60 = dt_meet - timedelta(minutes=60)
+            start_alert30 = dt_meet - timedelta(minutes=30)
+            start_alert15 = dt_meet - timedelta(minutes=15)
+            start_alert5 = dt_meet - timedelta(minutes=5)
+            dt_meet40 = dt_meet + timedelta(minutes=40)
+
 
         '''тут мы собираем квардс для передачи в планировщик'''
         mess = {'first_tg_id': first_tg_id, 'second_tg_id': second_tg_id}
@@ -140,20 +145,13 @@ async def callback_find_companion(message: types.Message):
         # globals()[name_sched].print_jobs()
 
         """непосредственно добавление заданий в обработчик"""
-        globals()[name_sched].add_job(send_message_cron60, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
-            minute=00, kwargs={'mess': mess}, misfire_grace_time=3)
-        globals()[name_sched].add_job(send_message_cron30, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
-            minute=30, kwargs={'mess': mess}, misfire_grace_time=3)
-        globals()[name_sched].add_job(send_message_cron15, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
-            minute=45, kwargs={'mess': mess}, misfire_grace_time=3)
-        globals()[name_sched].add_job(send_message_cron5, trigger='cron', day_of_week=start_alert.weekday(), hour=int(start_alert.strftime('%H')), 
-            minute=55, kwargs={'mess': mess}, misfire_grace_time=3)
-        globals()[name_sched].add_job(send_message_cron, trigger='cron', day_of_week=dt_meet.weekday(), hour=int(dt_meet.strftime('%H')),
-            minute=0, kwargs={'mess': mess}, misfire_grace_time=3)
-        globals()[name_sched].add_job(send_message_postmeet, trigger='cron', day_of_week=dt_meet.weekday(), hour=int(dt_meet.strftime('%H')),
-            minute=40, kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
-        globals()[name_sched].add_job(update_cron, trigger='cron', day_of_week=dt_meet.weekday(), hour=int(dt_meet.strftime('%H')),
-            minute=40, kwargs={'bd': bd}, misfire_grace_time=3)
+        globals()[name_sched].add_job(send_message_cron60, trigger='date', run_date=str(start_alert60), kwargs={'mess': mess}, misfire_grace_time=3)
+        globals()[name_sched].add_job(send_message_cron30, trigger='date', run_date=str(start_alert30), kwargs={'mess': mess}, misfire_grace_time=3)
+        globals()[name_sched].add_job(send_message_cron15, trigger='date', run_date=str(start_alert15), kwargs={'mess': mess}, misfire_grace_time=3)
+        globals()[name_sched].add_job(send_message_cron5, trigger='date', run_date=str(start_alert5), kwargs={'mess': mess}, misfire_grace_time=3)
+        globals()[name_sched].add_job(send_message_cron, trigger='date', run_date=str(dt_meet), kwargs={'mess': mess}, misfire_grace_time=3)
+        globals()[name_sched].add_job(send_message_postmeet, trigger='date', run_date=str(dt_meet40), kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
+        globals()[name_sched].add_job(update_cron, trigger='date', run_date=str(dt_meet40), kwargs={'bd': bd}, misfire_grace_time=3)
         globals()[name_sched].print_jobs()        
     else: # отработка цикла для тех кому пары не нашлось
         list_TS = [first_server_time_slot, ]

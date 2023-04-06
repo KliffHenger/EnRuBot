@@ -1,6 +1,6 @@
 from aiogram import types, Dispatcher
 from config import bot, dp
-from keyboards.inline_menu import U_STAT, G_MENU
+from keyboards.inline_menu import G_MENU
 from airtable_config import msg_table, table
 
 
