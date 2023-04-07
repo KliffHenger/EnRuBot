@@ -1,13 +1,14 @@
 from aiogram import types, Dispatcher
 from user_states import TimeSlot
 from aiogram.dispatcher import FSMContext
-from keyboards.inline_time_slot import WEEK, HOUR
+from keyboards.inline_time_slot import HOUR
 from keyboards.inline_menu import G_MENU
 from airtable_config import table
 from utils.menu import menu
 from config import dp, bot
 from datetime import datetime, timedelta
-from aiogram_calendar import simple_cal_callback, SimpleCalendar
+# from utils.simple_calendar import simple_cal_callback, SimpCalendar
+from utils.simple_calendar import calendar_callback as simple_cal_callback, SimpCalendar
 from aiogram.dispatcher.filters import Text
 import re
 
@@ -39,7 +40,7 @@ async def callback_timeslot_input(message: types.Message):
             except:
                 pass
             await bot.send_message(message.from_user.id, 
-                text=f"Please select a possible day for your meeting.", reply_markup=await SimpleCalendar().start_calendar())
+                text=f"Please select a possible day for your meeting.", reply_markup=await SimpCalendar().start_calendar())
             # print(msg_id)
             # table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
             # await TimeSlot.week_day.set()
@@ -52,7 +53,7 @@ async def time_slot_input(message: types.Message):
             msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
             await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             msg_id = (await bot.send_message(message.from_user.id, 
-                text=f"Please select a possible day for your meeting.", reply_markup=await SimpleCalendar().start_calendar())).message_id
+                text=f"Please select a possible day for your meeting.", reply_markup=await SimpCalendar().start_calendar())).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
             # await TimeSlot.week_day.set()
@@ -89,7 +90,7 @@ async def time_slot_input(message: types.Message):
 
 @dp.callback_query_handler(simple_cal_callback.filter())
 async def process_simple_calendar(message: types.Message, callback_data: dict):
-    selected, date = await SimpleCalendar().process_selection(message, callback_data)
+    selected, date = await SimpCalendar().process_selection(message, callback_data)
     # print(selected)
     if selected:
         sel_date = date.date()
@@ -121,7 +122,7 @@ async def process_simple_calendar(message: types.Message, callback_data: dict):
                     # await bot.delete_message(callback_query.message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                     msg_id = (await bot.send_message(message.from_user.id, 
                         f"\U0000203C Вы выбрали уже прошедшую дату, попробуйте выбрать будущую дату:", 
-                        reply_markup=await SimpleCalendar().start_calendar())).message_id
+                        reply_markup=await SimpCalendar().start_calendar())).message_id
 
 
 '''(3)Ввод времени начала'''
