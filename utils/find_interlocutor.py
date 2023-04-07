@@ -165,7 +165,8 @@ async def callback_find_companion(message: types.Message):
                             and find_table[index]['fields']['ServerTimeSlot'] != 'None' \
                             and find_table[index]['fields']['IsPared'] == 'False':
                         more_time_slot = str(find_table[index]['fields']['ServerTimeSlot'])
-                        for_list = more_time_slot+str(f_UTC)
+                        user_name = str(find_table[index]['fields']['UserName'])
+                        for_list = more_time_slot+str(f_UTC)+user_name
                         list_TS.append(for_list)
                         is_found = False
                         more_found = True

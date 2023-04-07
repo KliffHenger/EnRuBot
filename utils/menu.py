@@ -147,7 +147,8 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
 
 
 @dp.callback_query_handler(text='menu')
-async def callback_menu(message: types.Message):
+async def callback_menu(message: types.Message, state: FSMContext):
+    await state.finish()
     find_table = table.all()
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
