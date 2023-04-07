@@ -5,6 +5,7 @@ from keyboards.inline_time_slot import HOUR
 from keyboards.inline_menu import G_MENU
 from airtable_config import table
 from utils.menu import menu
+from utils.find_interlocutor import find_companion
 from config import dp, bot
 from datetime import datetime, timedelta
 # from utils.simple_calendar import simple_cal_callback, SimpCalendar
@@ -160,7 +161,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -199,7 +200,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -238,7 +239,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -277,7 +278,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -316,7 +317,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -355,7 +356,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -394,7 +395,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -433,7 +434,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -472,7 +473,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -511,7 +512,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -550,7 +551,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -589,7 +590,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -628,7 +629,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -667,7 +668,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -706,7 +707,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -745,7 +746,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -784,7 +785,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -823,7 +824,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -862,7 +863,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -901,7 +902,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -940,7 +941,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -979,7 +980,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -1018,7 +1019,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
@@ -1057,7 +1058,7 @@ async def set_start_00(message: types.Message):
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
-                await menu(message)
+                await find_companion(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
