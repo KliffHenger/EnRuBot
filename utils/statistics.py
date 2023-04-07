@@ -102,6 +102,7 @@ async def get_statistics(message: types.Message):
     for index in range(len(all_table)):  # тут формируем список статистики
         if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             user_stat = eval(all_table[index]['fields']['UserStatistics'])
+            user_hour_goal = all_table[index]['fields']['UserHourGoal']
             for index in user_stat:
                 if user_stat[index]['HR'] != 0 or user_stat[index]['Candidate'] != 0:
                     eng_lvl = index
@@ -126,7 +127,8 @@ async def get_statistics(message: types.Message):
                 except:
                     pass
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f'Your stats by roles:\n{stat_msg}', reply_markup=G_MENU)).message_id
+                    text=f'Your stats by roles:\n{stat_msg}\n\n\
+You have {user_hour_goal} meetings (for 40 min) left to the goal.', reply_markup=G_MENU)).message_id
                 print(msg_id)
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
     elif bad_list == msg_list:
@@ -137,7 +139,8 @@ async def get_statistics(message: types.Message):
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"No data on your statistics is available yet.\n\
-For progress tracking please don't skip the message after the meeting.", reply_markup=G_MENU)).message_id
+For progress tracking please don't skip the message after the meeting.\n\n\
+You have {user_hour_goal} meetings (for 40 min) left to the goal.", reply_markup=G_MENU)).message_id
                 print(msg_id)
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
 
