@@ -216,7 +216,7 @@ There is an opportunity to chat at this time:',
 
 
 
-
+''''это берет данные из сгенерированой клавиатуры со свободными ТС'''
 @dp.callback_query_handler(state=TS.time_slot)
 async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
     await state.update_data(time_slot=callback_query.data)
@@ -308,8 +308,12 @@ async def send_message_postmeet(mess_bd):
 async def update_cron(bd):
     first_record_id = bd['first_record_id']
     second_record_id = bd['second_record_id']
-    table.update(record_id=str(first_record_id), fields={'IsPared': "False"})
-    table.update(record_id=str(second_record_id), fields={'IsPared': "False"})
+    table.update(record_id=str(first_record_id), fields={'IsPared': 'False'})
+    table.update(record_id=str(second_record_id), fields={'IsPared': 'False'})
+    table.update(record_id=str(first_record_id), fields={'UserTimeSlot': 'None'})
+    table.update(record_id=str(second_record_id), fields={'UserTimeSlot': 'None'})
+    table.update(record_id=str(first_record_id), fields={'ServerTimeSlot': 'None'})
+    table.update(record_id=str(second_record_id), fields={'ServerTimeSlot': 'None'})
 
 
 '''выбор роли после успешного митинга'''
@@ -363,6 +367,7 @@ async def callback_cancel_meet(message: types.Message):
         table.update(record_id=str(second_user_record_id), fields={'IsPared': 'False'})
         table.update(record_id=str(first_user_record_id), fields={'UserTimeSlot': 'None'}) # это сделано для исключения спама
         # table.update(record_id=str(second_user_record_id), fields={'UserTimeSlot': 'None'}) # это сделано для исключения спама
+        table.update(record_id=str(first_user_record_id), fields={'ServerTimeSlot': 'None'})
         globals()[job_name].shutdown(wait=False) # отключение планировщика
         '''выдача сообщения отмены инициатору'''
         for index in range(len(find_table)):
