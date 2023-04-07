@@ -136,23 +136,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -162,7 +163,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='01')
@@ -174,23 +175,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -200,7 +202,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='02')
@@ -212,23 +214,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -238,7 +241,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='03')
@@ -250,23 +253,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -276,7 +280,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='04')
@@ -288,23 +292,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -314,7 +319,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='05')
@@ -326,23 +331,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -352,7 +358,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='06')
@@ -364,23 +370,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -390,7 +397,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='07')
@@ -402,23 +409,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -428,7 +436,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='08')
@@ -440,23 +448,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -466,7 +475,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='09')
@@ -478,23 +487,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -504,7 +514,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='10')
@@ -516,23 +526,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -542,7 +553,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='11')
@@ -554,23 +565,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -580,7 +592,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='12')
@@ -592,23 +604,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -618,7 +631,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='13')
@@ -630,23 +643,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -656,7 +670,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='14')
@@ -668,23 +682,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -694,7 +709,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='15')
@@ -706,23 +721,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -732,7 +748,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='16')
@@ -744,23 +760,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -770,7 +787,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='17')
@@ -782,23 +799,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -808,7 +826,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='18')
@@ -820,23 +838,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -846,7 +865,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='19')
@@ -858,23 +877,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -884,7 +904,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='20')
@@ -896,23 +916,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -922,7 +943,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='21')
@@ -934,23 +955,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -960,7 +982,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='22')
@@ -972,23 +994,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -998,7 +1021,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='23')
@@ -1010,23 +1033,24 @@ async def set_start_00(message: types.Message):
     for index in range(len(find_table)):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
-            day_meet = find_table[index]['fields']['UserDateSlot']
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3'
-            new_time_slot = day_meet+' '+start_time+':00:00'
-            user_UTC = find_table[index]['fields']['UTC']
-            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # 2023-03-02, 00
+            day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
+            user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
+            user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
             server_time_slot = user_time_slot - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                          minutes=int(user_UTC[3]+user_UTC[4]))
-            s_now = datetime.now().strftime('%Y-%m-%d %H')
-            serv_now = s_now+':00:00'
-            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S')
-            server_simile = server_now + timedelta(hours=2)
+                                                          minutes=int(user_UTC[3]+user_UTC[4])) # datetime выбора юзверя в серверное datetime
+            
+            s_now = datetime.now().strftime('%Y-%m-%d %H') # дата и час сейчас на сервере
+            serv_now = s_now+':00:00' # округляшки серверного времение
+            server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
+            server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
             print(server_simile)
             print(server_time_slot)
-            user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4]))
-            u_TS_min = user_ts_min + timedelta(hours=2)
-            user_min_TS = u_TS_min.strftime('%H')
+            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
+            user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
                     text=f"Your Time-Slot - {pared_time}")).message_id
@@ -1036,7 +1060,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не менее {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 
