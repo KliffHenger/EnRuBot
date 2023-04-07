@@ -92,7 +92,7 @@ async def callback_find_companion(message: types.Message):
                 except:
                     pass
                 msg_id1 = (await bot.send_message(message.from_user.id, 
-                    text=f'You will have a meeting with - \U0001F464 {second_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
+                    text=f'You will have a **zoom-**meeting with - \U0001F464 {second_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
                     reply_markup=C_MEET_MENU)).message_id
                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
         '''тут сообщение для сабмисива'''
@@ -109,7 +109,7 @@ async def callback_find_companion(message: types.Message):
                 except:
                     pass
                 msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
-                    text=f'You will have a meeting with - \U0001F464 {first_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
+                    text=f'You will have a **zoom-**meeting with - \U0001F464 {first_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
                     reply_markup=C_MEET_MENU)).message_id
                 table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
 
