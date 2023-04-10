@@ -231,28 +231,41 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
             pattern = r'^(?:19[0-9][0-9]|20[0-9][0-9])-(?:0?[1-9]|1[0-2])-(?:0?[1-9]|[12][0-9]|3[01])+([, ])+(0[0-9]|1[0-9]|2[0-3])+(:)+([0-5][0-9])+(:)+([0-5][0-9])$'
             delta_hours = int(first_UTC[1]+first_UTC[2]) # +0100
             delta_minutes = int(first_UTC[3]+first_UTC[4])
-            s_time = datetime.strptime(time_slot, "%Y-%m-%d %H:%M:%S")
-            u_time = str(s_time + timedelta(hours=delta_hours, minutes=delta_minutes))
-            pared_time = f'\U0001F5D3 {u_time[:16]} \U0001F5D3'
-
-            old_pared_time = f'\U0001F5D3 {old_sTS[:16]} \U0001F5D3'
-
-            if re.fullmatch(pattern, time_slot):
-                try:
-                    msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-                except:
-                    pass
-                try:
-                    await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
-                except:
-                    pass
-                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {pared_time}.', 
-                    reply_markup=GO_FIND)).message_id
-                table.update(record_id=str(record_id), fields={'ServerTimeSlot': time_slot})
-                table.update(record_id=str(record_id), fields={'UserTimeSlot': u_time})
-                table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
-                await state.finish()
-            else:
+            try:
+                s_time = datetime.strptime(time_slot, "%Y-%m-%d %H:%M:%S")
+                u_time = str(s_time + timedelta(hours=delta_hours, minutes=delta_minutes))
+                pared_time = f'\U0001F5D3 {u_time[:16]} \U0001F5D3'
+                old_pared_time = f'\U0001F5D3 {old_sTS[:16]} \U0001F5D3'
+                if re.fullmatch(pattern, time_slot):
+                    try:
+                        msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                    except:
+                        pass
+                    try:
+                        await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                    except:
+                        pass
+                    msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {pared_time}.', 
+                        reply_markup=GO_FIND)).message_id
+                    table.update(record_id=str(record_id), fields={'ServerTimeSlot': time_slot})
+                    table.update(record_id=str(record_id), fields={'UserTimeSlot': u_time})
+                    table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
+                    await state.finish()
+                else:
+                    try:
+                        msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                    except:
+                        pass
+                    try:
+                        await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                    except:
+                        pass
+                    msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your old Time-Slot - {old_pared_time}.', 
+                        reply_markup=G_MENU)).message_id
+                    table.update(record_id=str(record_id), fields={'UserTimeSlot': old_sTS})
+                    table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
+                    await state.finish()
+            except ValueError:
                 try:
                     msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
                 except:
@@ -266,6 +279,9 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                 table.update(record_id=str(record_id), fields={'UserTimeSlot': old_sTS})
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
                 await state.finish()
+
+
+            
 
     
 
