@@ -34,8 +34,8 @@ async def on_startup(_):
     print('The bot is online!')
     print(datetime.now())
     sched = AsyncIOScheduler()
-    sched.add_job(every_week, trigger='interval', minutes=5, misfire_grace_time=60) # строчка для тестов
-    # sched.add_job(every_week, trigger='cron', day_of_week=0, hour=18, misfire_grace_time=60) # рабочая строчка
+    # sched.add_job(every_week, trigger='interval', minutes=5, misfire_grace_time=60) # строчка для тестов
+    sched.add_job(every_week, trigger='cron', day_of_week=0, hour=18, misfire_grace_time=60) # рабочая строчка
     sched.start()
     sched.print_jobs()
  

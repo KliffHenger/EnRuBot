@@ -97,7 +97,7 @@ async def callback_find_companion(message: types.Message):
                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
         '''тут сообщение для сабмисива'''
         await bot.send_message(chat_id=int(second_tg_id), 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]} \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {second_user_time_slot[:16]} \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == second_tg_id:
                 try:
@@ -186,8 +186,8 @@ async def callback_find_companion(message: types.Message):
                     except:
                         pass
                     msg_id = (await bot.send_message(message.from_user.id, 
-                        text=f'There are no available peer matches for a given slot.\n\
-We saved your choice and would like to send a notification once we find a peer.\n\
+                        text=f'There are no available partner matches for a given slot.\n\
+We saved your choice and would like to send a notification once we find a partner.\n\
 There is an opportunity to chat at this time:',
                         reply_markup=genmarkup(list_TS))).message_id
                     # await bot.send_message(message.from_user.id, text=f'Your old Time-Slot - \U0001F5D3 {old_uTS[:16]} \U0001F5D3.', reply_markup=G_MENU)
@@ -245,8 +245,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                         await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                     except:
                         pass
-                    msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {pared_time}.', 
-                        reply_markup=GO_FIND)).message_id
+                    msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {pared_time}.')).message_id
                     table.update(record_id=str(record_id), fields={'ServerTimeSlot': time_slot})
                     table.update(record_id=str(record_id), fields={'UserTimeSlot': u_time})
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
@@ -325,7 +324,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
                         '''тут сообщение для сабмисива'''
                         await bot.send_message(chat_id=int(second_tg_id), 
-                            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]} \U0001F5D3')
+                            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {second_user_time_slot[:16]} \U0001F5D3')
                         for index in range(len(find_table)):
                             if find_table[index]['fields']['UserIDTG'] == second_tg_id:
                                 try:
@@ -414,9 +413,9 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                                     except:
                                         pass
                                     msg_id = (await bot.send_message(callback_query.from_user.id, 
-                                        text=f'There are no available peer matches for a given slot.\n\
-                We saved your choice and would like to send a notification once we find a peer.\n\
-                There is an opportunity to chat at this time:',
+                                        text=f'There are no available partner matches for a given slot.\n\
+We saved your choice and would like to send a notification once we find a partner.\n\
+There is an opportunity to chat at this time:',
                                         reply_markup=genmarkup(list_TS))).message_id
                                     # await bot.send_message(message.from_user.id, text=f'Your old Time-Slot - \U0001F5D3 {old_uTS[:16]} \U0001F5D3.', reply_markup=G_MENU)
                                     await TS.time_slot.set()
@@ -459,6 +458,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
                     await state.finish()
             except ValueError:
+                old_pared_time = f'\U0001F5D3 {old_sTS[:16]} \U0001F5D3'
                 try:
                     msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
                 except:
@@ -605,7 +605,7 @@ async def callback_cancel_meet(message: types.Message):
                 except:
                     pass
                 msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
-                    text=f'The meeting was canceled by your peer.', 
+                    text=f'The meeting was canceled by your partner.', 
                     reply_markup=G_MENU)).message_id
                 table.update(record_id=str(second_user_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
 
@@ -614,11 +614,12 @@ async def find_companion(message: types.Message):
     meeting_link, join_password = createMeeting()
     find_table = table.all()
     global first_user_record_id
-    global second_user_record_id
-    global second_user_tg_id
     global first_user_tg_id
     global first_UTC
-    first_user_record_id, first_user_eng_level, first_user_time_slot, first_server_time_slot, first_UTC, second_user_record_id, second_user_tg_id = '', '', '', '', '', '', ''
+    global second_user_record_id
+    global second_user_tg_id
+    global second_user_time_slot
+    first_user_record_id, first_user_eng_level, first_user_time_slot, first_server_time_slot, first_UTC, second_user_record_id, second_user_tg_id, second_user_time_slot = '', '', '', '', '', '', '', ''
     first_user_tg_id = str(message.from_user.id)
     more_found = False
     is_found = False
@@ -685,7 +686,7 @@ async def find_companion(message: types.Message):
                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
         '''тут сообщение для сабмисива'''
         await bot.send_message(chat_id=int(second_tg_id), 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]} \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {second_user_time_slot[:16]} \U0001F5D3')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == second_tg_id:
                 try:
@@ -774,8 +775,8 @@ async def find_companion(message: types.Message):
                     except:
                         pass
                     msg_id = (await bot.send_message(message.from_user.id, 
-                        text=f'There are no available peer matches for a given slot.\n\
-We saved your choice and would like to send a notification once we find a peer.\n\
+                        text=f'There are no available partner matches for a given slot.\n\
+We saved your choice and would like to send a notification once we find a partner.\n\
 There is an opportunity to chat at this time:',
                         reply_markup=genmarkup(list_TS))).message_id
                     # await bot.send_message(message.from_user.id, text=f'Your old Time-Slot - \U0001F5D3 {old_uTS[:16]} \U0001F5D3.', reply_markup=G_MENU)

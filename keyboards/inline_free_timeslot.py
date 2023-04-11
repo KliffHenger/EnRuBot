@@ -23,7 +23,7 @@ def genmarkup(list_TS: list): # передаём в функцию data
         pared_time = f'\U0001F464{name_user} \U0001F5D3 {time_for_msg} \U0001F5D3'
         print(pared_time)
         markup.add(InlineKeyboardButton(pared_time, callback_data=str_time)) # Создаём кнопки, pared_time - название, i - каллбек дата
-    markup.add(InlineKeyboardButton('\U000026A1\U000026A1\U000026A1 Main Menu \U000026A1\U000026A1\U000026A1', callback_data=call_TS))
+    markup.add(InlineKeyboardButton('\U000026A1 Оставить мой ТаймСлот \U000026A1', callback_data='menu'))
     return markup # возвращаем клавиатуру
 
 # list_TS = ['2099-09-29 19:59:59+1000Kliff', '2023-04-30 10:00:00+0100Irinachka']
