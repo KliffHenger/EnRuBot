@@ -235,7 +235,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                 s_time = datetime.strptime(time_slot, "%Y-%m-%d %H:%M:%S")
                 u_time = str(s_time + timedelta(hours=delta_hours, minutes=delta_minutes))
                 pared_time = f'\U0001F5D3 {u_time[:16]} \U0001F5D3'
-                old_pared_time = f'\U0001F5D3 {old_sTS[:16]} \U0001F5D3'
+                old_pared_time = f'\U0001F5D3 {old_uTS[:16]} \U0001F5D3'
                 if re.fullmatch(pattern, time_slot):
                     try:
                         msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
@@ -454,11 +454,11 @@ There is an opportunity to chat at this time:',
                         pass
                     msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your old Time-Slot - {old_pared_time}.', 
                         reply_markup=G_MENU)).message_id
-                    table.update(record_id=str(record_id), fields={'UserTimeSlot': old_sTS})
+                    table.update(record_id=str(record_id), fields={'UserTimeSlot': old_uTS})
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
                     await state.finish()
             except ValueError:
-                old_pared_time = f'\U0001F5D3 {old_sTS[:16]} \U0001F5D3'
+                old_pared_time = f'\U0001F5D3 {old_uTS[:16]} \U0001F5D3'
                 try:
                     msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
                 except:
@@ -469,7 +469,7 @@ There is an opportunity to chat at this time:',
                     pass
                 msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your old Time-Slot - {old_pared_time}.', 
                     reply_markup=G_MENU)).message_id
-                table.update(record_id=str(record_id), fields={'UserTimeSlot': old_sTS})
+                table.update(record_id=str(record_id), fields={'UserTimeSlot': old_uTS})
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
                 await state.finish()
 
