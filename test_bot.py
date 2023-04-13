@@ -1,6 +1,6 @@
 from config import bot, dp
 from aiogram.utils import executor
-from utils import registration, menu, time_slot, find_interlocutor, hour_goal, english_level, sending_messages
+from utils import registration, menu, time_slot, find_interlocutor, english_level, sending_messages, restart_active_jobs
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from airtable_config import msg_table, table
 from datetime import datetime, timedelta
@@ -29,7 +29,6 @@ async def every_week():
                     pass
 
 
-
 async def on_startup(_):
     print('The bot is online!')
     print(datetime.now())
@@ -38,17 +37,18 @@ async def on_startup(_):
     sched.add_job(every_week, trigger='cron', day_of_week=0, hour=18, misfire_grace_time=60) # рабочая строчка
     sched.start()
     sched.print_jobs()
+    await restart_active_jobs.restart_jobs()
  
 
 
 """Регистрация всех хэндлеров"""
-sending_messages.register_handlers_send_msg(dp)
-registration.register_handlers_registration(dp)
-time_slot.register_handlers_time_slot(dp)
-menu.register_handlers_menu(dp)
-find_interlocutor.register_handlers_find_interlocutor(dp)
-hour_goal.register_handlers_hour_goal(dp)
-english_level.register_handlers_english_level(dp)
+sending_messages.register_handlers_send_msg(dp)                 # функция рассылки сообщений
+registration.register_handlers_registration(dp)                 # функция регистрации новых пользователей
+time_slot.register_handlers_time_slot(dp)                       # функция установки ТаймСлота
+menu.register_handlers_menu(dp)                                 # функция Главного Меню
+find_interlocutor.register_handlers_find_interlocutor(dp)       # функция Поиска Собеседника
+english_level.register_handlers_english_level(dp)               # функция выбора уровня языка
+restart_active_jobs.register_handlers_restart_active_jobs(dp)   # функция перезапуска активных задач планировщиков
 
 
 
