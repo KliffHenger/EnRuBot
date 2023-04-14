@@ -190,7 +190,7 @@ async def callback_find_companion(message: types.Message):
 We saved your choice and would like to send a notification once we find a partner.\n\
 There is an opportunity to chat at this time:',
                         reply_markup=genmarkup(list_TS))).message_id
-                    # await bot.send_message(message.from_user.id, text=f'Your old Time-Slot - \U0001F5D3 {old_uTS[:16]} \U0001F5D3.', reply_markup=G_MENU)
+                    # await bot.send_message(message.from_user.id, text=f'Your current time slot - \U0001F5D3 {old_uTS[:16]} \U0001F5D3.', reply_markup=G_MENU)
                     await TS.time_slot.set()
                     print(msg_id)
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
@@ -417,7 +417,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
 We saved your choice and would like to send a notification once we find a partner.\n\
 There is an opportunity to chat at this time:',
                                         reply_markup=genmarkup(list_TS))).message_id
-                                    # await bot.send_message(message.from_user.id, text=f'Your old Time-Slot - \U0001F5D3 {old_uTS[:16]} \U0001F5D3.', reply_markup=G_MENU)
+                                    # await bot.send_message(message.from_user.id, text=f'Your current time slot - \U0001F5D3 {old_uTS[:16]} \U0001F5D3.', reply_markup=G_MENU)
                                     await TS.time_slot.set()
                                     print(msg_id)
                                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
@@ -440,9 +440,6 @@ There is an opportunity to chat at this time:',
                                         reply_markup=G_MENU)).message_id
                                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
                                     print(msg_id)
-
-
-
                 else:
                     try:
                         msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
@@ -452,7 +449,7 @@ There is an opportunity to chat at this time:',
                         await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                     except:
                         pass
-                    msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your old Time-Slot - {old_pared_time}.', 
+                    msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your current time slot - {old_pared_time}.', 
                         reply_markup=G_MENU)).message_id
                     table.update(record_id=str(record_id), fields={'UserTimeSlot': old_uTS})
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
@@ -467,7 +464,7 @@ There is an opportunity to chat at this time:',
                     await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                 except:
                     pass
-                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your old Time-Slot - {old_pared_time}.', 
+                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your current time slot - {old_pared_time}.', 
                     reply_markup=G_MENU)).message_id
                 table.update(record_id=str(record_id), fields={'UserTimeSlot': old_uTS})
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
@@ -563,7 +560,7 @@ async def callback_cancel_meet(message: types.Message):
     for index in range(len(find_table)): # вытягивание инициатора отмены из БД
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             first_user_record_id = find_table[index]['id']
-            job_name = str(find_table[index]['fields']['JobName'])
+            job_name = find_table[index]['fields']['JobName']
             second_tg_id = find_table[index]['fields']['IsParedID']
             print(second_tg_id)
     for index in range(len(find_table)):  # вытягивание собеседника для отмены из БД
@@ -779,7 +776,7 @@ async def find_companion(message: types.Message):
 We saved your choice and would like to send a notification once we find a partner.\n\
 There is an opportunity to chat at this time:',
                         reply_markup=genmarkup(list_TS))).message_id
-                    # await bot.send_message(message.from_user.id, text=f'Your old Time-Slot - \U0001F5D3 {old_uTS[:16]} \U0001F5D3.', reply_markup=G_MENU)
+                    # await bot.send_message(message.from_user.id, text=f'Your current time slot - \U0001F5D3 {old_uTS[:16]} \U0001F5D3.', reply_markup=G_MENU)
                     await TS.time_slot.set()
                     print(msg_id)
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
