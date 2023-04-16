@@ -80,7 +80,7 @@ async def callback_find_companion(message: types.Message):
         
         '''тут у нас выдача сообщений про успешный метчинг'''
         await bot.send_message(message.from_user.id, 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]} \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]}')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 try:
@@ -92,12 +92,12 @@ async def callback_find_companion(message: types.Message):
                 except:
                     pass
                 msg_id1 = (await bot.send_message(message.from_user.id, 
-                    text=f'You will have a Zoom-meeting with - \U0001F464 {second_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
+                    text=f'You will have a Zoom-meeting with - \U0001F464 {second_user_fname}\nWe would like to send a reminder half an hour prior to the call.', 
                     reply_markup=C_MEET_MENU)).message_id
                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
         '''тут сообщение для сабмисива'''
         await bot.send_message(chat_id=int(second_tg_id), 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {second_user_time_slot[:16]} \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {second_user_time_slot[:16]}')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == second_tg_id:
                 try:
@@ -109,7 +109,7 @@ async def callback_find_companion(message: types.Message):
                 except:
                     pass
                 msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
-                    text=f'You will have a Zoom-meeting with - \U0001F464 {first_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
+                    text=f'You will have a Zoom-meeting with - \U0001F464 {first_user_fname}\nWe would like to send a reminder half an hour prior to the call.', 
                     reply_markup=C_MEET_MENU)).message_id
                 table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
 
@@ -234,8 +234,8 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
             try:
                 s_time = datetime.strptime(time_slot, "%Y-%m-%d %H:%M:%S")
                 u_time = str(s_time + timedelta(hours=delta_hours, minutes=delta_minutes))
-                pared_time = f'\U0001F5D3 {u_time[:16]} \U0001F5D3'
-                old_pared_time = f'\U0001F5D3 {old_uTS[:16]} \U0001F5D3'
+                pared_time = f'\U0001F5D3 {u_time[:16]}'
+                old_pared_time = f'\U0001F5D3 {old_uTS[:16]}'
                 if re.fullmatch(pattern, time_slot):
                     try:
                         msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
@@ -307,7 +307,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
 
                         '''тут у нас выдача сообщений про успешный метчинг'''
                         await bot.send_message(callback_query.from_user.id, 
-                            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]} \U0001F5D3')
+                            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]}')
                         for index in range(len(find_table)):
                             if find_table[index]['fields']['UserIDTG'] == str(callback_query.from_user.id):
                                 try:
@@ -319,12 +319,12 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                                 except:
                                     pass
                                 msg_id1 = (await bot.send_message(callback_query.from_user.id, 
-                                    text=f'You will have a Zoom-meeting with - \U0001F464 {second_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
+                                    text=f'You will have a Zoom-meeting with - \U0001F464 {second_user_fname}\nWe would like to send a reminder half an hour prior to the call.', 
                                     reply_markup=C_MEET_MENU)).message_id
                                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
                         '''тут сообщение для сабмисива'''
                         await bot.send_message(chat_id=int(second_tg_id), 
-                            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {second_user_time_slot[:16]} \U0001F5D3')
+                            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {second_user_time_slot[:16]}')
                         for index in range(len(find_table)):
                             if find_table[index]['fields']['UserIDTG'] == second_tg_id:
                                 try:
@@ -336,7 +336,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                                 except:
                                     pass
                                 msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
-                                    text=f'You will have a Zoom-meeting with - \U0001F464 {first_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
+                                    text=f'You will have a Zoom-meeting with - \U0001F464 {first_user_fname}\nWe would like to send a reminder half an hour prior to the call.', 
                                     reply_markup=C_MEET_MENU)).message_id
                                 table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
 
@@ -455,7 +455,7 @@ There is an opportunity to chat at this time:',
                     table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
                     await state.finish()
             except ValueError:
-                old_pared_time = f'\U0001F5D3 {old_uTS[:16]} \U0001F5D3'
+                old_pared_time = f'\U0001F5D3 {old_uTS[:16]}'
                 try:
                     msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
                 except:
@@ -666,7 +666,7 @@ async def find_companion(message: types.Message):
         
         '''тут у нас выдача сообщений про успешный метчинг'''
         await bot.send_message(message.from_user.id, 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]} \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]}')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 try:
@@ -678,12 +678,12 @@ async def find_companion(message: types.Message):
                 except:
                     pass
                 msg_id1 = (await bot.send_message(message.from_user.id, 
-                    text=f'You will have a Zoom-meeting with - \U0001F464 {second_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
+                    text=f'You will have a Zoom-meeting with - \U0001F464 {second_user_fname}\nWe would like to send a reminder half an hour prior to the call.', 
                     reply_markup=C_MEET_MENU)).message_id
                 table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
         '''тут сообщение для сабмисива'''
         await bot.send_message(chat_id=int(second_tg_id), 
-            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {second_user_time_slot[:16]} \U0001F5D3')
+            text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {second_user_time_slot[:16]}')
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == second_tg_id:
                 try:
@@ -695,7 +695,7 @@ async def find_companion(message: types.Message):
                 except:
                     pass
                 msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
-                    text=f'You will have a Zoom-meeting with - \U0001F464 {first_user_fname} \U0001F464 \nWe would like to send a reminder half an hour prior to the call.', 
+                    text=f'You will have a Zoom-meeting with - \U0001F464 {first_user_fname}\nWe would like to send a reminder half an hour prior to the call.', 
                     reply_markup=C_MEET_MENU)).message_id
                 table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
 

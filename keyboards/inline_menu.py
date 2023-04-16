@@ -7,7 +7,7 @@ BTN_TIME_SLOT = InlineKeyboardButton('\U0001F551 Change the time slot', callback
 BTN_STATISTICS = InlineKeyboardButton('\U0001F4C8 Show stats', callback_data='statistics')
 BTN_FIND_INTERLOCUTOR = InlineKeyboardButton('\U0001F91D Find a Partner',  callback_data='find_interlocutor')
 # BTN_HOUR_GOAL = InlineKeyboardButton('\U0001F3C6 See the Goal', callback_data='hour_goal')
-BTN_GEN_MENU = InlineKeyboardButton('\U000026A1\U000026A1\U000026A1 Main Menu \U000026A1\U000026A1\U000026A1', callback_data='menu')
+BTN_GEN_MENU = InlineKeyboardButton('\U000026A1 Main Menu \U000026A1', callback_data='menu')
 BTN_DA = InlineKeyboardButton('\U00002714 Yes', callback_data='register')
 BTN_NET = InlineKeyboardButton('\U0000274C No', callback_data='start')
 BTN_START = InlineKeyboardButton('Start', callback_data='start')

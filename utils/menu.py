@@ -89,11 +89,11 @@ async def menu(message: types.Message):
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time} \U0001F5D3\n\n\
-\U000026A1 \U000026A1 \U000026A1 Main Menu: \U000026A1 \U000026A1 \U000026A1 \n\
-The following functions are disabled before the meeting at: \U0001F5D3 {pared_time} \U0001F5D3\n\
-\U0001F6AB \U0001F4DA Select my English Level \U0001F6AB\n\
-\U0001F6AB \U0001F551 Change the time slot \U0001F6AB"
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time}\n\n\
+\U000026A1 Main Menu: \U000026A1\n\
+The following functions are disabled before the meeting at: \U0001F5D3 {pared_time}\n\
+\U0001F6AB \U0001F4DA Select my English Level\n\
+\U0001F6AB \U0001F551 Change the time slot"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=PARED_MENU)).message_id
             print(str(msg_id) + "MENU pared_true")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -105,7 +105,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             pared_time = f'{time_slot[:16]}'
 
             record_id = find_table[index]['id']  # достает record_id из БД
-            answer_message = f"\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
+            answer_message = f"\U000026A1 Main Menu: \U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)).message_id
             print(str(msg_id) + "MENU")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -118,7 +118,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             pared_time = f'{time_slot[:16]}'
 
             record_id = find_table[index]['id']  # достает record_id из БД
-            answer_message = f"\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
+            answer_message = f"\U000026A1 Main Menu: \U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
             print(str(msg_id) + "MENU")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -139,8 +139,8 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time} \U0001F5D3\n\n\
-\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time}\n\n\
+\U000026A1 Main Menu: \U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
             print(str(msg_id) + "MENU")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -167,11 +167,11 @@ async def callback_menu(message: types.Message, state: FSMContext):
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time} \U0001F5D3\n\n\
-\U000026A1 \U000026A1 \U000026A1 Main Menu: \U000026A1 \U000026A1 \U000026A1 \n\
-The following functions are disabled before the meeting at: \U0001F5D3 {pared_time} \U0001F5D3\n\
-\U0001F6AB \U0001F4DA Select my English Level \U0001F6AB\n\
-\U0001F6AB \U0001F551 Change the time slot \U0001F6AB"
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time}\n\n\
+\U000026A1 Main Menu: \U000026A1\n\
+The following functions are disabled before the meeting at: \U0001F5D3 {pared_time}\n\
+\U0001F6AB \U0001F4DA Select my English Level\n\
+\U0001F6AB \U0001F551 Change the time slot"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=PARED_MENU)).message_id
             print(str(msg_id) + " MENU inline pared_truee")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -183,7 +183,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             pared_time = f'{time_slot[:16]}'
 
             record_id = find_table[index]['id']  # достает record_id из БД
-            answer_message = f"\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
+            answer_message = f"\U000026A1 Main Menu: \U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_EN_LVL)).message_id
             print(str(msg_id) + " MENU inline non EL")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -196,7 +196,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             pared_time = f'{time_slot[:16]}'
 
             record_id = find_table[index]['id']  # достает record_id из БД
-            answer_message = f"\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
+            answer_message = f"\U000026A1 Main Menu: \U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
             print(str(msg_id) + " MENU inline non TS")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
@@ -217,8 +217,8 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time} \U0001F5D3\n\n\
-\U000026A1\U000026A1\U000026A1 Main Menu: \U000026A1\U000026A1\U000026A1"
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time}\n\n\
+\U000026A1 Main Menu: \U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
             print(str(msg_id) + " MENU inline")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД

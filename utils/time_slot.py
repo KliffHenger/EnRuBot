@@ -138,7 +138,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -177,7 +177,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -216,7 +216,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -255,7 +255,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -294,7 +294,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -333,7 +333,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -372,7 +372,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -411,7 +411,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -450,7 +450,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -489,7 +489,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -528,7 +528,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -567,7 +567,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -606,7 +606,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -645,7 +645,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -684,7 +684,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -723,7 +723,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -762,7 +762,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -801,7 +801,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -840,7 +840,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -879,7 +879,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -918,7 +918,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -957,7 +957,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -996,7 +996,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
@@ -1035,7 +1035,7 @@ async def set_start_00(message: types.Message):
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             element_id = find_table[index]['id']
             day_meet = find_table[index]['fields']['UserDateSlot'] # дата из БД
-            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40 \U0001F5D3' # подготовка под будущее сообщение
+            pared_time = f'\U0001F5D3 {day_meet} {start_time}:00 - {start_time}:40' # подготовка под будущее сообщение
             new_time_slot = day_meet+' '+start_time+':00:00' # строковый ТС
             user_UTC = find_table[index]['fields']['UTC'] # UTC пациента
             user_time_slot = datetime.strptime(new_time_slot, '%Y-%m-%d %H:%M:%S') # строковый ТС --> в datatime
