@@ -108,7 +108,7 @@ async def process_simple_calendar(message: types.Message, callback_data: dict):
                     # await bot.delete_message(callback_query.message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                     
                     msg_id = (await bot.send_message(message.from_user.id, 
-                        f"Great. You've selected - {correct_date}.\nNext, please write in the time you would be comfortable to start at:", 
+                        f"Great. You've selected - {correct_date}.\nNext, please select the time for your meeting:", 
                         reply_markup=HOUR)).message_id
                     print(msg_id)
                     table.update(record_id=str(record_id), fields={"UserDateSlot": str(correct_date)})

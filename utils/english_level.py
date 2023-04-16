@@ -5,6 +5,7 @@ from airtable_config import table
 from keyboards.inline_english_level import user_english_level
 from config import bot, dp
 from utils.menu import menu
+from aiogram.utils.markdown import hlink
 import re
 
 '''
@@ -25,7 +26,9 @@ async def eng_level(message: types.Message):
             except:
                 pass
             msg_id = (await bot.send_message(message.from_user.id, 
-                'Please select your English level', reply_markup=user_english_level)).message_id
+                text=f"Please select your level.\n\
+You can check your level on {hlink ('TEST', 'https://airtable.com/shrRKW2Hn6f9UNGVj?hide_ChatBotTest=true&prefill_ChatBotTest=true')} ", 
+                disable_web_page_preview=True, parse_mode='HTML', reply_markup=user_english_level)).message_id
             print(msg_id)
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
             
