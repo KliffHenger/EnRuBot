@@ -1,8 +1,7 @@
-from config import bot, dp
+from config import bot, dp, sched
 from aiogram import types, Dispatcher
 from .meeting import createMeeting
 from airtable_config import table
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from keyboards.inline_menu import G_MENU, CONF_MEET
 from datetime import datetime, timedelta
 
@@ -35,8 +34,7 @@ async def restart_jobs():
             second_record_id = all_table[index]['id']
             # is_found = True
     # if is_found == True:
-            globals()[job1_name] = AsyncIOScheduler()
-            globals()[job1_name].start()
+            list_jobs = '_1', '_2', '_3', '_4', '_5', '_6', '_7'
             if first_server_time_slot:    # этот кусок кода отвечет за формирование необходимых дат для отсрочки сообщений
                 dt_meet = datetime.strptime(first_server_time_slot, "%Y-%m-%d %H:%M:%S") # 2023-03-30 23:00:00
                 start_alert60 = dt_meet - timedelta(minutes=60)
@@ -51,14 +49,21 @@ async def restart_jobs():
             mess_bd = {'first_tg_id': first_tg_id, 'second_tg_id': second_tg_id, 
                         'first_record_id':first_record_id, 'second_record_id':second_record_id}
             """непосредственно добавление заданий в обработчик"""
-            globals()[job1_name].add_job(re_send_message_cron60, trigger='date', run_date=str(start_alert60), kwargs={'mess': mess}, misfire_grace_time=3)
-            globals()[job1_name].add_job(re_send_message_cron30, trigger='date', run_date=str(start_alert30), kwargs={'mess': mess}, misfire_grace_time=3)
-            globals()[job1_name].add_job(re_send_message_cron15, trigger='date', run_date=str(start_alert15), kwargs={'mess': mess}, misfire_grace_time=3)
-            globals()[job1_name].add_job(re_send_message_cron5, trigger='date', run_date=str(start_alert5), kwargs={'mess': mess}, misfire_grace_time=3)
-            globals()[job1_name].add_job(re_send_message_cron, trigger='date', run_date=str(dt_meet), kwargs={'mess': mess}, misfire_grace_time=3)
-            globals()[job1_name].add_job(re_send_message_postmeet, trigger='date', run_date=str(dt_meet40), kwargs={'mess_bd': mess_bd}, misfire_grace_time=3)
-            globals()[job1_name].add_job(re_update_cron, trigger='date', run_date=str(dt_meet40), kwargs={'bd': bd}, misfire_grace_time=3)
-            globals()[job1_name].print_jobs() 
+            sched.add_job(re_send_message_cron60, trigger='date', run_date=str(start_alert60), kwargs={'mess': mess}, 
+                                                misfire_grace_time=3, id=job1_name+list_jobs[6])
+            sched.add_job(re_send_message_cron30, trigger='date', run_date=str(start_alert30), kwargs={'mess': mess}, 
+                                                misfire_grace_time=3, id=job1_name+list_jobs[5])
+            sched.add_job(re_send_message_cron15, trigger='date', run_date=str(start_alert15), kwargs={'mess': mess}, 
+                                                misfire_grace_time=3, id=job1_name+list_jobs[4])
+            sched.add_job(re_send_message_cron5, trigger='date', run_date=str(start_alert5), kwargs={'mess': mess}, 
+                                                misfire_grace_time=3, id=job1_name+list_jobs[3])
+            sched.add_job(re_send_message_cron, trigger='date', run_date=str(dt_meet), kwargs={'mess': mess}, 
+                                                misfire_grace_time=3, id=job1_name+list_jobs[2])
+            sched.add_job(re_send_message_postmeet, trigger='date', run_date=str(dt_meet40), kwargs={'mess_bd': mess_bd}, 
+                                                misfire_grace_time=3, id=job1_name+list_jobs[1])
+            sched.add_job(re_update_cron, trigger='date', run_date=str(dt_meet40), kwargs={'bd': bd}, 
+                                                misfire_grace_time=3, id=job1_name+list_jobs[0])
+            sched.print_jobs() 
             table.update(record_id=str(first_record_id), fields={'NoActive': 'False'})
             table.update(record_id=str(second_record_id), fields={'NoActive': 'False'})
             await restart_jobs()

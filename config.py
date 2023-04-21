@@ -1,6 +1,10 @@
 from aiogram import Bot, Dispatcher, executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
+
+
+sched = AsyncIOScheduler()
 
 
 

@@ -1,6 +1,6 @@
 from config import bot, dp
 from aiogram.utils import executor
-from utils import registration, menu, time_slot, find_interlocutor, english_level, sending_messages, restart_active_jobs
+from utils import registration, menu, time_slot, find_interlocutor, english_level, sending_messages, restart_active_jobs, connect
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from airtable_config import msg_table, table
 from datetime import datetime, timedelta
@@ -32,11 +32,11 @@ async def every_week():
 async def on_startup(_):
     print('The bot is online!')
     print(datetime.now())
-    sched = AsyncIOScheduler()
-    sched.start()
+    sched_regular = AsyncIOScheduler()
+    sched_regular.start()
     # sched.add_job(every_week, trigger='interval', minutes=5, misfire_grace_time=60) # строчка для тестов
-    sched.add_job(every_week, trigger='cron', day_of_week=0, hour=18, misfire_grace_time=60) # рабочая строчка
-    sched.print_jobs()
+    sched_regular.add_job(every_week, trigger='cron', day_of_week=0, hour=18, misfire_grace_time=60) # рабочая строчка
+    sched_regular.print_jobs()
     await restart_active_jobs.for_rest()
     await restart_active_jobs.restart_jobs()
  
@@ -47,9 +47,10 @@ sending_messages.register_handlers_send_msg(dp)                 # функция
 registration.register_handlers_registration(dp)                 # функция регистрации новых пользователей
 time_slot.register_handlers_time_slot(dp)                       # функция установки ТаймСлота
 menu.register_handlers_menu(dp)                                 # функция Главного Меню
-find_interlocutor.register_handlers_find_interlocutor(dp)       # функция Поиска Собеседника
+# find_interlocutor.register_handlers_find_interlocutor(dp)       # функция Поиска Собеседника !!!
 english_level.register_handlers_english_level(dp)               # функция выбора уровня языка
-restart_active_jobs.register_handlers_restart_active_jobs(dp)   # функция перезапуска активных задач планировщиков
+# restart_active_jobs.register_handlers_restart_active_jobs(dp)   # функция перезапуска активных задач планировщиков
+connect.register_handlers_connect(dp)                           # функция подбора пары
 
 
 
