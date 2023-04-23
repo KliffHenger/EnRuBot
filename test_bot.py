@@ -1,6 +1,6 @@
-from config import bot, dp
+from config import bot, dp, sched
 from aiogram.utils import executor
-from utils import registration, menu, time_slot, find_interlocutor, english_level, sending_messages, restart_active_jobs, connect
+from utils import registration, menu, time_slot, english_level, sending_messages, restart_active_jobs, connect
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from airtable_config import msg_table, table
 from datetime import datetime, timedelta
@@ -34,6 +34,7 @@ async def on_startup(_):
     print(datetime.now())
     sched_regular = AsyncIOScheduler()
     sched_regular.start()
+    sched.start()
     # sched.add_job(every_week, trigger='interval', minutes=5, misfire_grace_time=60) # строчка для тестов
     sched_regular.add_job(every_week, trigger='cron', day_of_week=0, hour=18, misfire_grace_time=60) # рабочая строчка
     sched_regular.print_jobs()

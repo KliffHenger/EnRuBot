@@ -299,19 +299,14 @@ async def set_level_C2(message: types.Message, state: FSMContext):
 Тут все сообщения написаные пользователем отлавливаются и получают реакцию.
 Надо бы его перенести куда-нибудь в более очевидное место. Но потом.
 '''
-async def echo_message(message: types.Message):
-    find_table = table.all()
-    # element_id = ''
-    for index in range(len(find_table)):
-        if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
-            # element_id = find_table[index]['id']
-            # msg_id_get = int(find_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-            # await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
-            msg_id = (await bot.send_message(message.from_user.id, 
-                text='Oops! Wrong format!\nTry again, please. Make sure you use the keyboard.')).message_id
-            print(msg_id)
-            # table.update(record_id=str(element_id), fields={"msgIDforDEL": str(msg_id)})   # запись msg_id в БД
+# async def echo_message(message: types.Message):
+#     find_table = table.all()
+#     for index in range(len(find_table)):
+#         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
+#             msg_id = (await bot.send_message(message.from_user.id, 
+#                 text='Oops! Wrong format!\nTry again, please. Make sure you use the keyboard.')).message_id
+#             print(msg_id)
 
 def register_handlers_english_level(dp: Dispatcher):
     dp.register_message_handler(set_eng_level, state=Reg.user_eng_level)
-    dp.register_message_handler(echo_message)
+    # dp.register_message_handler(echo_message)

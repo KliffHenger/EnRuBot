@@ -52,7 +52,6 @@ def meet_connect(first_user_tg_id: str):
         '''названия задач'''
         list_jobs = '_1', '_2', '_3', '_4', '_5', '_6', '_7'
         
-        sched.start()
         table.update(record_id=first_record_id, fields={'JobName': name_sched})
         table.update(record_id=second_record_id, fields={'JobName': name_sched})
         '''этот кусок кода отвечет за формирование необходимых дат для отсрочки сообщений'''
