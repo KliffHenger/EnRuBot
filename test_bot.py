@@ -28,6 +28,20 @@ async def every_week():
                 except:
                     pass
 
+async def every_hour():
+    all_table = table.all()
+    for index in range(len(all_table)):
+        s_TS = all_table[index]['fields']['ServerTimeSlot']
+        record_id = all_table[index]['id']
+        time_now = datetime.now()
+        if s_TS != 'None':
+            server_user_time = datetime.strptime(s_TS, '%Y-%m-%d %H:%M:%S')
+            if time_now >= server_user_time:
+                table.update(record_id, {'ServerTimeSlot': 'None'})
+                table.update(record_id, {'UserTimeSlot': 'None'})
+
+
+
 
 async def on_startup(_):
     print('The bot is online!')
@@ -37,6 +51,7 @@ async def on_startup(_):
     sched.start()
     # sched.add_job(every_week, trigger='interval', minutes=5, misfire_grace_time=60) # строчка для тестов
     sched_regular.add_job(every_week, trigger='cron', day_of_week=0, hour=18, misfire_grace_time=60) # рабочая строчка
+    sched_regular.add_job(every_hour, trigger='interval', minutes=60, misfire_grace_time=60)
     sched_regular.print_jobs()
     await restart_active_jobs.for_rest()
     await restart_active_jobs.restart_jobs()
@@ -48,9 +63,8 @@ sending_messages.register_handlers_send_msg(dp)                 # функция
 registration.register_handlers_registration(dp)                 # функция регистрации новых пользователей
 time_slot.register_handlers_time_slot(dp)                       # функция установки ТаймСлота
 menu.register_handlers_menu(dp)                                 # функция Главного Меню
-# find_interlocutor.register_handlers_find_interlocutor(dp)       # функция Поиска Собеседника !!!
 english_level.register_handlers_english_level(dp)               # функция выбора уровня языка
-# restart_active_jobs.register_handlers_restart_active_jobs(dp)   # функция перезапуска активных задач планировщиков
+restart_active_jobs.register_handlers_restart_active_jobs(dp)   # функция перезапуска активных задач планировщиков
 connect.register_handlers_connect(dp)                           # функция подбора пары
 
 
