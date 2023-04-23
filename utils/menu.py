@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Command
 from aiogram.dispatcher import FSMContext
 from airtable_config import table
-from keyboards.inline_menu import KB_MENU, G_MENU, START_MENU, NO_EN_LVL, NO_T_SLOT, PARED_MENU
+from keyboards.inline_menu import KB_MENU, G_MENU, START_MENU, NO_EN_LVL, PARED_MENU
 from config import bot, dp, week_dict
 
 
@@ -119,7 +119,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
 
             record_id = find_table[index]['id']  # достает record_id из БД
             answer_message = f"\U000026A1 Main Menu: \U000026A1"
-            msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
+            msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
             print(str(msg_id) + "MENU")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
@@ -197,7 +197,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
 
             record_id = find_table[index]['id']  # достает record_id из БД
             answer_message = f"\U000026A1 Main Menu: \U000026A1"
-            msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=NO_T_SLOT)).message_id
+            msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
             print(str(msg_id) + " MENU inline non TS")
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
         elif find_table[index]['fields']['UserIDTG'] == str(message.from_user.id) \
