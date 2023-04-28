@@ -181,8 +181,10 @@ async def set_user_utc(message: types.Message, state=FSMContext):
         await bot.send_message(message.from_user.id,f"Часовой пояс установлен в {user_city} ({tz_user} / UTC{utc_f_msg}).")
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
-                element_id = find_table[index]['id']
-                table.update(record_id=str(element_id), fields={"UTC": str(user_utc)})
+                record_id = find_table[index]['id']
+                table.update(record_id=str(record_id), fields={'UTC': str(user_utc)})
+                table.update(record_id=str(record_id), fields={'ServerTimeSlot': 'None'})
+                table.update(record_id=str(record_id), fields={'UserTimeSlot': 'None'})
                 await state.finish()
                 await menu(message)
         

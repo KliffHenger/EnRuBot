@@ -59,9 +59,7 @@ async def callback_other_time_slots(message: types.Message):
                 except:
                     pass
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f'There are no available partner matches for a given slot.\n\
-We saved your choice and would like to send a notification once we find a partner.\n\
-There is an opportunity to chat at this time:',
+                    text=f'There is an opportunity to chat at this time:',
                     reply_markup=genmarkup(list_TS))).message_id
                 # await bot.send_message(message.from_user.id, text=f'Your current time slot - \U0001F5D3 {old_uTS[:16]} \U0001F5D3.', reply_markup=G_MENU)
                 await TS.time_slot.set()
