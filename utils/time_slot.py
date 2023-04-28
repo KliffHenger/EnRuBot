@@ -152,8 +152,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -192,8 +196,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -232,8 +240,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -272,8 +284,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -312,8 +328,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -352,8 +372,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -392,8 +416,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -432,8 +460,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -472,8 +504,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -512,8 +548,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -552,8 +592,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -592,8 +636,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -632,8 +680,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -672,8 +724,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -712,8 +768,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -752,8 +812,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -792,8 +856,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -832,8 +900,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -872,8 +944,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -912,8 +988,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -952,8 +1032,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -992,8 +1076,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -1032,8 +1120,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
@@ -1072,8 +1164,12 @@ async def set_start_00(message: types.Message):
             serv_now = s_now+':00:00' # округляшки серверного времение
             server_now = datetime.strptime(serv_now, '%Y-%m-%d %H:%M:%S') # перевод из строки в datetime
             server_simile = server_now + timedelta(hours=2) # добавка 2 часа чтобы точно успели оповещения придти
-            user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
-                                                minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            if user_UTC[0] == '+': # смотрим что UTC положительный
+                user_ts_min = server_now + timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
+            else: # смотрим что UTC отрицательный
+                user_ts_min = server_now - timedelta(hours=int(user_UTC[1]+user_UTC[2]),
+                                                    minutes=int(user_UTC[3]+user_UTC[4])) # формирование времени пользователя 
             u_TS_min = user_ts_min + timedelta(hours=2) # формирование минимального времени которое пользователь может указать
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:

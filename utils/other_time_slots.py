@@ -104,7 +104,10 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                 delta_hours = int(first_UTC[1]+first_UTC[2]) # +0100
                 delta_minutes = int(first_UTC[3]+first_UTC[4])
                 s_time = datetime.strptime(time_slot, "%Y-%m-%d %H:%M:%S")
-                u_time = str(s_time + timedelta(hours=delta_hours, minutes=delta_minutes))
+                if first_UTC[0] == '+':  # смотрим что UTC положительный
+                    u_time = str(s_time + timedelta(hours=delta_hours, minutes=delta_minutes))
+                else: # смотрим что UTC отрицательный
+                    u_time = str(s_time - timedelta(hours=delta_hours, minutes=delta_minutes))
                 pared_time = f'\U0001F5D3 {u_time[:16]}'
                 old_pared_time = f'\U0001F5D3 {old_uTS[:16]}'
                 try:

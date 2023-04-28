@@ -18,7 +18,10 @@ def genmarkup(list_TS: list): # передаём в функцию data
         delta_minutes = int(first_UTC[3]+first_UTC[4])
         str_time = i[:19]
         s_time = datetime.strptime(str_time, "%Y-%m-%d %H:%M:%S")
-        u_time = str(s_time + timedelta(hours=delta_hours, minutes=delta_minutes))
+        if first_UTC[0] == '+':  # смотрим что UTC положительный
+            u_time = str(s_time + timedelta(hours=delta_hours, minutes=delta_minutes))
+        else: # смотрим что UTC отрицательный
+            u_time = str(s_time - timedelta(hours=delta_hours, minutes=delta_minutes))
         time_for_msg = u_time[:16]
         pared_time = f'\U0001F464{name_user} \U0001F5D3 {time_for_msg}'
         print(pared_time)
