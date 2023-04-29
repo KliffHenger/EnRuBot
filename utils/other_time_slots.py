@@ -200,6 +200,14 @@ async def callback_select_role(message: types.Message):
     for index in range(len(all_table)):
         if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             record_id = all_table[index]['id']  # достает record_id из БД
+            try:
+                msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+            except:
+                print('msg_id не нашелся в БД')
+            try:
+                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+            except:
+                print('Бот не смог удалить сообщение')
             msg_id = (await bot.send_message(
                 message.from_user.id, text=f'Заполните форму - [LINK]\n\n\
 Choose the role you had in the meeting:', reply_markup=U_STAT)).message_id
@@ -214,6 +222,15 @@ async def callback_fail_meet(message: types.Message):
         if all_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             record_id = all_table[index]['id']  # достает record_id из БД
             leave_score = int(all_table[index]['fields']['LeaveMeeting'])
+            try:
+                msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+            except:
+                print('msg_id не нашелся в БД')
+            try:
+                await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+            except:
+                print('Бот не смог удалить сообщение')
+                    
             new_leave = leave_score+1
             msg_id = (await bot.send_message(
                 message.from_user.id, text=f'\U0001F62D Очень жаль. Надеемся в следующий раз всё получится.', reply_markup=G_MENU)).message_id
