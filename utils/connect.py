@@ -2,9 +2,10 @@ from config import bot, dp, sched
 from aiogram import types, Dispatcher
 from airtable_config import table
 from .meeting import createMeeting
+from .intention_meet import intention_status
 from datetime import datetime, timedelta
-
 from keyboards.inline_menu import G_MENU, CONF_MEET
+from keyboards.inline_intention_meet import KB_intention_status
 
 
 
@@ -78,9 +79,9 @@ def meet_connect(first_user_tg_id: str):
         # strt_alert = last_find + timedelta(seconds=50)
         # d_meet39 = last_find + timedelta(seconds=60)
         # d_meet40 = last_find + timedelta(seconds=70)
-        # sched.add_job(send_message_cron60, trigger='date', run_date=strt_alert60, kwargs={'mess': mess}, 
+        # sched.add_job(send_message_cron60, trigger='date', run_date=strt_alert60, kwargs={'mess_bd': mess_bd}, 
         #                                 misfire_grace_time=3, id=name_sched+list_jobs[6])
-        # sched.add_job(send_message_cron30, trigger='date', run_date=strt_alert30, kwargs={'mess': mess}, 
+        # sched.add_job(send_message_cron30, trigger='date', run_date=strt_alert30, kwargs={'mess_bd': mess_bd}, 
         #                                 misfire_grace_time=3, id=name_sched+list_jobs[5])
         # sched.add_job(send_message_cron15, trigger='date', run_date=strt_alert15, kwargs={'mess': mess}, 
         #                                 misfire_grace_time=3, id=name_sched+list_jobs[4])
@@ -93,11 +94,12 @@ def meet_connect(first_user_tg_id: str):
         # sched.add_job(update_cron, trigger='date', run_date=d_meet39, kwargs={'bd': bd}, 
         #                                 misfire_grace_time=3, id=name_sched+list_jobs[0])
         # sched.print_jobs()
+        # return str(first_record_id), str(second_record_id)
         
         """непосредственно добавление заданий в обработчик"""
-        sched.add_job(send_message_cron60, trigger='date', run_date=str(start_alert60), kwargs={'mess': mess}, 
+        sched.add_job(send_message_cron60, trigger='date', run_date=str(start_alert60), kwargs={'mess_bd': mess_bd}, 
                                         misfire_grace_time=3, id=name_sched+list_jobs[6])
-        sched.add_job(send_message_cron30, trigger='date', run_date=str(start_alert30), kwargs={'mess': mess}, 
+        sched.add_job(send_message_cron30, trigger='date', run_date=str(start_alert30), kwargs={'mess_bd': mess_bd}, 
                                         misfire_grace_time=3, id=name_sched+list_jobs[5])
         sched.add_job(send_message_cron15, trigger='date', run_date=str(start_alert15), kwargs={'mess': mess}, 
                                         misfire_grace_time=3, id=name_sched+list_jobs[4])
@@ -114,16 +116,27 @@ def meet_connect(first_user_tg_id: str):
         return str(first_record_id), str(second_record_id)
 
 """непосредственно наши сообщения которые будут приходить перед началом + работа с БД"""
-async def send_message_cron60(mess):
-    first_tg_id = mess['first_tg_id']
-    second_tg_id = mess['second_tg_id']
-    await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin in 1 hour.')
-    await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin in 1 hour.')
-async def send_message_cron30(mess):
-    first_tg_id = mess['first_tg_id']
-    second_tg_id = mess['second_tg_id']
+async def send_message_cron60(mess_bd):
+    first_tg_id = mess_bd['first_tg_id']
+    second_tg_id = mess_bd['second_tg_id']
+    first_record_id = mess_bd['first_record_id']
+    second_record_id = mess_bd['second_record_id']
+    msg_id1 = (await bot.send_message(chat_id=int(first_tg_id), 
+                            text=f'The meeting will begin in 1 hour.\nВы будете присутствовать?', 
+                            reply_markup=KB_intention_status)).message_id
+    msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
+                            text=f'The meeting will begin in 1 hour.\nВы будете присутствовать?', 
+                            reply_markup=KB_intention_status)).message_id
+    table.update(record_id=str(first_record_id), fields={'msgIDforDEL': str(msg_id1)})
+    table.update(record_id=str(second_record_id), fields={'msgIDforDEL': str(msg_id2)})
+async def send_message_cron30(mess_bd):
+    first_tg_id = mess_bd['first_tg_id']
+    second_tg_id = mess_bd['second_tg_id']
+    first_record_id = mess_bd['first_record_id']
+    second_record_id = mess_bd['second_record_id']
     await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin in 30 minutes.')
     await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin in 30 minutes.')
+    await intention_status(first_record_id, second_record_id)
 async def send_message_cron15(mess):
     first_tg_id = mess['first_tg_id']
     second_tg_id = mess['second_tg_id']
@@ -158,6 +171,8 @@ async def update_cron(bd):
     table.update(record_id=str(second_record_id), fields={'UserTimeSlot': 'None'})
     table.update(record_id=str(first_record_id), fields={'ServerTimeSlot': 'None'})
     table.update(record_id=str(second_record_id), fields={'ServerTimeSlot': 'None'})
+    table.update(record_id=str(first_record_id), fields={'In_Status': 'None'})
+    table.update(record_id=str(second_record_id), fields={'In_Status': 'None'})
 
 """функция проверки джобов в планировщике"""
 async def djobumne(message: types.Message):
