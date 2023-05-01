@@ -73,26 +73,26 @@ def meet_connect(first_user_tg_id: str):
 
         '''быстрые задания для тестов'''
         # strt_alert60 = last_find + timedelta(seconds=10)
-        # strt_alert30 = last_find + timedelta(seconds=20)
-        # strt_alert15 = last_find + timedelta(seconds=30)
-        # strt_alert5 = last_find + timedelta(seconds=40)
-        # strt_alert = last_find + timedelta(seconds=50)
-        # d_meet39 = last_find + timedelta(seconds=60)
-        # d_meet40 = last_find + timedelta(seconds=70)
+        # strt_alert30 = last_find + timedelta(seconds=40)
+        # strt_alert15 = last_find + timedelta(seconds=50)
+        # strt_alert5 = last_find + timedelta(seconds=60)
+        # strt_alert = last_find + timedelta(seconds=70)
+        # d_meet39 = last_find + timedelta(seconds=80)
+        # d_meet40 = last_find + timedelta(seconds=90)
         # sched.add_job(send_message_cron60, trigger='date', run_date=strt_alert60, kwargs={'mess_bd': mess_bd}, 
-        #                                 misfire_grace_time=3, id=name_sched+list_jobs[6])
+                                        # misfire_grace_time=3, id=name_sched+list_jobs[6])
         # sched.add_job(send_message_cron30, trigger='date', run_date=strt_alert30, kwargs={'mess_bd': mess_bd}, 
-        #                                 misfire_grace_time=3, id=name_sched+list_jobs[5])
+                                        # misfire_grace_time=3, id=name_sched+list_jobs[5])
         # sched.add_job(send_message_cron15, trigger='date', run_date=strt_alert15, kwargs={'mess': mess}, 
-        #                                 misfire_grace_time=3, id=name_sched+list_jobs[4])
+                                        # misfire_grace_time=3, id=name_sched+list_jobs[4])
         # sched.add_job(send_message_cron5, trigger='date', run_date=strt_alert5, kwargs={'mess': mess}, 
-        #                                 misfire_grace_time=3, id=name_sched+list_jobs[3])
+                                        # misfire_grace_time=3, id=name_sched+list_jobs[3])
         # sched.add_job(send_message_cron, trigger='date', run_date=strt_alert, kwargs={'mess': mess}, 
-        #                                 misfire_grace_time=3, id=name_sched+list_jobs[2])
+                                        # misfire_grace_time=3, id=name_sched+list_jobs[2])
         # sched.add_job(send_message_postmeet, trigger='date', run_date=d_meet40, kwargs={'mess_bd': mess_bd}, 
-        #                                 misfire_grace_time=3, id=name_sched+list_jobs[1])
+                                        # misfire_grace_time=3, id=name_sched+list_jobs[1])
         # sched.add_job(update_cron, trigger='date', run_date=d_meet39, kwargs={'bd': bd}, 
-        #                                 misfire_grace_time=3, id=name_sched+list_jobs[0])
+                                        # misfire_grace_time=3, id=name_sched+list_jobs[0])
         # sched.print_jobs()
         # return str(first_record_id), str(second_record_id)
         

@@ -145,7 +145,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                         except:
                             pass
                         msg_id1 = (await bot.send_message(callback_query.from_user.id, 
-                            text=f'You will have a Zoom-meeting with - \U0001F464 {second_user_fname}\nWe would like to send a reminder half an hour prior to the call.', 
+                            text=f'You will have a Zoom-meeting with - \U0001F464 {second_user_fname}\nWe would like to send a reminder one hour before the call.', 
                             reply_markup=C_MEET_MENU)).message_id
                         table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
                         
@@ -163,7 +163,7 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
                         except:
                             pass
                         msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
-                            text=f'You will have a Zoom-meeting with - \U0001F464 {first_user_fname}\nWe would like to send a reminder half an hour prior to the call.', 
+                            text=f'You will have a Zoom-meeting with - \U0001F464 {first_user_fname}\nWe would like to send a reminder one hour before the call.', 
                             reply_markup=C_MEET_MENU)).message_id
                         table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
             else:
@@ -262,14 +262,34 @@ async def callback_cancel_meet(message: types.Message):
         table.update(record_id=str(first_user_record_id), fields={'UserTimeSlot': 'None'}) # это сделано для исключения спама
         # table.update(record_id=str(second_user_record_id), fields={'UserTimeSlot': 'None'}) # это сделано для исключения спама
         table.update(record_id=str(first_user_record_id), fields={'ServerTimeSlot': 'None'})
-        
-        sched.remove_job(job_name+'_1')
-        sched.remove_job(job_name+'_2')
-        sched.remove_job(job_name+'_3')
-        sched.remove_job(job_name+'_4')
-        sched.remove_job(job_name+'_5')
-        sched.remove_job(job_name+'_6')
-        sched.remove_job(job_name+'_7')
+        try:
+            sched.remove_job(job_name+'_1')
+        except:
+            print('Бот не нашел Джобу')
+        try:
+            sched.remove_job(job_name+'_2')
+        except:
+            print('Бот не нашел Джобу')
+        try:
+            sched.remove_job(job_name+'_3')
+        except:
+            print('Бот не нашел Джобу')
+        try:
+            sched.remove_job(job_name+'_4')
+        except:
+            print('Бот не нашел Джобу')
+        try:
+            sched.remove_job(job_name+'_5')
+        except:
+            print('Бот не нашел Джобу')
+        try:
+            sched.remove_job(job_name+'_6')
+        except:
+            print('Бот не нашел Джобу')
+        try:
+            sched.remove_job(job_name+'_7')
+        except:
+            print('Бот не нашел Джобу')
         '''выдача сообщения отмены инициатору'''
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
