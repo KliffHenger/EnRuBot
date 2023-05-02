@@ -262,6 +262,8 @@ async def callback_cancel_meet(message: types.Message):
         table.update(record_id=str(first_user_record_id), fields={'UserTimeSlot': 'None'}) # это сделано для исключения спама
         # table.update(record_id=str(second_user_record_id), fields={'UserTimeSlot': 'None'}) # это сделано для исключения спама
         table.update(record_id=str(first_user_record_id), fields={'ServerTimeSlot': 'None'})
+        table.update(record_id=str(first_user_record_id), fields={'In_Status': 'None'})
+        table.update(record_id=str(second_user_record_id), fields={'In_Status': 'None'})
         try:
             sched.remove_job(job_name+'_1')
         except:
