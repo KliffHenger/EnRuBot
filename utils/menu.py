@@ -91,6 +91,7 @@ async def menu(message: types.Message):
                 pass
             answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time}\n\n\
 \U000026A1 Main Menu: \U000026A1\n\
+We would like to send a reminder an hour prior to the call.\n\
 The following functions are disabled before the meeting at: \U0001F5D3 {pared_time}\n\
 \U0001F6AB \U0001F4DA Select my English Level\n\
 \U0001F6AB \U0001F551 Change the time slot"
@@ -169,6 +170,7 @@ async def callback_menu(message: types.Message, state: FSMContext):
                 pass
             answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time}\n\n\
 \U000026A1 Main Menu: \U000026A1\n\
+We would like to send a reminder an hour prior to the call.\n\
 The following functions are disabled before the meeting at: \U0001F5D3 {pared_time}\n\
 \U0001F6AB \U0001F4DA Select my English Level\n\
 \U0001F6AB \U0001F551 Change the time slot"
