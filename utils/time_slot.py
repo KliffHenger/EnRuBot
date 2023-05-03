@@ -122,7 +122,7 @@ async def process_simple_calendar(message: types.Message, callback_data: dict):
                     # msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
                     # await bot.delete_message(callback_query.message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
                     msg_id = (await bot.send_message(message.from_user.id, 
-                        f"\U0000203C Вы выбрали уже прошедшую дату, попробуйте выбрать будущую дату:", 
+                        f"\U0000203C Please choose a coming date. The selected date is in the past:", 
                         reply_markup=await SimpCalendar().start_calendar())).message_id
 
 
@@ -169,7 +169,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='01')
@@ -213,7 +213,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='02')
@@ -257,7 +257,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='03')
@@ -301,7 +301,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='04')
@@ -345,7 +345,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='05')
@@ -389,7 +389,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='06')
@@ -433,7 +433,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='07')
@@ -477,7 +477,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='08')
@@ -521,7 +521,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='09')
@@ -565,7 +565,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='10')
@@ -609,7 +609,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='11')
@@ -653,7 +653,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='12')
@@ -697,7 +697,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='13')
@@ -741,7 +741,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='14')
@@ -785,7 +785,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='15')
@@ -829,7 +829,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='16')
@@ -873,7 +873,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='17')
@@ -917,7 +917,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='18')
@@ -961,7 +961,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='19')
@@ -1005,7 +1005,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='20')
@@ -1049,7 +1049,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='21')
@@ -1093,7 +1093,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='22')
@@ -1137,7 +1137,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 @dp.callback_query_handler(text='23')
@@ -1181,7 +1181,7 @@ async def set_start_00(message: types.Message):
                 await menu(message)
             else:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Следует выбрать не раньше {user_min_TS}", reply_markup=HOUR)).message_id
+                    text=f"Please select a date and time no earlier than {user_min_TS}", reply_markup=HOUR)).message_id
                 print(msg_id)
 
 

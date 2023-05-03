@@ -14,14 +14,14 @@ import pytz
 
 async def bot_register(message: types.Message):
     msg_id = (await bot.send_message(message.from_user.id,
-        f"Please share your name:")).message_id
+        f"Let me ask your name, please? :")).message_id
     print(msg_id)
     await Reg.user_name.set()
 
 @dp.callback_query_handler(text='register')
 async def bot_register(message: types.Message):
     msg_id = (await bot.send_message(message.from_user.id,
-        f"Please share your name:")).message_id
+        f"Let me ask your name, please? :")).message_id
     print(msg_id)
     await bot.delete_message(message.from_user.id, msg_id-1)
     await Reg.user_name.set()
@@ -29,7 +29,7 @@ async def bot_register(message: types.Message):
 async def get_user_name(message: types.Message, state: FSMContext):
     await state.update_data(user_name=message.text)
     await bot.send_message(message.from_user.id, 
-        f"<b>{message.text}</b>, now share your last name:",
+        f"May I also ask for your last name? :",
                          parse_mode='HTML')
     await Reg.user_surname.set()
 
@@ -82,7 +82,7 @@ async def set_user_email(message: types.Message, state=FSMContext):
         # table.update(record_id=str(element_id), fields={"UserEngLevel": str(wrong_date)})
         # table.update(record_id=str(element_id), fields={"UserTimeSlot": str(wrong_date)})
         # table.update(record_id=str(element_id), fields={"IsPared": str(wrong_status)})
-        await bot.send_message(message.from_user.id, f"Введите ваш город:")
+        await bot.send_message(message.from_user.id, f"Please enter your city:")
         await Reg.user_utc.set()
     else:
         msg_id = (await bot.send_message(message.from_user.id,
@@ -156,7 +156,7 @@ async def set_user_email(message: types.Message, state=FSMContext):
 @dp.callback_query_handler(text='set_city')
 async def bot_register(message: types.Message):
     msg_id = (await bot.send_message(message.from_user.id,
-        f"Введите ваш город:")).message_id
+        f"Please enter your city:")).message_id
     print(msg_id)
     await Reg.user_utc.set()
 
@@ -179,7 +179,7 @@ async def set_user_utc(message: types.Message, state=FSMContext):
         user_time = datetime.now(tzUser)
         user_utc = user_time.strftime("%z")
         utc_f_msg = str(user_utc[0]+user_utc[1]+user_utc[2]+':'+user_utc[3]+user_utc[4])
-        await bot.send_message(message.from_user.id,f"Часовой пояс установлен в {user_city} ({tz_user} / UTC{utc_f_msg}).")
+        await bot.send_message(message.from_user.id,f"Time zone set to {user_city} ({tz_user} / UTC{utc_f_msg}).")
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
                 record_id = find_table[index]['id']

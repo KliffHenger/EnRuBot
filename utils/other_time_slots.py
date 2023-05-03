@@ -79,8 +79,8 @@ async def callback_other_time_slots(message: types.Message):
                 except:
                     pass
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text="Sorry, we haven't been able to find a match at that time. Please try another level of the language. \
-Или введите ТаймСлот который вам удобен.",
+                    text="Sorry, we couldn't find a match for that time. \
+Could you try another language level or suggest a time slot that works for you?",
                     reply_markup=SET_ENlvl_and_TS)).message_id
                 table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
                 print(msg_id)
@@ -209,7 +209,7 @@ async def callback_select_role(message: types.Message):
             except:
                 print('Бот не смог удалить сообщение')
             msg_id = (await bot.send_message(
-                message.from_user.id, text=f'Заполните форму - [LINK]\n\n\
+                message.from_user.id, text=f'Please fill out the form at [LINK]\n\n\
 Choose the role you had in the meeting:', reply_markup=U_STAT)).message_id
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
 
@@ -233,7 +233,7 @@ async def callback_fail_meet(message: types.Message):
                     
             new_leave = leave_score+1
             msg_id = (await bot.send_message(
-                message.from_user.id, text=f'\U0001F62D Очень жаль. Надеемся в следующий раз всё получится.', reply_markup=G_MENU)).message_id
+                message.from_user.id, text=f"\U0001F62D We're sorry to hear that. We hope it works out better next time.", reply_markup=G_MENU)).message_id
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
             table.update(record_id=str(record_id), fields={"LeaveMeeting": str(new_leave)})  #запись Ливнувших в БД
 

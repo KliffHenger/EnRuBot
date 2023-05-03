@@ -19,7 +19,7 @@ async def callback_select_role(message: types.Message):
             except:
                 print('Бот не смог удалить сообщение')
             msg_id = (await bot.send_message(
-                message.from_user.id, text=f'Спасибо, мы уведомим вашего собеседника.')).message_id
+                message.from_user.id, text=f'Thank you, we will inform your partner.')).message_id
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
             table.update(record_id=str(record_id), fields={'In_Status': 'True'})  #запись In_Status в БД
 
@@ -38,7 +38,7 @@ async def callback_select_role(message: types.Message):
             except:
                 print('Бот не смог удалить сообщение')
             msg_id = (await bot.send_message(
-                message.from_user.id, text=f'Спасибо, мы уведомим вашего собеседника.')).message_id
+                message.from_user.id, text=f'Thank you, we will inform your partner.')).message_id
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
             table.update(record_id=str(record_id), fields={'In_Status': 'False'})  #запись In_Status в БД
 

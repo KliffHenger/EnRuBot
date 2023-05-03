@@ -122,10 +122,10 @@ async def send_message_cron60(mess_bd):
     first_record_id = mess_bd['first_record_id']
     second_record_id = mess_bd['second_record_id']
     msg_id1 = (await bot.send_message(chat_id=int(first_tg_id), 
-                            text=f'The meeting will begin in 1 hour.\nВы будете присутствовать?', 
+                            text=f'The meeting starts in an hour.\nAre you joining?', 
                             reply_markup=KB_intention_status)).message_id
     msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
-                            text=f'The meeting will begin in 1 hour.\nВы будете присутствовать?', 
+                            text=f'The meeting starts in an hour.\nAre you joining?', 
                             reply_markup=KB_intention_status)).message_id
     table.update(record_id=str(first_record_id), fields={'msgIDforDEL': str(msg_id1)})
     table.update(record_id=str(second_record_id), fields={'msgIDforDEL': str(msg_id2)})
@@ -170,8 +170,8 @@ async def send_message_postmeet(mess_bd):
     second_tg_id = mess_bd['second_tg_id']
     first_record_id = mess_bd['first_record_id']
     second_record_id = mess_bd['second_record_id']
-    msg_id1 = (await bot.send_message(int(first_tg_id), text=f'Встреча состоялась?', reply_markup=CONF_MEET)).message_id
-    msg_id2 = (await bot.send_message(int(second_tg_id), text=f'Встреча состоялась?', reply_markup=CONF_MEET)).message_id
+    msg_id1 = (await bot.send_message(int(first_tg_id), text=f'Did the meeting take place?', reply_markup=CONF_MEET)).message_id
+    msg_id2 = (await bot.send_message(int(second_tg_id), text=f'Did the meeting take place?', reply_markup=CONF_MEET)).message_id
     table.update(record_id=str(first_record_id), fields={'msgIDforDEL': str(msg_id1)})
     table.update(record_id=str(second_record_id), fields={'msgIDforDEL': str(msg_id2)})
 async def update_cron(bd):
