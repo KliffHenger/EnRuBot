@@ -134,6 +134,18 @@ async def send_message_cron30(mess_bd):
     second_tg_id = mess_bd['second_tg_id']
     first_record_id = mess_bd['first_record_id']
     second_record_id = mess_bd['second_record_id']
+    f_table = table.get(first_record_id)
+    s_table = table.get(second_record_id)
+    try:
+        msg1_id_get = int(f_table['fields']['msgIDforDEL'])  # достает msg1_id из БД
+        msg2_id_get = int(s_table['fields']['msgIDforDEL'])  # достает msg2_id из БД
+    except:
+        print('msg_id не нашелся в БД')
+    try:
+        await bot.delete_message(int(first_tg_id), message_id=msg1_id_get) # удаляет сообщение по msg1_id из БД
+        await bot.delete_message(int(second_tg_id), message_id=msg2_id_get) # удаляет сообщение по msg2_id из БД
+    except:
+        print('Бот не смог удалить сообщение')
     await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin in 30 minutes.')
     await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin in 30 minutes.')
     await intention_status(first_record_id, second_record_id)
