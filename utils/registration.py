@@ -164,8 +164,17 @@ async def bot_register(message: types.Message):
 async def set_user_utc(message: types.Message, state=FSMContext):
     await state.update_data(user_utc=message.text)
     user_city = message.text
-    geo = geopy.geocoders.Nominatim(user_agent="SuperMon_Bot")
-    location = geo.geocode(user_city) # преобразуе 
+    print(user_city)
+    geo = geopy.geocoders.Nominatim(user_agent="Super_Bot")
+    if user_city == 'Saint-Petersburg' or user_city == 'Saint Petersburg' or user_city == 'St Petersburg':
+        print('Исключение для Питера')
+        location = geo.geocode('СПБ')
+    elif user_city == 'Brest' or user_city == 'Брест':
+        print('Исключение для Бреста')
+        location = geo.geocode('РБ Брест')
+    else:
+        location = geo.geocode(user_city) # преобразуе 
+    
     # print(location.latitude,location.longitude)
     find_table = table.all()
     if location is None:
