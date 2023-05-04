@@ -79,6 +79,7 @@ async def menu(message: types.Message):
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
             pared_time = f'{time_slot[:16]}'
+            pared_hour = f'{time_slot[11:14]}'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
@@ -89,7 +90,7 @@ async def menu(message: types.Message):
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time}\n\n\
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time} - {pared_hour}40\n\n\
 \U000026A1 Main Menu: \U000026A1\n\
 We would like to send a reminder an hour prior to the call.\n\
 The following functions are disabled before the meeting at: \U0001F5D3 {pared_time}\n\
@@ -130,6 +131,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
             pared_time = f'{time_slot[:16]}'
+            pared_hour = f'{time_slot[11:14]}'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
@@ -140,7 +142,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time}\n\n\
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time} - {pared_hour}40\n\n\
 \U000026A1 Main Menu: \U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
             print(str(msg_id) + "MENU")
@@ -158,6 +160,7 @@ async def callback_menu(message: types.Message, state: FSMContext):
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
             pared_time = f'{time_slot[:16]}'
+            pared_hour = f'{time_slot[11:14]}'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
@@ -168,7 +171,7 @@ async def callback_menu(message: types.Message, state: FSMContext):
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time}\n\n\
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time} - {pared_hour}40\n\n\
 \U000026A1 Main Menu: \U000026A1\n\
 We would like to send a reminder an hour prior to the call.\n\
 The following functions are disabled before the meeting at: \U0001F5D3 {pared_time}\n\
@@ -209,6 +212,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
             time_slot = find_table[index]['fields']['UserTimeSlot']
 
             pared_time = f'{time_slot[:16]}'
+            pared_hour = f'{time_slot[11:14]}'
 
             record_id = find_table[index]['id']  # достает record_id из БД
             try:
@@ -219,7 +223,7 @@ The following functions are disabled before the meeting at: \U0001F5D3 {pared_ti
                 await bot.delete_message(message.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
             except:
                 pass
-            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time}\n\n\
+            answer_message = f"You have a - {eng_level} English level.\nYour Time-Slot - \U0001F5D3 {pared_time} - {pared_hour}40\n\n\
 \U000026A1 Main Menu: \U000026A1"
             msg_id = (await bot.send_message(message.from_user.id, text=answer_message, parse_mode='HTML', reply_markup=KB_MENU)).message_id
             print(str(msg_id) + " MENU inline")

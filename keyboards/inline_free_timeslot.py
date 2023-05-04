@@ -7,13 +7,13 @@ from datetime import datetime, timedelta
 def genmarkup(list_TS: list): # передаём в функцию data
     markup = InlineKeyboardMarkup() # создаём клавиатуру
     markup.row_width = 1 # кол-во кнопок в строке
+    # print(list_TS)
     raw_call_TS = list_TS.pop(0)
     call_TS = raw_call_TS[:19]
     for i in list_TS: # цикл для создания кнопок
         first_UTC = i[19:24] # i = 2023-04-30 10:00:00+0100
         # print(first_UTC)
         name_user = i[24:]
-        print(name_user)
         delta_hours = int(first_UTC[1]+first_UTC[2]) # +0100
         delta_minutes = int(first_UTC[3]+first_UTC[4])
         str_time = i[:19]
@@ -26,7 +26,8 @@ def genmarkup(list_TS: list): # передаём в функцию data
         pared_time = f'\U0001F464{name_user} \U0001F5D3 {time_for_msg}'
         print(pared_time)
         markup.add(InlineKeyboardButton(pared_time, callback_data=str_time)) # Создаём кнопки, pared_time - название, i - каллбек дата
-    markup.add(InlineKeyboardButton('\U0001F551 Change the time slot', callback_data='timeslot'))
+    markup.add(InlineKeyboardButton('\U0001F551 Enter the time slot', callback_data='timeslot'))
+    markup.add(InlineKeyboardButton('\U00002B05 Back', callback_data=raw_call_TS))
     return markup # возвращаем клавиатуру
 
 # list_TS = ['2099-09-29 19:59:59+1000Kliff', '2023-04-30 10:00:00+0100Irinachka']

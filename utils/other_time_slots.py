@@ -4,6 +4,7 @@ from .meeting import createMeeting
 from config import bot, dp, sched
 from .time_slot import time_slot_input
 from .connect import meet_connect
+from .menu import menu
 from keyboards.inline_menu import G_MENU, U_STAT, C_MEET_MENU, SET_ENlvl_and_TS, SET_TS
 from keyboards.inline_free_timeslot import genmarkup
 from utils.simple_calendar import calendar_callback as simple_cal_callback, SimpCalendar
@@ -21,16 +22,18 @@ async def callback_other_time_slots(message: types.Message):
     global second_user_record_id
     global second_user_tg_id
     global first_user_tg_id
+    global first_server_time_slot
     global first_UTC
     first_user_record_id, first_user_eng_level, first_user_time_slot, first_server_time_slot, first_UTC, \
     second_user_record_id, second_user_tg_id = '', '', '', '', '', '', ''
     first_user_tg_id = str(message.from_user.id)
     more_found = False
-    list_TS = [first_server_time_slot, ]
+    list_TS = []
     for index in range(len(find_table)): # начало цикла подбора, вытягивание инициатора из БД
         if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
             first_user_eng_level = find_table[index]['fields']['UserEngLevel']
             first_server_time_slot = find_table[index]['fields']['ServerTimeSlot']
+            list_TS.append(first_server_time_slot)
             first_user_time_slot = find_table[index]['fields']['UserTimeSlot']
             f_UTC = find_table[index]['fields']['UTC']
             first_user_fname = find_table[index]['fields']['UserName']
@@ -99,86 +102,91 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
             record_id = all_table[index]['id']  # достает record_id из БД
             time_slot = callback_query.data
             pattern = r'^(?:19[0-9][0-9]|20[0-9][0-9])-(?:0?[1-9]|1[0-2])-(?:0?[1-9]|[12][0-9]|3[01])+([, ])+(0[0-9]|1[0-9]|2[0-3])+(:)+([0-5][0-9])+(:)+([0-5][0-9])$'
-            # try:
-            if re.fullmatch(pattern, time_slot):
-                delta_hours = int(first_UTC[1]+first_UTC[2]) # +0100
-                delta_minutes = int(first_UTC[3]+first_UTC[4])
-                s_time = datetime.strptime(time_slot, "%Y-%m-%d %H:%M:%S")
-                if first_UTC[0] == '+':  # смотрим что UTC положительный
-                    u_time = str(s_time + timedelta(hours=delta_hours, minutes=delta_minutes))
-                else: # смотрим что UTC отрицательный
-                    u_time = str(s_time - timedelta(hours=delta_hours, minutes=delta_minutes))
-                pared_time = f'\U0001F5D3 {u_time[:16]}'
-                old_pared_time = f'\U0001F5D3 {old_uTS[:16]}'
-                try:
-                    msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-                except:
-                    pass
-                try:
-                    await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
-                except:
-                    pass
-                msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {pared_time}.')).message_id
-                table.update(record_id=str(record_id), fields={'ServerTimeSlot': time_slot})
-                table.update(record_id=str(record_id), fields={'UserTimeSlot': u_time})
-                table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
+            if time_slot == old_sTS:
+                await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot now - {old_uTS[:16]}.', reply_markup=G_MENU)
+                # table.update(record_id=str(record_id), fields={'ServerTimeSlot': time_slot})
                 await state.finish()
-                first_record_id, second_record_id = meet_connect(first_user_tg_id) # ВАЖНО! Функция получает ID, мэтчит и выдает record_id пользователей из пары
-                f_dict = table.get(first_record_id)
-                s_dict = table.get(second_record_id)
-                first_user_time_slot = f_dict['fields']['UserTimeSlot']
-                first_user_fname = f_dict['fields']['UserName']
-                second_user_fname = s_dict['fields']['UserName']
-                second_tg_id = s_dict['fields']['UserIDTG']
-                second_user_time_slot = s_dict['fields']['UserTimeSlot']
-                '''тут у нас выдача сообщений про успешный метчинг'''
-                await bot.send_message(callback_query.from_user.id, 
-                    text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]}')
-                for index in range(len(all_table)):
-                    if all_table[index]['fields']['UserIDTG'] == str(callback_query.from_user.id):
-                        try:
-                            msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-                        except:
-                            pass
-                        try:
-                            await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
-                        except:
-                            pass
-                        msg_id1 = (await bot.send_message(callback_query.from_user.id, 
-                            text=f'You will have a Zoom-meeting with - \U0001F464 {second_user_fname}\nWe would like to send a reminder one hour before the call.', 
-                            reply_markup=C_MEET_MENU)).message_id
-                        table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
-                        
-                '''тут сообщение для сабмисива'''
-                await bot.send_message(chat_id=int(second_tg_id), 
-                    text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {second_user_time_slot[:16]}')
-                for index in range(len(all_table)):
-                    if all_table[index]['fields']['UserIDTG'] == second_tg_id:
-                        try:
-                            msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
-                        except:
-                            pass
-                        try:
-                            await bot.delete_message(int(second_tg_id), message_id=msg_id_get) # удаляет сообщение по msg_id из БД
-                        except:
-                            pass
-                        msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
-                            text=f'You will have a Zoom-meeting with - \U0001F464 {first_user_fname}\nWe would like to send a reminder one hour before the call.', 
-                            reply_markup=C_MEET_MENU)).message_id
-                        table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
             else:
-                print('Exept')
-                await state.finish()
-                all_table = table.all()
-                for index in range(len(all_table)):
-                    if all_table[index]['fields']['UserIDTG'] == str(callback_query.from_user.id):
-                        record_id = all_table[index]['id']  # достает record_id из БД
+                if re.fullmatch(pattern, time_slot):
+                    delta_hours = int(first_UTC[1]+first_UTC[2]) # +0100
+                    delta_minutes = int(first_UTC[3]+first_UTC[4])
+                    s_time = datetime.strptime(time_slot, "%Y-%m-%d %H:%M:%S")
+                    if first_UTC[0] == '+':  # смотрим что UTC положительный
+                        u_time = str(s_time + timedelta(hours=delta_hours, minutes=delta_minutes))
+                    else: # смотрим что UTC отрицательный
+                        u_time = str(s_time - timedelta(hours=delta_hours, minutes=delta_minutes))
+                    pared_time = f'\U0001F5D3 {u_time[:16]}'
+                    pared_hour = f'{u_time[11:14]}'
+                    old_pared_time = f'\U0001F5D3 {old_uTS[:16]}'
+                    try:
                         msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                    except:
+                        pass
+                    try:
                         await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
-                        msg_id = (await bot.send_message(callback_query.from_user.id, 
-                            text=f"Please select a possible day for your meeting.", reply_markup=await SimpCalendar().start_calendar())).message_id
-                        print(msg_id)
-                        table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
+                    except:
+                        pass
+                    msg_id = (await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot - {pared_time} - {pared_hour}40.')).message_id
+                    table.update(record_id=str(record_id), fields={'ServerTimeSlot': time_slot})
+                    table.update(record_id=str(record_id), fields={'UserTimeSlot': u_time})
+                    table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  # запись msg_id в БД
+                    await state.finish()
+                    first_record_id, second_record_id = meet_connect(first_user_tg_id) # ВАЖНО! Функция получает ID, мэтчит и выдает record_id пользователей из пары
+                    f_dict = table.get(first_record_id)
+                    s_dict = table.get(second_record_id)
+                    first_user_time_slot = f_dict['fields']['UserTimeSlot']
+                    first_user_fname = f_dict['fields']['UserName']
+                    second_user_fname = s_dict['fields']['UserName']
+                    second_tg_id = s_dict['fields']['UserIDTG']
+                    second_user_time_slot = s_dict['fields']['UserTimeSlot']
+                    '''тут у нас выдача сообщений про успешный метчинг'''
+                    await bot.send_message(callback_query.from_user.id, 
+                        text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {first_user_time_slot[:16]}')
+                    for index in range(len(all_table)):
+                        if all_table[index]['fields']['UserIDTG'] == str(callback_query.from_user.id):
+                            try:
+                                msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                            except:
+                                pass
+                            try:
+                                await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                            except:
+                                pass
+                            msg_id1 = (await bot.send_message(callback_query.from_user.id, 
+                                text=f'You will have a Zoom-meeting with - \U0001F464 {second_user_fname}\nWe would like to send a reminder one hour before the call.', 
+                                reply_markup=C_MEET_MENU)).message_id
+                            table.update(record_id=str(first_record_id), fields={"msgIDforDEL": str(msg_id1)})  #запись msg_id в БД
+
+                    '''тут сообщение для сабмисива'''
+                    await bot.send_message(chat_id=int(second_tg_id), 
+                        text=f'We have found a match for you.\nYour meeting starts on \U0001F5D3 {second_user_time_slot[:16]}')
+                    for index in range(len(all_table)):
+                        if all_table[index]['fields']['UserIDTG'] == second_tg_id:
+                            try:
+                                msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                            except:
+                                pass
+                            try:
+                                await bot.delete_message(int(second_tg_id), message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                            except:
+                                pass
+                            msg_id2 = (await bot.send_message(chat_id=int(second_tg_id), 
+                                text=f'You will have a Zoom-meeting with - \U0001F464 {first_user_fname}\nWe would like to send a reminder one hour before the call.', 
+                                reply_markup=C_MEET_MENU)).message_id
+                            table.update(record_id=str(second_record_id), fields={"msgIDforDEL": str(msg_id2)})  #запись msg_id в БД
+                else:
+                    print('Exept')
+                    await state.finish()
+                    all_table = table.all()
+                    for index in range(len(all_table)):
+                        if all_table[index]['fields']['UserIDTG'] == str(callback_query.from_user.id):
+                            record_id = all_table[index]['id']  # достает record_id из БД
+                            msg_id_get = int(all_table[index]['fields']['msgIDforDEL'])  # достает msg_id из БД
+                            await bot.delete_message(callback_query.from_user.id, message_id=msg_id_get) # удаляет сообщение по msg_id из БД
+                            msg_id = (await bot.send_message(callback_query.from_user.id, 
+                                text=f"Please select a possible day for your meeting.", reply_markup=await SimpCalendar().start_calendar())).message_id
+                            print(msg_id)
+                            table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
             # except :
             #     print('Exept Val')
             #     await state.finish()
