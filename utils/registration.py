@@ -179,7 +179,8 @@ async def set_user_utc(message: types.Message, state=FSMContext):
     find_table = table.all()
     if location is None:
         await bot.send_message(message.from_user.id, 
-                        f"Не удалось найти такой город. Попробуйте написать его название латиницей или указать более крупный город поблизости.")
+                        f"We're sorry, but we couldn't find the city you're looking for. Please try entering the city name in Latin, \
+or consider searching for a larger town nearby.")
     else:  
         tf = TimezoneFinder()
         tz_user = tf.timezone_at(lng=location.longitude, lat=location.latitude)

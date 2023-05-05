@@ -60,36 +60,36 @@ async def intention_status(first_record_id: str, second_record_id: str):
     except:
         print('Бот не смог удалить сообщение')
     if f_table['fields']['In_Status'] == 'True' and s_table['fields']['In_Status'] == 'True': # 1 - Да, 2 - Да
-        await bot.send_message(int(first_tg_id), text=f'{second_user_name} подтвердил своё присутствие.')
-        await bot.send_message(int(second_tg_id), text=f'{first_user_name} подтвердил своё присутствие.')
+        await bot.send_message(int(first_tg_id), text=f'{second_user_name} has confirmed their attendance.')
+        await bot.send_message(int(second_tg_id), text=f'{first_user_name} has confirmed their attendance.')
     if f_table['fields']['In_Status'] == 'False' and s_table['fields']['In_Status'] == 'False': # 1 - Нет, 2 - Нет
-        await bot.send_message(int(first_tg_id), text=f'Вы не намерены присутствовать, {second_user_name} тоже не намерен присутствовать.')
-        await bot.send_message(int(second_tg_id), text=f'Вы не намерены присутствовать, {first_user_name} тоже не намерен присутствовать.')
+        await bot.send_message(int(first_tg_id), text=f'Unfortunately, you do not intend to attend. We are going to cancel your meeting and notify your partner.')
+        await bot.send_message(int(second_tg_id), text=f'Unfortunately, you do not intend to attend. We are going to cancel your meeting and notify your partner.')
         await cancel_meet(first_record_id, second_record_id)
     if f_table['fields']['In_Status'] == 'False' and s_table['fields']['In_Status'] == 'False': # 1 - Не знаю, 2 - Не знаю
-        await bot.send_message(int(first_tg_id), text=f'{second_user_name} и Вы не подтвердили своё присутствие.')
-        await bot.send_message(int(second_tg_id), text=f'{first_user_name} и Вы не подтвердили своё присутствие.')
+        await bot.send_message(int(first_tg_id), text=f'You and {second_user_name} have not confirmed participation in the speaking practice. We will send you the reminders and a link, but we are not sure that the meeting will take place.')
+        await bot.send_message(int(second_tg_id), text=f'You and {first_user_name} have not confirmed participation in the speaking practice. We will send you the reminders and a link, but we are not sure that the meeting will take place.')
     if f_table['fields']['In_Status'] == 'True' and s_table['fields']['In_Status'] == 'False': # 1 - Да, 2 - Нет
-        await bot.send_message(int(first_tg_id), text=f'{second_user_name} не будет присутствовать, поэтому можете игнорировать встречу.')
-        await bot.send_message(int(second_tg_id), text=f'Вы не намерены присутствовать, очень жаль.')
+        await bot.send_message(int(first_tg_id), text=f'{second_user_name} has not confirmed their attendance. The meeting is canceled.')
+        await bot.send_message(int(second_tg_id), text=f'Unfortunately, you do not intend to attend. We are going to cancel your meeting and notify your partner.')
         await cancel_meet(first_record_id, second_record_id)
     if f_table['fields']['In_Status'] == 'False' and s_table['fields']['In_Status'] == 'True': # 1 - Нет, 2 - Да
-        await bot.send_message(int(first_tg_id), text=f'Вы не намерены присутствовать, очень жаль.')
-        await bot.send_message(int(second_tg_id), text=f'{first_user_name} не будет присутствовать, поэтому можете игнорировать встречу.')
+        await bot.send_message(int(first_tg_id), text=f'Unfortunately, you do not intend to attend. We are going to cancel your meeting and notify your partner.')
+        await bot.send_message(int(second_tg_id), text=f'{first_user_name} has not confirmed their attendance. The meeting is canceled.')
         await cancel_meet(first_record_id, second_record_id)
     if f_table['fields']['In_Status'] == 'True' and s_table['fields']['In_Status'] == 'None': # 1 - Да, 2 - Не знаю
-        await bot.send_message(int(first_tg_id), text=f'{second_user_name} не подтвердил своё присутствие, поэтому возможно он не будет присутствовать.')
-        await bot.send_message(int(second_tg_id), text=f'Вы не подтвердили ваше присутствие, поэтому {first_user_name} возможно не будет присутствовать.')
+        await bot.send_message(int(first_tg_id), text=f'{second_user_name} have not confirmed participation in the speaking practice. We will send you the reminders and a link, but we are not sure that the meeting will take place.')
+        await bot.send_message(int(second_tg_id), text=f"You have not confirmed participation in the speaking practice. We will send you the reminders and a link, but we are not sure that the meeting will take place.")
     if f_table['fields']['In_Status'] == 'None' and s_table['fields']['In_Status'] == 'True': # 1 - Не знаю, 2 - Да
-        await bot.send_message(int(first_tg_id), text=f'Вы не подтвердили ваше присутствие, поэтому {second_user_name} возможно не будет присутствовать.')
-        await bot.send_message(int(second_tg_id), text=f'{first_user_name} не подтвердил своё присутствие, поэтому возможно он не будет присутствовать.')
+        await bot.send_message(int(first_tg_id), text=f"You have not confirmed participation in the speaking practice. We will send you the reminders and a link, but we are not sure that the meeting will take place.")
+        await bot.send_message(int(second_tg_id), text=f'{first_user_name} have not confirmed participation in the speaking practice. We will send you the reminders and a link, but we are not sure that the meeting will take place.')
     if f_table['fields']['In_Status'] == 'None' and s_table['fields']['In_Status'] == 'False': # 1 - Не знаю, 2 - Нет
-        await bot.send_message(int(first_tg_id), text=f'{second_user_name} не будет присутствовать, поэтому можете игнорировать встречу.')
-        await bot.send_message(int(second_tg_id), text=f'Вы не намерены присутствовать, очень жаль.')
+        await bot.send_message(int(first_tg_id), text=f'{second_user_name} has not confirmed their attendance. The meeting is canceled.')
+        await bot.send_message(int(second_tg_id), text=f'Unfortunately, you do not intend to attend. We are going to cancel your meeting and notify your partner.')
         await cancel_meet(first_record_id, second_record_id)
     if f_table['fields']['In_Status'] == 'False' and s_table['fields']['In_Status'] == 'None': # 1 - Нет, 2 - Не знаю
-        await bot.send_message(int(first_tg_id), text=f'Вы не намерены присутствовать, очень жаль.')
-        await bot.send_message(int(second_tg_id), text=f'{first_user_name} не будет присутствовать, поэтому можете игнорировать встречу.')
+        await bot.send_message(int(first_tg_id), text=f'Unfortunately, you do not intend to attend. We are going to cancel your meeting and notify your partner.')
+        await bot.send_message(int(second_tg_id), text=f'{first_user_name} has not confirmed their attendance. The meeting is canceled.')
         await cancel_meet(first_record_id, second_record_id)
     
 
