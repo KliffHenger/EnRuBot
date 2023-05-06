@@ -5,6 +5,7 @@ api_key = 'key64C9CvHlRvTZnd'
 base_id = 'app5Z5KfDBdcGv3eg'
 table_name = 'tblyHxtR3Se0M0hId' # Test
 # table_name = 'tblTjjGzhD8UAMjNP' # Prod
+# table_name = 'tblhX0mhkSChrSuNY' # Prod v2 Раскомментить перед отправлением на Прод
 table_name2 = 'tblHUyth3sBhAsQ8a' # Это таблица Формы регистрации с сайта
 table_msg = 'tblWOK5v6wvnzHHoN' # Это таблица с Текстами для рассылки
 

@@ -5,10 +5,8 @@ from keyboards.inline_time_slot import HOUR
 from keyboards.inline_menu import G_MENU
 from airtable_config import table
 from utils.menu import menu
-# from utils.find_interlocutor import find_companion
 from config import dp, bot
 from datetime import datetime, timedelta
-# from utils.simple_calendar import simple_cal_callback, SimpCalendar
 from utils.simple_calendar import calendar_callback as simple_cal_callback, SimpCalendar
 from aiogram.dispatcher.filters import Text
 import re
