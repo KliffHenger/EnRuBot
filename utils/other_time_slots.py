@@ -218,7 +218,7 @@ async def callback_select_role(message: types.Message):
                 print('Бот не смог удалить сообщение')
             msg_id = (await bot.send_message(
                 message.from_user.id, text=f'Please fill out the form at [LINK]\n\n\
-Choose the role you had in the meeting:', reply_markup=U_STAT)).message_id
+What was your role in the speaking practice?', reply_markup=U_STAT)).message_id
             table.update(record_id=str(record_id), fields={"msgIDforDEL": str(msg_id)})  #запись msg_id в БД
 
 

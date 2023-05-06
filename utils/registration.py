@@ -14,14 +14,14 @@ import pytz
 
 async def bot_register(message: types.Message):
     msg_id = (await bot.send_message(message.from_user.id,
-        f"Let me ask your name, please? :")).message_id
+        f"What's your name? :")).message_id
     print(msg_id)
     await Reg.user_name.set()
 
 @dp.callback_query_handler(text='register')
 async def bot_register(message: types.Message):
     msg_id = (await bot.send_message(message.from_user.id,
-        f"Let me ask your name, please? :")).message_id
+        f"What's your name? :")).message_id
     print(msg_id)
     await bot.delete_message(message.from_user.id, msg_id-1)
     await Reg.user_name.set()
