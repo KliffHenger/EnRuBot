@@ -166,10 +166,15 @@ async def set_user_utc(message: types.Message, state=FSMContext):
     user_city = message.text
     print(user_city)
     geo = geopy.geocoders.Nominatim(user_agent="Super_Bot")
-    if user_city == 'Saint-Petersburg' or user_city == 'Saint Petersburg' or user_city == 'St Petersburg':
+    if user_city == 'Saint-Petersburg' or user_city == 'Saint Petersburg' or user_city == 'St Petersburg' or user_city == 'St. Petersburg' \
+        or user_city == 'saint-petersburg' or user_city == 'saint petersburg' or user_city == 'st petersburg' or user_city == 'St. Petersburg' \
+        or user_city == 'saint-Petersburg' or user_city == 'saint Petersburg' or user_city == 'st Petersburg' or user_city == 'St. Petersburg' \
+        or user_city == 'Saint-Petersburg' or user_city == 'Saint Petersburg' or user_city == 'St Petersburg' or user_city == 'St. Petersburg' \
+        or user_city == 'SAINT-PETERSBURG' or user_city == 'SAINT PETERSBURG' or user_city == 'ST PETERSBURG' or user_city == 'St. Petersburg' :
         print('Исключение для Питера')
         location = geo.geocode('СПБ')
-    elif user_city == 'Brest' or user_city == 'Брест':
+    elif user_city == 'Brest' or user_city == 'Брест' or user_city == 'брест' or user_city == 'brest' or user_city == 'БРЕСТ' \
+        or user_city == 'BREST':
         print('Исключение для Бреста')
         location = geo.geocode('РБ Брест')
     else:
