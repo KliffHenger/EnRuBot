@@ -160,7 +160,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -204,7 +205,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -248,7 +250,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -292,7 +295,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -336,7 +340,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -380,7 +385,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -424,7 +430,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -468,7 +475,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -512,7 +520,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -556,7 +565,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -600,7 +610,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -644,7 +655,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -688,7 +700,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -732,7 +745,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -776,7 +790,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -820,7 +835,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -864,7 +880,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -908,7 +925,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -952,7 +970,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -996,7 +1015,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -1040,7 +1060,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -1084,7 +1105,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -1128,7 +1150,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
@@ -1172,7 +1195,8 @@ async def set_start_00(message: types.Message):
             user_min_TS = u_TS_min.strftime('%Y-%m-%d %H:%M') # перевод минимального ТС в строковый формат
             if server_simile <= server_time_slot:
                 msg_id = (await bot.send_message(message.from_user.id, 
-                    text=f"Your Time-Slot - {pared_time}")).message_id
+                    text=f"Your Time-Slot - {pared_time}\n\
+We saved your choice and would like to send a notification once we find a partner.")).message_id
                 print(msg_id)
                 table.update(str(element_id), {'ServerTimeSlot': str(server_time_slot)})
                 table.update(str(element_id), {'UserTimeSlot': new_time_slot})
