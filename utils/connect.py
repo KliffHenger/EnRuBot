@@ -51,7 +51,7 @@ def meet_connect(first_user_tg_id: str):
         '''тут мы каждому пользователю выдаем по планировщику'''
         name_sched = 'sch'+first_tg_id
         '''названия задач'''
-        list_jobs = '_1', '_2', '_3', '_4', '_5', '_6', '_7'
+        list_jobs = '_1', '_2', '_3', '_4', '_5', '_6', '_7', '_8'
         
         table.update(record_id=first_record_id, fields={'JobName': name_sched})
         table.update(record_id=second_record_id, fields={'JobName': name_sched})
@@ -59,6 +59,7 @@ def meet_connect(first_user_tg_id: str):
         # datetime_meet = str(first_user_time_slot)+",00,00"
         dt_meet = datetime.strptime(first_server_time_slot, "%Y-%m-%d %H:%M:%S") # 2023-03-30 23:00:00
         start_alert60 = dt_meet - timedelta(minutes=60)
+        start_alert31 = dt_meet - timedelta(minutes=31)
         start_alert30 = dt_meet - timedelta(minutes=30)
         start_alert15 = dt_meet - timedelta(minutes=15)
         start_alert5 = dt_meet - timedelta(minutes=5)
@@ -73,6 +74,7 @@ def meet_connect(first_user_tg_id: str):
 
         '''быстрые задания для тестов'''
         # strt_alert60 = last_find + timedelta(seconds=10)
+        # strt_alert31 = last_find + timedelta(seconds=30)
         # strt_alert30 = last_find + timedelta(seconds=40)
         # strt_alert15 = last_find + timedelta(seconds=50)
         # strt_alert5 = last_find + timedelta(seconds=60)
@@ -80,24 +82,28 @@ def meet_connect(first_user_tg_id: str):
         # d_meet39 = last_find + timedelta(seconds=80)
         # d_meet40 = last_find + timedelta(seconds=90)
         # sched.add_job(send_message_cron60, trigger='date', run_date=strt_alert60, kwargs={'mess_bd': mess_bd}, 
-                                        # misfire_grace_time=3, id=name_sched+list_jobs[6])
+        #                                 misfire_grace_time=3, id=name_sched+list_jobs[7])
+        # sched.add_job(status_meet31, trigger='date', run_date=strt_alert31, kwargs={'mess_bd': mess_bd}, 
+        #                                 misfire_grace_time=3, id=name_sched+list_jobs[6])
         # sched.add_job(send_message_cron30, trigger='date', run_date=strt_alert30, kwargs={'mess_bd': mess_bd}, 
-                                        # misfire_grace_time=3, id=name_sched+list_jobs[5])
+        #                                 misfire_grace_time=3, id=name_sched+list_jobs[5])
         # sched.add_job(send_message_cron15, trigger='date', run_date=strt_alert15, kwargs={'mess': mess}, 
-                                        # misfire_grace_time=3, id=name_sched+list_jobs[4])
+        #                                 misfire_grace_time=3, id=name_sched+list_jobs[4])
         # sched.add_job(send_message_cron5, trigger='date', run_date=strt_alert5, kwargs={'mess': mess}, 
-                                        # misfire_grace_time=3, id=name_sched+list_jobs[3])
+        #                                 misfire_grace_time=3, id=name_sched+list_jobs[3])
         # sched.add_job(send_message_cron, trigger='date', run_date=strt_alert, kwargs={'mess': mess}, 
-                                        # misfire_grace_time=3, id=name_sched+list_jobs[2])
+        #                                 misfire_grace_time=3, id=name_sched+list_jobs[2])
         # sched.add_job(send_message_postmeet, trigger='date', run_date=d_meet40, kwargs={'mess_bd': mess_bd}, 
-                                        # misfire_grace_time=3, id=name_sched+list_jobs[1])
+        #                                 misfire_grace_time=3, id=name_sched+list_jobs[1])
         # sched.add_job(update_cron, trigger='date', run_date=d_meet39, kwargs={'bd': bd}, 
-                                        # misfire_grace_time=3, id=name_sched+list_jobs[0])
+        #                                 misfire_grace_time=3, id=name_sched+list_jobs[0])
         # sched.print_jobs()
         # return str(first_record_id), str(second_record_id)
         
         """непосредственно добавление заданий в обработчик"""
         sched.add_job(send_message_cron60, trigger='date', run_date=str(start_alert60), kwargs={'mess_bd': mess_bd}, 
+                                        misfire_grace_time=3, id=name_sched+list_jobs[7])
+        sched.add_job(status_meet31, trigger='date', run_date=str(start_alert31), kwargs={'mess_bd': mess_bd}, 
                                         misfire_grace_time=3, id=name_sched+list_jobs[6])
         sched.add_job(send_message_cron30, trigger='date', run_date=str(start_alert30), kwargs={'mess_bd': mess_bd}, 
                                         misfire_grace_time=3, id=name_sched+list_jobs[5])
@@ -129,7 +135,7 @@ async def send_message_cron60(mess_bd):
                             reply_markup=KB_intention_status)).message_id
     table.update(record_id=str(first_record_id), fields={'msgIDforDEL': str(msg_id1)})
     table.update(record_id=str(second_record_id), fields={'msgIDforDEL': str(msg_id2)})
-async def send_message_cron30(mess_bd):
+async def status_meet31(mess_bd):
     first_tg_id = mess_bd['first_tg_id']
     second_tg_id = mess_bd['second_tg_id']
     first_record_id = mess_bd['first_record_id']
@@ -146,9 +152,12 @@ async def send_message_cron30(mess_bd):
         await bot.delete_message(int(second_tg_id), message_id=msg2_id_get) # удаляет сообщение по msg2_id из БД
     except:
         print('Бот не смог удалить сообщение')
+    await intention_status(first_record_id, second_record_id)
+async def send_message_cron30(mess_bd):
+    first_tg_id = mess_bd['first_tg_id']
+    second_tg_id = mess_bd['second_tg_id']
     await bot.send_message(chat_id=int(first_tg_id), text=f'The meeting will begin in 30 minutes.')
     await bot.send_message(chat_id=int(second_tg_id), text=f'The meeting will begin in 30 minutes.')
-    await intention_status(first_record_id, second_record_id)
 async def send_message_cron15(mess):
     first_tg_id = mess['first_tg_id']
     second_tg_id = mess['second_tg_id']
@@ -194,6 +203,7 @@ async def djobumne(message: types.Message):
 def register_handlers_connect(dp: Dispatcher):
     dp.register_message_handler(djobumne, commands=['djobumne']) # это команда для проверки джобов
     dp.register_message_handler(send_message_cron60, commands=['40000_monkeys_put_a_banana_up_their_butt'])
+    dp.register_message_handler(status_meet31, commands=['40000_monkeys_put_a_banana_up_their_butt'])
     dp.register_message_handler(send_message_cron30, commands=['40000_monkeys_put_a_banana_up_their_butt'])
     dp.register_message_handler(send_message_cron15, commands=['40000_monkeys_put_a_banana_up_their_butt'])
     dp.register_message_handler(send_message_cron5, commands=['40000_monkeys_put_a_banana_up_their_butt'])

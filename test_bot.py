@@ -14,19 +14,22 @@ async def every_week():
         tg_id = all_table[index]['fields']['UserIDTG']
         last = all_table[index]['fields']['LastFindPeer'] # 2023-04-05 16:42:43 но это просто строка
         text_msg = msg_tb['fields']['Text']
-        if last == 'None': # сюда попадают все, кто ни разу никого не искал
+        silent_week = datetime.now() - timedelta(days=7) # указать то кол-во дней простоя которое нужно (сейчас 7 дней)
+        birth_day = '1989-04-02 12:11:22'
+        try:
+            last_time_find = datetime.strptime(last, '%Y-%m-%d %H:%M:%S')
+        except:
+            last_time_find = datetime.strptime(birth_day, '%Y-%m-%d %H:%M:%S')
+        if last_time_find < silent_week: # сюда попадают все, кто ни разу никого не искал
             try:
                 await bot.send_message(int(tg_id), text=text_msg, reply_markup=G_MENU)
             except:
                 pass
-        else: # сюда попадают те, кто долго не искали собеседника
-            silent_week = datetime.now() - timedelta(days=7) # указать то кол-во дней простоя которое нужно (сейчас 7 дней)
-            last_time_find = datetime.strptime(last, '%Y-%m-%d %H:%M:%S')
-            if last_time_find < silent_week:
-                try:
-                    await bot.send_message(int(tg_id), text=text_msg, reply_markup=G_MENU)
-                except:
-                    pass
+        # elif : # сюда попадают те, кто долго не искали собеседника
+        #     try:
+        #         await bot.send_message(int(tg_id), text=text_msg, reply_markup=G_MENU)
+        #     except:
+        #         pass
 
 async def every_hour():
     all_table = table.all()
@@ -49,8 +52,8 @@ async def on_startup(_):
     sched_regular = AsyncIOScheduler()
     sched_regular.start()
     sched.start()
-    # sched.add_job(every_week, trigger='interval', seconds=10, misfire_grace_time=60) # строчка для тестов
-    sched_regular.add_job(every_week, trigger='cron', day_of_week=0, hour=10, misfire_grace_time=60) # рабочая строчка
+    sched.add_job(every_week, trigger='interval', seconds=10, misfire_grace_time=60) # строчка для тестов
+    # sched_regular.add_job(every_week, trigger='cron', day_of_week=0, hour=10, misfire_grace_time=60) # рабочая строчка
     sched_regular.add_job(every_hour, trigger='interval', minutes=60, misfire_grace_time=60)
     sched_regular.print_jobs()
     await restart_active_jobs.for_rest()

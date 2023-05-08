@@ -275,31 +275,35 @@ async def callback_cancel_meet(message: types.Message):
         try:
             sched.remove_job(job_name+'_1')
         except:
-            print('Бот не нашел Джобу')
+            print('Бот не нашел Джобу 1')
         try:
             sched.remove_job(job_name+'_2')
         except:
-            print('Бот не нашел Джобу')
+            print('Бот не нашел Джобу 2')
         try:
             sched.remove_job(job_name+'_3')
         except:
-            print('Бот не нашел Джобу')
+            print('Бот не нашел Джобу 3')
         try:
             sched.remove_job(job_name+'_4')
         except:
-            print('Бот не нашел Джобу')
+            print('Бот не нашел Джобу 4')
         try:
             sched.remove_job(job_name+'_5')
         except:
-            print('Бот не нашел Джобу')
+            print('Бот не нашел Джобу 5')
         try:
             sched.remove_job(job_name+'_6')
         except:
-            print('Бот не нашел Джобу')
+            print('Бот не нашел Джобу 6')
         try:
             sched.remove_job(job_name+'_7')
         except:
-            print('Бот не нашел Джобу')
+            print('Бот не нашел Джобу 7')
+        try:
+            sched.remove_job(job_name+'_8')
+        except:
+            print('Бот не нашел Джобу 8')
         '''выдача сообщения отмены инициатору'''
         for index in range(len(find_table)):
             if find_table[index]['fields']['UserIDTG'] == str(message.from_user.id):
