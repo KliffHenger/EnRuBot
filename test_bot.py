@@ -40,6 +40,7 @@ async def every_hour():
         if s_TS != 'None':
             server_user_time = datetime.strptime(s_TS, '%Y-%m-%d %H:%M:%S')
             if time_now >= server_user_time:
+                print(f'ТаймСлот {s_TS} удален потому что устарел')
                 table.update(record_id, {'ServerTimeSlot': 'None'})
                 table.update(record_id, {'UserTimeSlot': 'None'})
 
