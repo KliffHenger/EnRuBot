@@ -100,9 +100,10 @@ async def set_timeslot(callback_query: types.CallbackQuery, state: FSMContext):
             old_uTS = str(all_table[index]['fields']['UserTimeSlot'])
             first_UTC = all_table[index]['fields']['UTC']
             record_id = all_table[index]['id']  # достает record_id из БД
-            time_slot = callback_query.data
+            raw_time_slot = callback_query.data
+            time_slot = raw_time_slot[:19]
             pattern = r'^(?:19[0-9][0-9]|20[0-9][0-9])-(?:0?[1-9]|1[0-2])-(?:0?[1-9]|[12][0-9]|3[01])+([, ])+(0[0-9]|1[0-9]|2[0-3])+(:)+([0-5][0-9])+(:)+([0-5][0-9])$'
-            if time_slot == old_sTS:
+            if raw_time_slot == old_sTS:
                 await bot.send_message(callback_query.from_user.id, text=f'Your Time-Slot now - {old_uTS[:16]}.', reply_markup=G_MENU)
                 # table.update(record_id=str(record_id), fields={'ServerTimeSlot': time_slot})
                 await state.finish()

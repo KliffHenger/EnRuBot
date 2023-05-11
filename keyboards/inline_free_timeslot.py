@@ -25,7 +25,7 @@ def genmarkup(list_TS: list): # передаём в функцию data
         time_for_msg = u_time[:16]
         pared_time = f'\U0001F464{name_user} \U0001F5D3 {time_for_msg}'
         print(pared_time)
-        markup.add(InlineKeyboardButton(pared_time, callback_data=str_time)) # Создаём кнопки, pared_time - название, i - каллбек дата
+        markup.add(InlineKeyboardButton(pared_time, callback_data=i)) # Создаём кнопки, pared_time - название, i - каллбек дата
     markup.add(InlineKeyboardButton('\U0001F551 Enter the time slot', callback_data='timeslot'))
     markup.add(InlineKeyboardButton('\U00002B05 Back', callback_data=raw_call_TS))
     return markup # возвращаем клавиатуру
